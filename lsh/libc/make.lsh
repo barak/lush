@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: make.lsh,v 1.4 2003/03/20 21:02:49 leonb Exp $
+;;; $Id: make.lsh,v 1.7 2004/05/03 19:23:18 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -173,7 +173,7 @@
           (each ((src deps))
             (let ((srctime (alist-get 'mtime (fileinfo src))))
               (when (or (rules src) (not srctime))
-                (setq flag (or flag (==> this rebuild src))) )
+                (setq flag (or flag (==> this rebuild src done))) )
               (when (< objtime srctime)
                 (setq flag t) ) ) ) )
         (when done (done target))
@@ -186,10 +186,11 @@
             (setq lushflags (dhc-substitute-env dhc-make-lushflags vars))
             (vars "LUSHFLAGS" (concat lushflags " -I" srcdir " " moreflags))
             (vars "SRCDIR" srcdir)
+	    (vars "INCS" (dhc-generate-include-flags))
             (vars "SRC" (car deps))
             (vars "OBJ" obj)
             ;; Execute 
-            (setq cmd (dhc-substitute-env dhc-make-command vars))
+            (setq cmd (dhc-substitute-env cmd vars))
             (printf "%s\n" cmd)
             (let ((retcode (sys cmd)))
               (when (<> retcode 0)

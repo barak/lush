@@ -1,13 +1,13 @@
 Source: lush
 Section: devel
 Priority: extra
-Maintainer: Kevin M. Rosenberg <kmr@debian.org>
+Maintainer: Daniel Baumann <daniel.baumann@panthera-systems.net>
 Build-Depends: debhelper (>= 4.0.0), binutils-dev, xlibs-dev
-Standards-Version: 3.6.1.0
+Standards-Version: 3.6.1
 
 Package: lush
-Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, lush-library
+Architecture: alpha amd64 arm hppa i386 m68k mips mipsel powerpc s390 sparc
+Depends: lush-library
 Description: Lisp Universal Shell Executable
  Lush is a programming language and environment that is based on the
  Lisp programming language. The lush language is small compared to ANSI
@@ -18,7 +18,7 @@ Description: Lisp Universal Shell Executable
 
 Package: lush-library
 Architecture: all
-Depends: lush
+Depends: lush (= ${Source-Version}), python
 Description: Lisp Universal Shell Library
  These are the libraries for the lush package.
  .
@@ -26,4 +26,3 @@ Description: Lisp Universal Shell Library
  Lisp programming language. The lush language is small compared to ANSI
  Common Lisp and is optimized for numeric calculations. Lush includes
  a libraries for numerical analysis and building graphical user interfaces.
-

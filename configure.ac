@@ -5,7 +5,7 @@
 
 AC_PREREQ(2.50)
 AC_INIT(lush, 1.0)
-AC_REVISION($Id: configure.ac,v 1.35 2003/12/12 02:13:13 leonb Exp $)
+AC_REVISION($Id: configure.ac,v 1.41 2004/07/21 16:12:46 leonb Exp $)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR(README)
 AC_CONFIG_HEADER(include/lushconf.h)
@@ -30,7 +30,7 @@ AC_ARG_WITH(extra-libraries,
             AC_MSG_ERROR([Cannot stat directory $withval])
           fi ] )
 
-
+# Always look into a "gnu" directory.
 curwd=`pwd`
 if test -d $curwd/gnu/include ; then
    CPPFLAGS="$CPPFLAGS -I$curwd/gnu/include"
@@ -38,6 +38,19 @@ fi
 if test -d $curwd/gnu/lib ; then
    LDFLAGS="$LDFLAGS -L$curwd/gnu/lib"
 fi
+
+# Check for fink on macs.
+case "$host" in
+  *-darwin* | *-macos10*)
+     if test -d /opt/local ; then
+       CPPFLAGS="$CPPFLAGS -I/opt/local/include"
+       LDFLAGS="$LDFLAGS -L/opt/local/lib"
+     elif test -d /sw ; then
+       CPPFLAGS="$CPPFLAGS -I/sw/include"
+       LDFLAGS="$LDFLAGS -L/sw/lib"
+     fi
+  ;;
+esac
 
 
 # ----------------------------------------
@@ -109,15 +122,18 @@ AC_CHECK_LIB(dl,dlopen)
 AC_CHECK_LIB(dld,shl_load)
 AC_CHECK_LIB(util,openpty)
 
+# NSModule API
+require_bfd=yes
+AC_CHECK_FUNCS(NSLinkModule,[require_bfd=no])
+
 # bfd
 AC_ARG_WITH(bfd,
     AC_HELP_STRING([--without-bfd],
         [Compile Lush without the BFD library.]),
-    [require_bfd=$withval],[require_bfd=yes])
+    [require_bfd=$withval])
 
 if test x$require_bfd = xno ; then
     BFD_YES='#'
-    AC_MSG_WARN([Compiling Lush without BFD])
 else
     BFD_YES=''
     has_bfd=yes
@@ -228,7 +244,7 @@ AC_HEADER_STDC
 AC_HEADER_DIRENT
 AC_HEADER_TIME
 AC_HEADER_SYS_WAIT     
-AC_CHECK_HEADERS(memory.h string.h strings.h limits.h)
+AC_CHECK_HEADERS(memory.h string.h strings.h limits.h alloca.h)
 AC_CHECK_HEADERS(unistd.h sys/mman.h termios.h pty.h util.h)
 AC_CHECK_HEADERS(dlfcn.h dl.h ieeefp.h fpu_control.h fenv.h)
 AC_CHECK_HEADERS(stropts.h sys/stropts.h sys/select.h sys/ttold.h)
@@ -276,13 +292,9 @@ CC_PIC_FLAG=
 MAKESO=
 
 if test x${GCC} = xyes ; then
+    test x${GXX} = xyes && LDCC=${CXX}
     CC_PIC_FLAG='-fPIC'
     MAKESO="$LDCC -shared -o"
-    # Linking the main executable with g++ helps
-    # when dynlinking c++ object files.
-    if test x${GXX} = xyes ; then
-       LDCC=${CXX}
-    fi
 fi
 
 # Tested?
@@ -292,7 +304,7 @@ case "$host" in
         ;;
     *-darwin* | *-macos10* | *-rhapsody*)
         SOEXT=dylib
-        MAKESO="$LDCC -dynamiclib -o"
+        MAKESO="$LDCC -dylib -o"
         ;;
     *-freebsd2*)
         CC_PIC_FLAG='-fPIC'

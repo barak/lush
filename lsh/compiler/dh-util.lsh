@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: dh-util.lsh,v 1.53 2004/01/08 15:05:06 leonb Exp $
+;;; $Id: dh-util.lsh,v 1.55 2004/05/07 16:14:24 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -346,7 +346,7 @@
   (when ~(= 'dht-class (unode-val :type:u-tclass))
         (dhc-error "type is not a class in dhc-class-to-struct-decl"))
   (let ((the-struct (sprintf (concat "struct VClass_%s {\n"
-                                     "  dhclassdoc_t *Cdoc;\n"
+                                     "  void *Cdoc;\n"
                                      "  void (*Cdestroy)(gptr);")
                              (unode-val :type:u-name) ))
         (the-methods ())
@@ -2750,7 +2750,8 @@
     
     (incr tmpnames-seed)
     (setq size (apply * (bound source)))
-    (setq temp-mat (copy-any-matrix source))
+    (setq temp-mat (matrix size))
+    (copy-any-matrix source temp-mat)
     (dhc-add-c-declarations (sprintf "static %s %s[] = {" 
                                      ctype constant-name))
     (for (i 0 (- size 2))

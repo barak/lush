@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: oostruct.c,v 1.16 2003/02/15 00:15:28 leonb Exp $
+ * $Id: oostruct.c,v 1.19 2004/07/26 17:30:44 leonb Exp $
  **********************************************************************/
 
 /***********************************************************************
@@ -306,6 +306,10 @@ class_dispose(at *q)
   /* Remove atclass in dhclassdoc */
   if (s->classdoc)
     s->classdoc->lispdata.atclass = 0;
+  if (s->kname)
+    free(s->kname);
+  s->kname = 0;
+  s->classdoc = 0;
   /* Unlink subclass chain */
   if (s->super && s->atsuper->Object) 
     {
@@ -525,7 +529,6 @@ new_ooclass(at *classname, at *superclass, at *keylist, at *defaults)
   super = superclass->Object;
   cl = malloc(sizeof(struct class));
   *cl = object_class;
-  cl->classdoc = 0;
   cl->slotssofar = super->slotssofar+i;
   cl->goaway = 1;
   cl->dontdelete = 0;
@@ -555,6 +558,10 @@ new_ooclass(at *classname, at *superclass, at *keylist, at *defaults)
   cl->hashtable = 0L;
   cl->hashsize = 0;
   cl->hashok = 0;
+
+  /* Initialize DHCLASS stuff */
+  cl->classdoc = 0;
+  cl->kname = 0;
   
   /* Create AT and returns it */
   UNLOCK(p);
@@ -605,7 +612,7 @@ new_oostruct(at *cl)
     error(NIL,"not a class",cl);
   c = cl->Object;
   if ( c->self_dispose != oostruct_dispose )
-    error(NIL,"class is not a subclass of ::class:object",cl);
+    error(NIL,"class is not a subclass of ::class:object", cl);
   
   len = c->slotssofar;
   s = malloc(sizeof(struct oostruct)+(len-1)*sizeof(struct oostructitem));
@@ -663,6 +670,30 @@ DX(xnew_empty)
   ARG_NUMBER(1);
   ARG_EVAL(1);
   return new_oostruct(APOINTER(1));
+}
+
+DX(xnew_copy)
+{
+  at *p, *c, *ans;
+  struct oostruct *s, *d;
+  int i;
+  
+  ARG_NUMBER(1);
+  ARG_EVAL(1);
+  p = APOINTER(1);
+  if (! (p && (p->flags & X_OOSTRUCT)))
+    error(NIL,"Not an instance of a user defined class",p);
+  c = classof(p);
+  ans = new_oostruct(c);
+  UNLOCK(c);
+  s = p->Object;
+  d = ans->Object;
+  for (i=0; i<d->size && i<s->size; i++)
+    {
+      p = d->slots[i].val = s->slots[i].val;
+      LOCK(p);
+    }
+  return ans;
 }
 
 
@@ -1352,8 +1383,28 @@ DX(xis_of_class)
     error(NIL,"not a class",q);
   if (is_of_class(p,q->Object))
     return true();
-  else
-    return NIL;
+#ifdef DHCLASSDOC
+  if (GPTRP(p))
+    {
+      /* Handle gptrs by calling to-obj behind the scenes. Ugly. */
+      int flag = 0;
+      at *sym = named("to-obj");
+      at *fun = find_primitive(0, sym);
+      if (EXTERNP(fun, &dx_class))
+	{
+	  at *arg = new_cons(p,NIL);
+	  UNLOCK(sym);
+	  sym = apply(fun, arg);
+	  UNLOCK(arg);
+	  flag = is_of_class(sym, q->Object);
+	}
+      UNLOCK(sym);
+      UNLOCK(fun);
+      if (flag)
+	return true();
+    }
+#endif
+  return NIL;
 }
 
 
@@ -1382,6 +1433,7 @@ init_oostruct(void)
   dx_define("makeclass",xmakeclass);
   dy_define("new",ynew);
   dx_define("new-empty",xnew_empty);
+  dx_define("new-copy",xnew_copy);
   dx_define("delete",xdelete);
   dy_define("letslot",yletslot);
   dx_define("check==>",xchecksend);

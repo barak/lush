@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;  $Id: sysenv.lsh,v 1.107 2004/01/18 06:10:45 leonb Exp $
+;;;  $Id: sysenv.lsh,v 1.113 2004/08/02 21:32:06 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -127,7 +127,9 @@
 	(progn
 	  (writing "$stderr" (where 7))
 	  (load "$stdin" "$stdout" "[Break]\n? |  |> ")
-	  (not (ask "Resume execution")) )
+	  (when (not (ask "Resume execution"))
+	    (printf "[Ready]\n") 
+	    t ) )
       t ) )
 
 (de nice-debug-hook()
@@ -138,7 +140,8 @@
              (ask "Debug toplevel"))
 	(progn
 	  (writing "$stderr" (where 7))
-	  (load "$stdin" "$stdout" "[Debug]\n? |  |> ") )
+	  (load "$stdin" "$stdout" "[Debug]\n? |  |> ") 
+	  (printf "[Ready]\n") )
       t ) )
 
 (de pause l
@@ -378,10 +381,10 @@
     (when (and (> p 0) (<> (length k) p))
       (error 'defclass "Typed and untyped slots are mixed" ()) )
     ;; generate
-    `(let ((c (makeclass ',name ,super ',k (list ,@d))))
-       (when ,(> p 0) (putp c 'slots ',body))
+    `(let ((|CLASS| (makeclass ',name ,super ',k (list ,@d))))
+       (when ,(> p 0) (putp |CLASS| 'slots ',body))
        (setq :,name :,name)
-       (setq ,name c)
+       (setq ,name |CLASS|)
        ',name) ) )
 
 (dm defmethod(f class name . body)
@@ -557,10 +560,11 @@
 
 
 (defvar matrix double-matrix)
+(defvar matrix-nc double-matrix-nc)
 (defvar array atom-matrix)
 (defvar submatrix sub-index)
 
-(lock-symbol matrix array submatrix)
+(lock-symbol matrix matrix-nc array submatrix)
 
 (de contiguousp (m)
   (let ((flag t)(size 1))
@@ -1300,7 +1304,7 @@
 
 (de module.hook(what m)
   (cond
-   ;; ON INITIALIZATION
+   ;; ON INIT
    ((= what 'init)
     (each ((pair (module-defs m)))
       (cond
@@ -1324,15 +1328,22 @@
         ;; - perform definition
         (when (and (classp (cadr pair)) (symbolp (cddr pair)))
           (putmethod (cadr pair) (cddr pair) (car pair)) ) ) ) ) )
-   ;; ON UNLOAD.
+   ;; ON UNLINK
    ((= what 'unlink)
     (each ((pair (module-defs m)))
-      ;; undo global definitions
-      (when (symbolp (cdr pair))
-        (let ((old (eval `:,(cdr pair))))
-          (when (== (car pair) old)
-            (setq old (getp old 'saved))
-            (eval `(setq :,(cdr pair) ',old)) ) ) ) ) ) ) )
+      (cond
+       ;; global definition
+       ((symbolp (cdr pair))
+        (let ((old (getp (car pair) 'saved)))
+          (when (and old (== (car pair) (eval `:,(cdr pair))))
+	    (if (not (and (classp old) (classp (car pair))))
+		;; non class: undo global definition
+		(eval `(setq :,(cdr pair) ',old))
+	      ;; class: copy saved methods
+	      (putp (car pair) 'saved ())
+	      (putp (car pair) 'precious (getp old 'precious))
+	      (each ((m (methods old)))
+		(putmethod (car pair) m (check==> old m)) ) ) ) ) ) ) ) ) ) )
 
 (de mod-search(name)
   (let ((found ())
@@ -1575,22 +1586,34 @@
   (cons 'progn else) )
 
 (de cmacro.read-c()
-  (let ((nextchar (skip-char " \r\t")))
+  (let ((nextchar (skip-char "")))
     (cond
-     ((= nextchar ";")
-      (read-string 1)
-      (if (not (index (skip-char " \r\t") "#\n")) "; " (skip-char) ";") )
      ((= nextchar "$")
       (cmacro.read-dollar) )
      ((= nextchar "#")
       (read-string 1)
       (if (<> (skip-char "") "}") "#" (read-string 1) "#}") )
-     ((or (= nextchar "\"") (= nextchar "'"))
+     ((index nextchar " \t\n\r")
+      (read-string " \t\n\r") )
+     ((index nextchar "\"'")
       (cmacro.read-string (read-string 1)) )
-     ((= nextchar "\n")
-      (read-string 1) )
+     ((= nextchar "/")
+      (cmacro.read-comment))
      (t
-      (concat (read-string "~$;#'\"\n")) ) ) ) )
+      (read-string "~$#\"'/\e") ) ) ) )
+
+(de cmacro.read-comment()
+  (let ((c (read-string 1))
+	(cc (skip-char "")) )
+    (selectq cc
+      ("/" ;; c++ style comment
+       (setq c (concat c (read-string "~\n\r") "\n")) )
+      ("*" ;; c style comment
+       (while (and (<> cc "/") (<> cc "\e"))
+	 (setq c (concat c (read-string "~*\e") (read-string "*")))
+	 (setq cc (skip-char "")) )
+       (setq c (concat c (read-string 1))) ) )
+    c) )
 
 (de cmacro.read-string(delim)
   (let ((dat (list delim))
@@ -1625,9 +1648,8 @@
 
 (dmc |#{|
   (let ((again t)
-        (pgm  ())
-        (stmt ())
-        (expr ()) )
+        (expr ()) 
+        (stmt (list "")) )
     (while again
       (let ((item (cmacro.read-c)))
         (when (stringp item)
@@ -1635,27 +1657,21 @@
         (cond
          ((= item "#}")
           (setq again ()) )
-         ((= item ";")
-          (setq stmt (apply concat (nconc1 stmt item)))
-          (setq pgm (nconc1 pgm `(cinline ,stmt ,@expr)))
-          (setq stmt ())
-          (setq expr ()) )
-         ((not (stringp item))
-          (setq stmt (nconc1 stmt "(%s)"))
-          (setq expr (nconc1 expr item)) )
          ((= item "\e")
           (error "unbalanced cmacro #{ #}") )
-         (t
-          (setq stmt (nconc1 stmt item)) ) ) ) )
-    (when stmt
-      (setq stmt (apply concat stmt))
-      (setq pgm (nconc1 pgm `(cinline ,stmt ,@expr))) )
-    (list (if (cdr pgm) (cons 'progn pgm) (car pgm))) ) )
+	 ((stringp item)
+	  (setq stmt (nconc1 stmt item)) )
+	 (t
+	  (setq stmt (nconc1 stmt "(%s)"))
+	  (setq expr (nconc1 expr item)) ) ) ) )
+    (let ((l (lastcdr stmt)))
+      (rplaca l (regex-subst "[ \t\n\r]*$" "" (car l))) )
+    (list  `(cinline ,(apply concat stmt) ,@expr)) ) )
 
 (lock-symbol breakp protect unprotect 
              cinline ifdef ifcompiled
              cmacro.read-c cmacro.read-string 
-             cmacro.read-dollar |#{| )
+	     cmacro.read-comment cmacro.read-dollar |#{| )
 
 
 
@@ -1714,22 +1730,17 @@
   (find-file static-library-path name extlist) )
 
 (de find-shared-library(name &optional extlist)
-  (let ((p ()))
+  (let ((p shared-library-path))
     (when (not extlist)
       (setq extlist '(""))
       (when (not (index "." (basename name)))
         (setq extlist (list (concat "." (or (getconf "SOEXT") "so")))) ) )
-    (when (filep "/sbin/ldconfig")
-      (let* ((c "| 2>/dev/null /sbin/ldconfig -p | grep '^\t%s[. ]'"))
-        (reading (sprintf c name)
-          (while (<> (skip-char) "\e")
-            (let* ((s (read-string))
-                   (n (regex-seek "=> /" s)) )
-              (when (consp n)
-                (setq s (dirname (mid s (+ (car n) 3))))
-                (when (and (dirp s) (not (member s p)))
-                  (setq p (cons s p)) ) ) ) ) ) ) )
-    (setq p (nconc (reverse p) shared-library-path))
+    (when (filep "/etc/ld.so.conf")
+      (reading "/etc/ld.so.conf"
+	(while (<> (skip-char) "\e")
+	  (let ((d (read-string "~\n\r\t\b ")))
+	    (when (and (dirp d) (not (member d p)))
+	      (setq p (cons d p)) ) ) ) ) )
     (find-file p name extlist) ) )
 
 (de find-shared-or-static-library(name &optional extlist)

@@ -30,6 +30,9 @@
 /* Extension for object files */
 #undef EXT_OBJ
 
+/* Define to 1 if you have the <alloca.h> header file. */
+#undef HAVE_ALLOCA_H
+
 /* Define to 1 if you have the <bfd.h> header file. */
 #undef HAVE_BFD_H
 
@@ -153,6 +156,9 @@
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
+
+/* Define to 1 if you have the `NSLinkModule' function. */
+#undef HAVE_NSLINKMODULE
 
 /* Define to 1 if you have the `openpty' function. */
 #undef HAVE_OPENPTY

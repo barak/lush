@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: compat.lsh,v 1.20 2003/09/08 13:20:29 leonb Exp $
+;;; $Id: compat.lsh,v 1.22 2004/04/17 20:09:29 profshadoko Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -134,7 +134,6 @@
 (defvar i8-matrix-nc byte-matrix-nc)
 (defvar u8-matrix-nc ubyte-matrix-nc)
 (defvar p-matrix-nc packed-matrix-nc)
-(defvar matrix-nc float-matrix-nc)
 (defvar flt-matrix float-matrix)
 (defvar real-matrix double-matrix)
 
@@ -284,7 +283,7 @@
 (mapc (lambda(name)
         (let* ((pn (pname name))
                (new-name (named (concat "idx-" pn)))
-               (code `(list 'progn (cons ,(list 'quote new-name) l) ())))
+               (code `(list 'progn (cons ,(list 'quote new-name) l))))
           (eval `(dmd ,(named (concat "idx-m0" pn)) l ,code))
           (eval `(dmd ,(named (concat "idx-m1" pn)) l ,code))
           (eval `(dmd ,(named (concat "idx-m2" pn)) l ,code))
@@ -300,7 +299,7 @@
 (mapc (lambda(name)
         (let* ((pn (pname name))
                (new-name (named (concat "idx-" pn)))
-               (code `(list 'progn (cons ,(list 'quote new-name) l) ())))
+               (code `(list 'progn (cons ,(list 'quote new-name) l))))
           (eval `(dmd ,(named (concat "idx-m0" pn "m0")) l ,code))
           (eval `(dmd ,(named (concat "idx-m1" pn "m1")) l ,code))
           (eval `(dmd ,(named (concat "idx-m2" pn "m2")) l ,code))
@@ -310,7 +309,7 @@
 (mapc (lambda(name)
         (let* ((pn (pname name))
                (new-name (named (concat "idx-" pn)))
-               (code `(list 'progn (cons `(list 'quote new-name) l) ())))
+               (code `(list 'progn (cons `(list 'quote new-name) l))))
           (eval `(dmd ,(named (concat "idx-m0" pn "m0acc")) l ,code))
           (eval `(dmd ,(named (concat "idx-m1" pn "m1acc")) l ,code))
           (eval `(dmd ,(named (concat "idx-m2" pn "m2acc")) l ,code))

@@ -24,18 +24,13 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: lisp_c.c,v 1.28 2003/07/11 15:56:24 leonb Exp $
+ * $Id: lisp_c.c,v 1.35 2004/08/02 22:08:32 leonb Exp $
  **********************************************************************/
 
 
 #include "header.h"
 #include "check_func.h"
 #include "dh.h"
-
-#if HAVE_LIBBFD
-# define DLDBFD 1
-# include "dldbfd.h"
-#endif
 
 /* From symbol.c */
 extern at *at_true;
@@ -48,6 +43,7 @@ static void at_to_dharg();
 
 /* Flags */
 static int dont_track_cside = 0;
+static int dont_warn_zombie = 0;
 static int dont_warn = 0;
 
 
@@ -1150,7 +1146,7 @@ lside_create_obj(at *p)
         error(NIL,"This is not an instance of a compiled class",p);        
       /* get and check classdoc */
       if (CONSP(objcl->priminame))
-        check_primitive(objcl->priminame);
+        check_primitive(objcl->priminame, objcl->classdoc);
       classdoc = objcl->classdoc;
       /* allocate object */
       n = alloc_obj(classdoc);
@@ -1252,12 +1248,24 @@ lside_destroy_item(void *cptr)
                * the data blocks associated to this object (e.g. storage data)
                * because this data block was owned by the lisp object...
                */
-              free(n->citem);
+	      if (n->litem)
+		{
+		  at *p = n->litem;
+		  if (p->flags & X_OOSTRUCT)
+		    ((struct oostruct *)(p->Object))->cptr = 0;
+		  else if (p->flags & X_INDEX)
+		    ((struct index *)(p->Object))->cptr = 0;
+		  else if (storagep(p))
+		    ((struct storage *)(p->Object))->cptr = 0;
+		}
+	      if (n->citem)
+		free(n->citem);
               avl_del(cptr);
               return;
+	    default:
+	      error(NIL,"lisp_c internal : corrupted data structure",NIL);
             }
         }
-      error(NIL,"lisp_c internal : corrupted data structure",NIL);
     }
 }
 
@@ -1268,19 +1276,31 @@ lside_destroy_item(void *cptr)
 int
 lside_mark_unlinked(void *cdoc)
 {
-  avlnode *n;
   int count = 0;
-  n = avl_first(0);
-  while (n)
+  int again = 1;
+  while (again)
     {
-      if (n->cmoreinfo == cdoc)
-        if (n->cinfo == CINFO_OBJ)
-          {
-            n->cinfo = CINFO_UNLINKED;
-            n->cmoreinfo = 0;
-            count += 1;
-          }
-      n = avl_succ(n);
+      avlnode *m = avl_first(0);
+      again = 0;
+      while (m)
+	{
+	  avlnode *n = m;
+	  m = avl_succ(m);
+	  if (n->cmoreinfo != cdoc)
+	    continue;
+	  if (n->belong == BELONG_LISP)
+	    {
+	      lside_destroy_item(n->citem);
+	      count += 1;
+	      again = 1;
+	    }
+	  else if (n->cinfo == CINFO_OBJ)
+	    {
+	      n->cinfo = CINFO_UNLINKED;
+	      n->cmoreinfo = 0;
+	      count += 1;
+	    }
+	}
     }
   return count;
 }
@@ -1385,10 +1405,10 @@ cside_destroy_node(avlnode *n)
   /* There is no need to free this object.
    * This is the reponsibility of the compiled code who effectively
    * owns this object and told us that the object was being deleted.
-     */
+   */
   if (n->belong != BELONG_C) 
     return;
-  /* delete lisp object as well */
+  /* Delete lisp object as well */
   if (n->litem)
     {
       avlchain_set(n, 0);
@@ -1396,7 +1416,6 @@ cside_destroy_node(avlnode *n)
         {
         case CINFO_SRG:
           ((struct storage *)(n->litem->Object))->cptr = 0;
-          /* Do not transmute SRG (they are trusted by indexes) */
           update_lisp_from_c(n);
           break;
         case CINFO_OBJ:
@@ -1412,6 +1431,25 @@ cside_destroy_node(avlnode *n)
           transmute_object_into_gptr(n->litem, n->citem);
           break;
         }
+    }
+  /* Apply destructors */
+  if (n->citem)
+    {
+      switch (n->cinfo)
+        {
+        case CINFO_SRG:
+	  srg_free(n->citem);
+          break;
+	case CINFO_OBJ:
+	  if (n->cmoreinfo)
+	    {
+	      dhclassdoc_t *cdoc = n->cmoreinfo;
+	      struct VClass_object *vtbl = cdoc->lispdata.vtable;
+	      if (vtbl && vtbl->Cdoc == cdoc && vtbl->Cdestroy)
+		(*vtbl->Cdestroy)(n->citem);
+	    }
+	  break;
+	}
     }
   /* delete avl map entry */
   avl_del(n->citem);
@@ -1874,6 +1912,11 @@ at_to_dharg(at *at_obj, dharg *arg, dhrecord *drec, at *errctx)
           arg->dh_srg_ptr = at_obj->Gptr;
           return;
         }
+      if ((at_obj->flags & X_ZOMBIE) && dont_warn_zombie) 
+	{
+	  arg->dh_srg_ptr = 0;
+	  return;
+	}
       if (!storagep(at_obj))
         lisp2c_error("STORAGE expected",errctx,at_obj);
       /* check type and access */
@@ -1901,6 +1944,11 @@ at_to_dharg(at *at_obj, dharg *arg, dhrecord *drec, at *errctx)
           arg->dh_idx_ptr = at_obj->Gptr;
           return;
         }
+      if ((at_obj->flags & X_ZOMBIE) && dont_warn_zombie) 
+	{
+	  arg->dh_idx_ptr = 0;
+	  return;
+	}
       if(! EXTERNP(at_obj, &index_class))
         lisp2c_error("IDX expected",errctx,at_obj);
       /* check type and access */
@@ -1935,7 +1983,7 @@ at_to_dharg(at *at_obj, dharg *arg, dhrecord *drec, at *errctx)
         }
       if (at_obj->flags & X_ZOMBIE)
         {
-          if (!dont_track_cside)
+          if (!dont_track_cside && !dont_warn_zombie)
             lisp2c_warning("(in): found ZOMBIE instead of OBJ", errctx);
           arg->dh_obj_ptr = 0;
           return;
@@ -1968,6 +2016,11 @@ at_to_dharg(at *at_obj, dharg *arg, dhrecord *drec, at *errctx)
           arg->dh_srg_ptr = at_obj->Gptr;
           return;
         }
+      if ((at_obj->flags & X_ZOMBIE) && dont_warn_zombie) 
+	{
+	  arg->dh_srg_ptr = 0;
+	  return;
+	}
       if (! EXTERNP(at_obj, &string_class))
         lisp2c_error("STRING expected",errctx,at_obj);
       n = lside_create_str(at_obj);
@@ -2195,9 +2248,11 @@ update_c_from_lisp(avlnode *n)
         break;
       }
 
+#if LISP_C_VERBOSE
     case CINFO_UNLINKED:
       lisp2c_warning("(in): Found object with unlinked class",0);
       return;
+#endif
         
     case CINFO_OBJ:
       {
@@ -2209,8 +2264,10 @@ update_c_from_lisp(avlnode *n)
         int k,j,sl,nsl;
         
         if (object==0)
-          /* happens during call to the destructor */
           return;
+	if (n->litem->flags & C_GARBAGE)
+	  dont_warn_zombie = 1;
+
         cdoc = n->cmoreinfo;
         if (cdoc==0)
           error(NIL,"lisp_c internal: corrupted class information",NIL);
@@ -2337,11 +2394,13 @@ update_lisp_from_c(avlnode *n)
         DELAYED_UNLOCK(ind->atst, origst);
         break;
       }
-        
+
+#if LISP_C_VERBOSE
     case CINFO_UNLINKED:
       lisp2c_warning("(out) : Found C object with unlinked class",0);
       break;
-        
+#endif
+
     case CINFO_OBJ:
       {
         void *cptr = n->citem;
@@ -2353,8 +2412,10 @@ update_lisp_from_c(avlnode *n)
         at *orig, *new;
             
         if (object==0)
-          /* happens during call to the destructor */
           return;
+	if (n->litem->flags & C_GARBAGE)
+	  dont_warn_zombie = 1;
+
         cdoc = n->cmoreinfo;
         if (cdoc==0)
           error(NIL,"lisp_c internal: corrupted class information",NIL);
@@ -2523,7 +2584,7 @@ wipe_out_temps(void)
   while (dummy_tmps.chnxt != &dummy_tmps)
     {
       void *cptr;
-      dhclassdoc_t *cdoc;
+      void (*cdestroy)(gptr);
       avlnode *n = dummy_tmps.chnxt;
 
       if (n->belong!=BELONG_LISP  || n->litem!=0)
@@ -2537,19 +2598,9 @@ wipe_out_temps(void)
           srg_free(cptr);
           break;
         case CINFO_OBJ:
-          /* this horrible hack is used for freeing temporary pools */
-          cdoc = n->cmoreinfo;
-          if (!strcmp("pool", cdoc->lispdata.cname))
-            {
-#if DLDBFD
-              void (*func)() = (void(*)()) dld_get_func("C_free_C_pool");
-              if (func) (*func)(cptr);
-#elif 0
-              C_free_C_pool(cptr);
-#endif
-            }
+          if ((cdestroy = ((struct CClass_object*)cptr)->Vtbl->Cdestroy))
+            (*cdestroy)(cptr); /* call destructor */
           break;
-          
         }
       avlchain_set(n, 0);
       avl_del(cptr);
@@ -2602,12 +2653,13 @@ dh_listeval(at *p, at *q)
     
   /* Find and check the DHDOC */
   cfunc = p->Object;
+  if (CONSP(cfunc->name))
+    check_primitive(cfunc->name, cfunc->info);
   kname = cfunc->info;
   drec = kname->argdata;
   if(drec->op != DHT_FUNC)
     error(NIL, "(lisp_c) a function dhdoc was expected", NIL);
-  if (CONSP(cfunc->name))
-    check_primitive(cfunc->name);
+  dont_warn_zombie = 0;
   
   /* Count the arguments */
   nargs = drec->ndim;
@@ -2695,6 +2747,7 @@ dh_listeval(at *p, at *q)
   for (i=0; i<nargs; i++)
     UNLOCK(atgs[i]);
   /* return */
+  dont_warn_zombie = 0;
   if (errflag)
     error(NIL,"Run-time error in compiled code",NIL);
   return atfuncret;
@@ -2872,18 +2925,16 @@ DX(xto_gptr)
       n = lside_create_str(p);
       return NEW_GPTR(n->citem);
     }      
-#if DLDBFD
   else if (EXTERNP(p, &dh_class))
     {
       struct cfunction *cfunc;
       dhdoc_t *dhdoc;
       cfunc = p->Object;
       if (CONSP(cfunc->name))
-        check_primitive(cfunc->name);
+        check_primitive(cfunc->name, cfunc->info);
       if (( dhdoc = (dhdoc_t*)(cfunc->info) ))
-        return NEW_GPTR(dld_get_func(dhdoc->lispdata.c_name));
+        return NEW_GPTR(dhdoc->lispdata.call);
     }
-#endif
   error(NIL,"Cannot make a compiled version of this lisp object",p);
 }
 

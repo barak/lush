@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: unix.c,v 1.45 2003/11/25 17:04:51 leonb Exp $
+ * $Id: unix.c,v 1.50 2004/07/16 22:26:58 leonb Exp $
  **********************************************************************/
 
 /************************************************************************
@@ -246,45 +246,45 @@ break_irq(void)
 void 
 lastchance(char *s)
 {
-  static char reason[40];
+  static int already = 0;
   at *q;
   /* Test for recursive call */
-  if (!s || !*s)
-    s = "Unknown reason";
-  if (strncmp(s,reason,38) == 0)
+  if (!already) 
     {
-      abort(reason);
-      _exit(100);
-    }
-  if (reason[0]==0)
-    strncpy(reason,s,38);
-  /* Signal problem */
-  argeval_ptr = eval_ptr = eval_std;
-  error_doc.ready_to_an_error = FALSE;
-  fprintf(stderr, "\n\007**** GASP: Severe error : %s\n", s);
-  q = eval(named("toplevel"));
-  if (isatty(0) && EXTERNP(q,&de_class))
-    {
-      fprintf(stderr,"**** GASP: Trying to recover\n");
-      fprintf(stderr,"**** GASP: You should save your work immediatly\n\n");
-      /* Sanitize IO */
-      break_attempt = 0;      
-      block_async_poll();
-      context->input_file = stdin;
-      context->output_file = stdout;
-      context->input_tab = 0;
-      context->output_tab = 0;
-      /* Go toplevel */
+      already = 1;
+      /* Signal problem */
+      argeval_ptr = eval_ptr = eval_std;
       error_doc.ready_to_an_error = FALSE;
-      apply(q,NIL);
+      fprintf(stderr, "\n\007**** GASP: Severe error : %s\n", s);
+      q = eval(named("toplevel"));
+      if (isatty(0) && EXTERNP(q,&de_class))
+	{
+	  fprintf(stderr,"**** GASP: Trying to recover\n");
+	  fprintf(stderr,"**** GASP: You should save your work immediatly\n\n");
+	  /* Sanitize IO */
+	  break_attempt = 0;      
+	  block_async_poll();
+	  context->input_file = stdin;
+	  context->output_file = stdout;
+	  context->input_tab = 0;
+	  context->output_tab = 0;
+	  /* Go toplevel */
+	  error_doc.ready_to_an_error = FALSE;
+	  apply(q,NIL);
+	}
+      else
+	{
+	  time_t clock;
+	  time(&clock);
+	  fprintf(stderr,"**** GASP: %s", ctime(&clock));
+	}
+      abort("gasp handler");
     }
   else
     {
-      time_t clock;
-      time(&clock);
-      fprintf(stderr,"**** GASP: %s", ctime(&clock));
+      fprintf(stderr,"**** GASP: recursive error: %s\n", s);
     }
-  abort("gasp handler");
+  _exit(100);
 }
 
 
@@ -785,12 +785,15 @@ os_wait(int nfds, int* fds, int console, unsigned long ms)
    gets a line on the console (and process events) */
 
 #if HAVE_LIBREADLINE
-
-#if RL_READLINE_VERSION >= 0x400
-# define READLINE_COMPLETION 1
-#else
-# define READLINE_COMPLETION 0
+# if HAVE_READLINE_READLINE_H
+#  define READLINE 1
+#  if RL_READLINE_VERSION >= 0x400
+#   define READLINE_COMPLETION 1
+#  endif
+# endif
 #endif
+
+#if READLINE
 
 static int console_in_eventproc = 0;
 
@@ -1035,7 +1038,7 @@ console_getline(char *prompt, char *buf, int size)
     }
 }
 
-#else /* !HAVE_LIBREADLINE */
+#else /* !READLINE */
 
 static void
 console_init(void)
@@ -1070,7 +1073,7 @@ void
 toplevel_unix(void)
 {
   break_attempt = 0;
-#if HAVE_LIBREADLINE
+#if READLINE
   console_in_eventproc = 0;
   rl_deprep_terminal();
 #endif

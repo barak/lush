@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: header.h,v 1.57 2004/01/18 05:35:31 leonb Exp $
+ * $Id: header.h,v 1.61 2004/07/26 17:30:43 leonb Exp $
  **********************************************************************/
 
 #ifndef HEADER_H
@@ -235,6 +235,7 @@ typedef struct class {
   char 	           dontdelete;  /* class should not be deleted */
   /* additional info for dhclasses */
   dhclassdoc_t    *classdoc;  
+  char            *kname;
 } class;
 
 
@@ -557,6 +558,7 @@ struct cfunction {
   at *name;
   void *call;
   void *info;
+  char *kname;
 };
 
 struct lfunction {
@@ -723,10 +725,11 @@ TLAPI int eq_test (at *p, at *q);
 /* ARITH.H ----------------------------------------------------- */
 
 extern LUSHAPI class complex_class;
+#ifdef HAVE_COMPLEXREAL
 LUSHAPI at *new_complex(complexreal z);
 LUSHAPI int complexp(at*);
 LUSHAPI complexreal get_complex(at*);
-
+#endif
 
 /* OOSTRUCT.H ----------------------------------------------------- */
 
@@ -771,7 +774,7 @@ LUSHAPI void dhclass_define(char *name, dhclassdoc_t *kclass);
 LUSHAPI void dh_define(char *name, dhdoc_t *kname);
 LUSHAPI void dhmethod_define(dhclassdoc_t *kclass, char *name, dhdoc_t *kname);
 
-LUSHAPI void check_primitive(at *prim);
+LUSHAPI void check_primitive(at *prim, void *info);
 LUSHAPI at *find_primitive(at *module, at *name);
 LUSHAPI at *module_list(void);
 LUSHAPI at *module_load(char *filename, at *hook);
@@ -787,7 +790,6 @@ LUSHAPI void module_unload(at *atmodule);
 #define DATE_MINUTE     4
 #define DATE_SECOND     5
 
-extern char *ansidatenames[];
 extern class date_class;
 
 TLAPI char *str_date( at *p, int *pfrom, int *pto );
@@ -1280,6 +1282,7 @@ LUSHAPI void *register_poll_functions(int  (*spoll)(void),
 
 /* Event queues */ 
 LUSHAPI void *timer_add(at *handler, int delay, int period);
+LUSHAPI void *timer_abs(at *handler, real date);
 LUSHAPI void  timer_del(void *handle);
 LUSHAPI int   timer_fire(void);
 LUSHAPI void  event_add(at *handler, at *event);

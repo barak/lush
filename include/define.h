@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: define.h,v 1.11 2003/06/26 15:55:02 leonb Exp $
+ * $Id: define.h,v 1.13 2004/07/23 21:05:13 leonb Exp $
  **********************************************************************/
 
 #ifndef DEFINE_H
@@ -104,10 +104,6 @@ typedef void* gptr;
 # define CHECK_MACHINE(s)  check_amiga("Break "s)
 # define putc(c,stream)    aputc(c,stream)
 # define getc(stream)      agetc(stream)
-#endif
-
-#ifdef MAC
-/* This is not up-to-date */
 #endif
 
 #ifdef UNIX
@@ -195,6 +191,10 @@ typedef void* gptr;
 #   endif
 #  endif
 # endif
+#endif
+
+#ifdef HAVE_ALLOCA_H
+# include <alloca.h>
 #endif
 
 /* --------- GENERIC NAMES --------------- */

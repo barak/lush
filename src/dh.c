@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: dh.c,v 1.13 2003/01/28 18:00:39 leonb Exp $
+ * $Id: dh.c,v 1.17 2004/08/02 22:19:40 leonb Exp $
  **********************************************************************/
 
 #include "header.h"
@@ -251,6 +251,7 @@ new_dh(at *name, dhdoc_t *kdata)
   cfunc = allocate(&cfunc_alloc);
   cfunc->call = kdata->lispdata.call;
   cfunc->info = kdata;
+  cfunc->kname = strdup(kdata->lispdata.k_name);
   LOCK(name);
   cfunc->name = name;
   p = new_extern(&dh_class, cfunc);
@@ -332,6 +333,7 @@ make_dhclass(dhclassdoc_t *kdata)
       /* store */
       cl = p->Object;
       cl->classdoc = kdata;
+      cl->kname = strdup(kdata->lispdata.k_name);
       kdata->lispdata.atclass = p;
       return p;
     }
@@ -570,7 +572,7 @@ DX(xdhinfo_t)
     error(NIL,"Not a DH function", p);
   cfunc = p->Object;
   if (CONSP(cfunc->name))
-    check_primitive(cfunc->name);
+    check_primitive(cfunc->name, cfunc->info);
   dhdoc = (dhdoc_t*)(cfunc->info);
   if (! dhdoc)
     error(NIL,"Internal error: dhdoc unvailable",NIL);
@@ -593,7 +595,7 @@ DX(xdhinfo_c)
     error(NIL,"Not a DH function", p);
   cfunc = p->Object;
   if (CONSP(cfunc->name))
-    check_primitive(cfunc->name);
+    check_primitive(cfunc->name, cfunc->info);
   dhdoc = (dhdoc_t*)(cfunc->info);
   if (! dhdoc)
     error(NIL,"Internal error: dhdoc unvailable",NIL);
@@ -630,7 +632,7 @@ DX(xclassinfo_t)
     error(NIL,"not a class",p);
   cl = p->Object;
   if (CONSP(cl->priminame))
-    check_primitive(cl->priminame);
+    check_primitive(cl->priminame, cl->classdoc);
   if (!cl->classdoc)
     return NIL;
   return dhinfo_record(cl->classdoc->argdata);
@@ -650,10 +652,10 @@ DX(xclassinfo_c)
   if (! EXTERNP(p, &class_class))
     error(NIL,"not a class",p);
   cl = p->Object;
-  if (CONSP(cl->priminame))
-    check_primitive(cl->priminame);
   if (!(cdoc = cl->classdoc))
     error(NIL,"class is not compiled", p);
+  if (CONSP(cl->priminame))
+    check_primitive(cl->priminame, cl->classdoc);
   cname = new_string(strclean(cdoc->lispdata.cname));
   kname = new_string(strclean(cdoc->lispdata.k_name));
   vname = new_string(strclean(cdoc->lispdata.v_name));
@@ -674,14 +676,11 @@ Cdestroy_C_object(gptr p)
 }
 
 struct VClass_object Vt_object = { 
-  &Kc_object, 
+  (void*)&Kc_object, 
   &Cdestroy_C_object,
 };
 
-DHCLASSDOC(Kc_object, 
-           NULL, 
-           object, "object", 
-           Vt_object, 0) =
+DHCLASSDOC(Kc_object, NULL, object, "object", Vt_object, 0) =
 { 
   DH_CLASS(0, Kc_object), 
   DH_END_CLASS, 

@@ -311,10 +311,11 @@ date_name(at *p)
   return string_buffer;
 }
 
+static at *make_date(struct date *d);
+
 static void
 date_serialize(at **pp, int code)
 {
-  static at *make_date(struct date *d);
   void *p;
 
   if (code == SRZ_READ)

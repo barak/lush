@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: index.c,v 1.25 2003/07/11 13:03:45 leonb Exp $
+ * $Id: index.c,v 1.26 2004/04/15 23:45:34 leonb Exp $
  **********************************************************************/
 
 /******************************************************************************
@@ -142,6 +142,9 @@ index_name(at *p)
 }
 
 
+static at *index_set(struct index*,at**,at*,int);
+static at *index_ref(struct index*,at**);
+
 static at *
 index_listeval(at *p, at *q)
 {
@@ -149,9 +152,6 @@ index_listeval(at *p, at *q)
   register int i;
   register at *qsav;
   at *myp[MAXDIMS];
-
-  static at *index_set(struct index*,at**,at*,int);
-  static at *index_ref(struct index*,at**);
 
   ind = p->Object;
 
@@ -2147,12 +2147,15 @@ import_raw_matrix(at *p, FILE *f, int offset)
     error(NIL,"Cannot read data for this storage type",ind->atst);
 
   /* skip */
+  if (offset != 0)
+    {
 #if HAVE_FSEEKO
-  if (fseeko(f, (off_t)offset, SEEK_CUR) < 0)
+      if (fseeko(f, (off_t)offset, SEEK_CUR) < 0)
 #else
-    if (fseek(f, offset, SEEK_CUR) < 0)
+	if (fseek(f, offset, SEEK_CUR) < 0)
 #endif
-      test_file_error(NIL);
+	  test_file_error(NIL);
+    }
 
   /* read */
   index_write_idx(ind, &id);
