@@ -8,29 +8,33 @@ exec lush "$0" "$@"
 (let ((port 4000))
   ;; Search available port.
   (while (not (socketaccept port)) (incr port))
-  (printf "%s %d\n" (reading "|hostname" (read-string)) port)
+  (printf "LUSHSLAVE %s %d %d\n" 
+	  (reading "| hostname" (read-string)) 
+	  port (getpid) )
   (flush)
   ;; Open.
   (socketaccept port 'slave-input 'slave-output) )
 
 (de slave-debug-hook()
   (let ((err (errname)))
-    ;; Uncomment to print error messages
-    ;; (printf "*** %s\n" err)
+    (printf "*** %s\n" err)
     (lush-is-quiet t)
     (writing slave-output
       (print (cons 'error err))
       (flush) ) )
-  (lush-is-quiet ()) )
+  (lush-is-quiet ()) 
+  (flush)
+  t )
 
 (de slave-break-hook()
-  ;; Uncomment to print error messages
-  ;; (printf "*** Break\n")
+  (printf "*** Break\n")
   (lush-is-quiet t)
   (writing slave-output
     (print (cons 'error "Break"))
     (flush) ) 
-  (lush-is-quiet ()) )
+  (lush-is-quiet ())
+  (flush)
+  t )
 
 (unlock-symbol toplevel)
 
@@ -43,8 +47,10 @@ exec lush "$0" "$@"
              (result (eval command)) )
         (writing slave-output
           (bwrite (cons 'ok result))
-          (flush) ) ) )
+          (flush) )
+	(flush) ) )
     (lush-is-quiet t)
+    (printf "LUSHSLAVE TERMINATED\n")
     (exit 0) ) )
 
 (lock-symbol slave-input 

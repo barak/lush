@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: ps_driver.c,v 1.5 2002/11/06 16:30:50 leonb Exp $
+ * $Id: ps_driver.c,v 1.7 2004/11/22 19:54:18 leonb Exp $
  **********************************************************************/
 
 #include "header.h"
@@ -421,6 +421,16 @@ ps_clip(struct window *linfo,
     fprintf(info->f,"%d %d %d %d CLIP\n",w,h,x,y);
 }
 
+static void
+ps_set_linestyle(struct window *linfo, int ls)
+{
+  struct M_window *info = (struct M_window*)linfo;
+  begin(info);
+  if (ls>=0 && ls<4)
+    fprintf(info->f,"L%d\n",ls);
+}
+
+
 static char *hexmap="0123456789ABCDEF";
 
 static int
@@ -583,6 +593,7 @@ struct gdriver ps_driver = {
   /* import from sn3.2 */
   NIL,
   ps_get_mask,
+  ps_set_linestyle,
 };
 
 
@@ -597,6 +608,9 @@ ps_window(int x, int y, int w, int h, char *name)
   info->lwin.font       = new_safe_string(FONT_STD);
   info->lwin.color      = COLOR_FG;
   info->lwin.gdriver    = &ps_driver;
+  info->lwin.clipw = 0;
+  info->lwin.cliph = 0;
+  info->lwin.linestyle = 0;
   info->lwin.backptr    = ans;
   return ans;
 }

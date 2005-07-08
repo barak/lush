@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: toplevel.c,v 1.28 2004/07/19 19:47:05 leonb Exp $
+ * $Id: toplevel.c,v 1.31 2005/02/19 18:10:07 leonb Exp $
  **********************************************************************/
 
 
@@ -85,6 +85,7 @@ extern void init_lisp_c (void);
 extern void init_event (void);
 extern void init_graphics (void);
 extern void init_ps_driver (void);
+extern void init_lisp_driver (void);
 extern void init_comdraw_driver (void);
 #ifndef NOGRAPHICS
 #ifdef UNIX
@@ -194,6 +195,7 @@ init_lush(char *program_name)
 #ifndef NOGRAPHICS
   init_graphics();
   init_ps_driver();
+  init_lisp_driver();
   init_comdraw_driver();
 #ifdef UNIX
 #ifndef X_DISPLAY_MISSING
@@ -886,10 +888,13 @@ DX(xerrname)
 DX(xquiet)
 {
   ALL_ARGS_EVAL;
-  if (arg_number==1)
-    quiet = ((APOINTER(1)) ? TRUE : FALSE);
-  else if (arg_number)
-    ARG_NUMBER(-1);
+  if (arg_number>0)
+    {
+      extern int line_flush_stdout;
+      ARG_NUMBER(1);
+      quiet = ((APOINTER(1)) ? TRUE : FALSE);
+      line_flush_stdout = ! quiet;
+    }
   return ((quiet) ? true() : NIL);
 }
 

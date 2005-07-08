@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: shell.lsh,v 1.6 2003/10/01 21:23:00 profshadoko Exp $
+;;; $Id: shell.lsh,v 1.9 2005/03/08 20:14:44 ysulsky Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #? *** Shell Commands
@@ -150,7 +150,7 @@
 ;; exist. Here is how this function can be use for a
 ;; "make"-like function:
 ;;
-;; {<code> (when (file-newer? src dst) (produce-dst-from-src src dst))}
+;; {<code> (when (file-newer? src dst) (produce-dst-from-src src dst)) </code>}
 (de file-newer? (f1 f2)
   (let ((f2info (fileinfo f2)))
     (if f2info
@@ -307,9 +307,11 @@
 (de ls s
   (when (not s) (setq s (list (pwd))))
   (apply append 
-	 (all ((x s)) 
-	   (sort-list (filter shell.not-hidden-file-p 
-			      (cdr (cdr (files x)))) shell.file-after-p))))
+	 (all ((x s))
+           (sort-list (filter (lambda (f)
+                                (and (<> "." f)
+                                     (shell.not-hidden-file-p f)))
+                              (files x)) shell.file-after-p))))
 
 #? (ls-a <d1> <d2> ... <dn>)
 ;; return a list of all the files in <d1>

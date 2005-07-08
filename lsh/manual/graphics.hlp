@@ -1,25 +1,25 @@
-$Id: graphics.hlp,v 1.6 2003/02/14 17:01:34 leonb Exp $
+$Id: graphics.hlp,v 1.10 2005/02/08 04:52:45 profshadoko Exp $
 #? *** Graphics.
 
 Lush features a collection of graphics functions for creating
 windows, drawing figures, plotting curves, and handling graphical
-events.
+events. 
 
 A window descriptor is a lisp object of class <|WINDOW|>. 
 Most graphical commands implicitely operate on the current window
 defined by the window descriptor stored in the symbol <window>.
 
-Each window descriptor forwards all drawing requests to a
-``Graphic Driver'' which performs the system dependent calls
-required to display the drawings on the corresponding device.
-The most common type of window (and driver) is the <x11-window>,
-which displays on your screen under Xwindows. Another one is
-the <ps-window> which sends all graphic command to an
-Encapsulated PostScript file. A particularly useful one is
-the <comdraw-window> which sends graphics to a comdraw
-graphic editor. This type of window can be used to produce
-"editable" graphics that can be modified using comdraw
-of one of the other applications of the ivtools package.
+Each window descriptor forwards all drawing requests to a ``Graphic
+Driver'' which performs the system dependent calls required to display
+the drawings on the corresponding device.  The most common type of
+window (and driver) is the <x11-window>, which displays on your screen
+under Xwindows. Another one is the <ps-window> which sends all graphic
+command to an Encapsulated PostScript file. A very useful one is the
+<svg-window> which generates an SVG (Scalable Vector Graphics) file
+that can subsequently be edited with SVG-compatible drawing software,
+such as inkscape and sodipodi on Linux. Editable graphics can also be
+produced through the <comdraw-window> driver which sends graphics to
+the comdraw graphic editor (part of the ivtools package). 
 
 
 #? ** Creating a Window
@@ -37,6 +37,7 @@ descriptor that accesses your printer.
 .SEE (x11-window  [[[<x> <y>] <w> <h>] <name>])
 .SEE (comdraw-window [[[<x> <y>] <w> <h>] <name>])
 .SEE (ps-window [[<w> <h>] <name>])
+.SEE (new svg-window <svg-file> <width> <height> [<resolution>])
 .SEE (wbm-window  [[[<x> <y>] <w> <h>] <name>])
 .SEE window
 
@@ -324,6 +325,14 @@ The matrix <mat> can be an idx2 or idx3 as with <rgb-draw-matrix>.
 
 This function only works on true color displays.
 
+
+#? (save-window-as-ppm <filename>)
+.SEE (rgb-grab-matrix <x> <y> <mat>)
+This function uses <rgb-grab-matrix> to save
+a snapshot of the current window into 
+the PPM file <filename>.
+
+
 #? ** Drawing with Colors.
 
 Color selection is highly dependent on the capabilities
@@ -464,6 +473,22 @@ Value <0.9999> selects the last color of the set.
 Optional argument <symb> is a symbol which specifies a color set
 for function <color-stdmap>.
 .SEE (color-stdmap [<symb>])
+
+
+#? (linestyle [<ls>])
+This function allows for drawing dashed lines.  
+Argument <ls> can take the following values:
+.IP 
+<0> for solid lines.
+.IP 
+<1> for dotted lines.
+.IP 
+<2> for dashed lines.
+.IP 
+<3> for dotdashed lines.
+.PP
+Calling this function without arguments returns
+the last selected line style.
 
 
 #? ** Drawing Text.
@@ -1451,8 +1476,7 @@ respective directions are choosen as to preserve proportions.
 If both <w> and <h> are 0 or nil, no scaling is performed.
 
 
-
-
+#? ** << libplot/svg.lsh
 
 
 

@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: module.c,v 1.62 2004/08/02 22:08:32 leonb Exp $
+ * $Id: module.c,v 1.69 2005/01/17 18:23:32 leonb Exp $
  **********************************************************************/
 
 
@@ -140,16 +140,24 @@ nsbundle_init(void)
 		else if (!strcmp(sname,"_return_on_error"))
 		  nsbundle_return_on_error = (void*)addr;
 	      }
-	    while (!feof(f))
+	    while (! feof(f))
 	      if (fgetc(f) == '\n')
 		break;
 	  }
-	nsbundle_clear_undefined_list 
-	  = (void*)(slide + (char*)nsbundle_clear_undefined_list);
-	nsbundle_return_on_error 
-	  = (void*)(slide + (char*)nsbundle_return_on_error);
-	pclose(f);
+	if (nsbundle_clear_undefined_list)
+	  nsbundle_clear_undefined_list 
+	    = (void*)(slide + (char*)nsbundle_clear_undefined_list);
+	if (nsbundle_return_on_error)
+	  nsbundle_return_on_error 
+	    = (void*)(slide + (char*)nsbundle_return_on_error);
       }
+    if (f)
+      pclose(f);
+    if (! (nsbundle_clear_undefined_list && nsbundle_return_on_error))
+      fprintf(stderr,
+	      "*** Dynamic loader warning:\n"
+	      "    The DYLD_NASTY_HACK no longer works (lush/src/module.c)\n"
+	      "    New version of OSX?  Good or bad news?\n");
   }
 #endif
   return 0;
@@ -221,7 +229,11 @@ nsbundle_exec(nsbundle_t *bundle)
 	  if (def == &nsbundle_head) 
 	    bundle->executable = -1;
 	  else if (def)
-	    bundle->executable = nsbundle_exec(def);
+            {
+              int saved = def->executable;
+              bundle->executable = nsbundle_exec(def);
+              def->executable = saved;
+            }
 	  else if (! NSIsSymbolNameDefined(sname))
 	    bundle->executable = -1;
 	  if (bundle->executable < 0)
@@ -855,7 +867,7 @@ cleanup_module(struct module *m)
       if (EXTERNP(q, &class_class))
         {
           class *cl = q->Object;
-	  if (!cl->goaway || !cl->classdoc) 
+	  if (! cl->goaway) 
 	    {
 	      begin_iter_at(x) 
 		{
@@ -937,22 +949,26 @@ update_exec_flag(struct module *m)
     m->flags |= MODULE_EXEC;
   if (m->defs && newstate != oldstate)
     {
+      extern void clean_dhrecord(dhrecord *);
       /* Refresh function/class pointers */
       at *p = m->defs;
       while (p) {
 	if (CONSP(p->Car)) {
 	  at *q = p->Car->Car;
 	  if (q && (q->flags & X_FUNCTION)) {
+	    dhdoc_t *kdoc = 0;
 	    struct cfunction *cfunc = q->Object;
 	    if (!newstate) {
-	      cfunc->info = 0;
+	      kdoc = cfunc->info = 0;
 	    } else if (q->Class==&dh_class && cfunc->kname) {
-	      cfunc->info = dynlink_symbol(m, cfunc->kname, 0, 0);
-	      cfunc->call = ((dhdoc_t*)cfunc->info)->lispdata.call;
+	      kdoc = cfunc->info = dynlink_symbol(m, cfunc->kname, 0, 0);
+	      cfunc->call = kdoc->lispdata.call;
 	    } else if (cfunc->kname) {
-	      cfunc->info = dynlink_symbol(m, cfunc->kname, 1, 0);
+	      kdoc = cfunc->info = dynlink_symbol(m, cfunc->kname, 1, 0);
 	      cfunc->call = cfunc->info;
 	    }
+	    if (kdoc)
+	      clean_dhrecord(kdoc->argdata);
 	  } else if (EXTERNP(q, &class_class)) {
 	    struct class *cl = q->Object;
 	    if (! newstate)
@@ -964,14 +980,13 @@ update_exec_flag(struct module *m)
 	      if (kdata)
 		kdata->lispdata.atclass = q;
 	      cl->classdoc = kdata;
+	      if (kdata)
+		clean_dhrecord(kdata->argdata);
 	    }
 	  }
 	}
 	p = p->Cdr;
       }
-      /* Refresh init function pointer */
-      if (newstate && m->initname)
-	m->initaddr = dynlink_symbol(m, m->initname, 1, 0);
     }
   /* Call hook */
   dynlink_hook(m, "exec");
@@ -995,7 +1010,9 @@ update_init_flag(struct module *m)
       dynlink_hook(m, "unlink");
       cleanup_module(m);
     }
-  
+  /* Refresh init function pointer */
+  if (m->initname)
+    m->initaddr = dynlink_symbol(m, m->initname, 1, 0);
   /* Call init function */
   if (! strcmp(m->initname, "init_user_dll"))
     {
@@ -1198,6 +1215,7 @@ module_unload(at *atmodule)
     error(NIL,"Not a module", atmodule);
   if ((err = module_maybe_unload(atmodule->Object)))
     error(NIL, err, atmodule);
+  check_exec();
 }
 
 DX(xmodule_unload)
@@ -1205,7 +1223,6 @@ DX(xmodule_unload)
   ARG_NUMBER(1);
   ARG_EVAL(1);
   module_unload(APOINTER(1));
-  check_exec();
   return NIL;
 }
 
@@ -1266,9 +1283,10 @@ module_load(char *filename, at *hook)
   if (m != &root)
     if (module_maybe_unload(m))
       {
-        LOCK(m->backptr);
-        return m->backptr;
+	LOCK(m->backptr);
+	return m->backptr;
       }
+  check_exec();
   /* Allocate */
   m = allocate(&module_alloc);
   m->flags = MODULE_USED ;
@@ -1357,6 +1375,7 @@ module_load(char *filename, at *hook)
   m->prev->next = m;
   m->next->prev = m;
   check_executability = TRUE;
+  check_exec();
   return ans;
 }
 
@@ -1372,12 +1391,8 @@ DX(xmodule_load)
   if (hook && !(hook->flags & X_FUNCTION))
     error(NIL,"Not a function", hook);
   ans = module_load(ASTRING(1), hook);
-  check_exec();
   return ans;
 }
-
-
-
 
 
 

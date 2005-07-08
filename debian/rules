@@ -65,6 +65,7 @@ install: build
 	chmod -x `find $(DESTDIR-LIB) -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train_data`
 	chmod -x `find $(DESTDIR) -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train-data -or -name "*.mat" -or -name "*.cb" -or -name "*.des" -or -name "*.cc" -or -name "*.gz"`
 	chmod -x $(DESTDIR)/usr/share/lush/lush.el
+	chmod -x $(DESTDIR)/usr/share/lush/lush.1
 	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/svm/libsvm/svm.cpp
 	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/hopfield/patterns.mat
 	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/torch/demos/IOIdx2Ubyte.cc
@@ -84,6 +85,10 @@ install: build
 	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/perceptron/patterns.mat
 	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/hamming/addresses.mat
 	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/perceptron/desired.mat
+	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/svm/svqp/svqp2.cpp
+	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/audio/ronde3-susato.ogg
+	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sdl/SDLMain.m
+	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/fftw/sample-image.mat
 	#rm -f $(DESTDIR-LIB)/usr/share/lush/packages/sdl/SDL_copying.lsh
 
 # Build architecture-independent files here.
@@ -111,7 +116,7 @@ binary-arch: build install
 	dh_installexamples
 	dh_installman -p $(pkg) debian/lush.1
 	dh_installchangelogs
-	dh_strip -Xlush
+	dh_strip
 	dh_link
 	dh_compress
 	dh_fixperms

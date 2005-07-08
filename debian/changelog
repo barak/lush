@@ -1,3 +1,12 @@
+lush (1.1-1) unstable; urgency=low
+
+  * New upstream release:
+    - no longer need to ship unstripped binaries (Closes: #315973).
+  * added ppc64 to the list of architectures (Closes: #304516).
+  * bumped policy to 3.6.2.
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Fri,  8 Jul 2005 16:40:00 +0200
+
 lush (1.0+final-1) unstable; urgency=low
 
   * New maintainer (Closes: #250414).

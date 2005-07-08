@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: dh.c,v 1.17 2004/08/02 22:19:40 leonb Exp $
+ * $Id: dh.c,v 1.20 2005/01/17 18:23:25 leonb Exp $
  **********************************************************************/
 
 #include "header.h"
@@ -181,15 +181,15 @@ next_record(dhrecord *drec)
       if (temp_drec->ndim != n)
         error(NIL,"Malformed CLASSDOC: "
               "bad number of slots in class description", NIL);
-      while (drec->op == DHT_METHOD)
-        {
-          drec = next_record(drec);
-          n++;
-        }
       if (drec->op != DHT_END_CLASS)
         error(NIL, "Malformed CLASSDOC: "
               "class description contains unrecognized records", NIL);
-      return (temp_drec->end = drec+1);
+      drec++;
+      temp_drec->end = drec;
+      temp_drec = drec;
+      while (drec->op == DHT_METHOD)
+	drec = next_record(drec);
+      return temp_drec;
       
     case DHT_NAME:
       temp_drec = drec;
@@ -206,8 +206,12 @@ next_record(dhrecord *drec)
     }
 }
 
-
-
+void
+clean_dhrecord(dhrecord *drec)
+{
+  if (drec)
+    next_record(drec);
+}
 
 
 /* ---------------------------------------------
@@ -302,10 +306,6 @@ make_dhclass(dhclassdoc_t *kdata)
         error(NIL,"Malformed CLASSDOC: "
               "Expecting a class record", NIL);
       next_record(kdata->argdata);
-      for (drec = kdata->argdata->end;
-           drec && drec->op == DHT_METHOD;
-           drec = drec->end)
-        next_record(drec);
       /* create field lists */
       keylist = defaults = NIL;
       klwhere = &keylist;
@@ -631,10 +631,10 @@ DX(xclassinfo_t)
   if (! EXTERNP(p, &class_class))
     error(NIL,"not a class",p);
   cl = p->Object;
-  if (CONSP(cl->priminame))
-    check_primitive(cl->priminame, cl->classdoc);
   if (!cl->classdoc)
     return NIL;
+  if (CONSP(cl->priminame))
+    check_primitive(cl->priminame, cl->classdoc);
   return dhinfo_record(cl->classdoc->argdata);
 }
 

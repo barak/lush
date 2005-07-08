@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: graphics.c,v 1.11 2003/07/01 19:12:03 leonb Exp $
+ * $Id: graphics.c,v 1.15 2005/02/08 18:02:35 leonb Exp $
  **********************************************************************/
 
 
@@ -48,7 +48,9 @@ window_dispose(at *p)
   if (win->eventhandler)
     unprotect(p);
   UNLOCK(win->eventhandler);
+  win->eventhandler = NIL;
   UNLOCK(win->driverdata);
+  win->driverdata = NIL;
   if (win->gdriver->close)
     (*win->gdriver->close) (win);
   win->used = 0;
@@ -60,7 +62,7 @@ window_action(at *p, void (*action)(at *))
   register struct window *win;
   
   win = p->Object;
-  (*action) (win->font);
+  (*action)(win->font);
   (*action)(win->eventhandler);
   (*action)(win->driverdata);
 }
@@ -373,14 +375,15 @@ DX(xrect_text)
   x1 = AINTEGER(1);
   y1 = AINTEGER(2);
   s = ASTRING(3);
-  
-  if (win->gdriver->rect_text) {
-    (*win->gdriver->begin) (win);
-    (*win->gdriver->rect_text) (win, x1, y1, s, &x1, &y1, &w, &h);
-    (*win->gdriver->end) (win);
-  } else
+  w = h = 0;
+  if (win->gdriver->rect_text) 
+    {
+      (*win->gdriver->begin) (win);
+      (*win->gdriver->rect_text) (win, x1, y1, s, &x1, &y1, &w, &h);
+      (*win->gdriver->end) (win);
+    } 
+  if (w == 0 || h == 0)
     return NIL;
-  
   return cons(NEW_NUMBER(x1),
 	      cons(NEW_NUMBER(y1),
 		   cons(NEW_NUMBER(w),
@@ -516,6 +519,27 @@ DX(xclip)
   return NIL;
 }
 
+
+DX(xlinestyle)
+{
+  struct window *win;
+  int ls;
+  ALL_ARGS_EVAL;
+  win = current_window();
+  if (arg_number>=1)
+    {
+      ARG_NUMBER(1);
+      ls = AINTEGER(1);
+      if (win->gdriver->set_linestyle)
+	{
+	  (*win->gdriver->begin) (win);
+	  (*win->gdriver->set_linestyle) (win, ls);
+	  (*win->gdriver->end) (win);
+	  win->linestyle = ls;
+	}
+    }
+  return NEW_NUMBER(win->linestyle);
+}
 
 DX(xcolor)
 {
@@ -1990,7 +2014,7 @@ DY(ygsave)
   at *ans = NIL;
   int  oldcolor;
   at   *oldfont;
-  short oldx,oldy,oldw,oldh;
+  short oldx,oldy,oldw,oldh,oldl;
   struct window *win;
   struct context mycontext;
   int errorflag=0;
@@ -2005,6 +2029,7 @@ DY(ygsave)
   oldy = win->clipy;
   oldw = win->clipw;
   oldh = win->cliph;
+  oldl = win->linestyle;
   LOCK(oldfont);
   
   context_push(&mycontext);
@@ -2048,8 +2073,14 @@ DY(ygsave)
 	  win->clipw = oldw;
 	  win->cliph = oldh;
 	}
+      if (oldl!=win->linestyle)
+	if (win->gdriver->set_linestyle) {
+	  (*win->gdriver->begin) (win);
+	  (*win->gdriver->set_linestyle) (win, oldl);
+	  (*win->gdriver->end) (win);
+	  win->linestyle = oldl;
+	}
     }
-  
   if (errorflag)
     siglongjmp(context->error_jump, -1L);
   return ans;
@@ -2161,7 +2192,9 @@ init_graphics(void)
   dx_define("gray-draw-matrix",xgray_draw_matrix);
   dx_define("color-draw-matrix",xcolor_draw_matrix);
   dx_define("rgb-draw-matrix",xrgb_draw_matrix);  
+  /* LUSH */
   dx_define("rgb-grab-matrix",xrgb_grab_matrix);  
+  dx_define("linestyle",xlinestyle);
   /* OGRE SPEEDUP */
   dx_define("point-in-rect",xpoint_in_rect);
   dx_define("rect-in-rect",xrect_in_rect);

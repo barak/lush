@@ -2,11 +2,11 @@ Source: lush
 Section: devel
 Priority: extra
 Maintainer: Daniel Baumann <daniel.baumann@panthera-systems.net>
-Build-Depends: debhelper (>= 4.0.0), binutils-dev, xlibs-dev
-Standards-Version: 3.6.1
+Build-Depends: debhelper (>= 4.0.0), binutils-dev, libx11-6
+Standards-Version: 3.6.2
 
 Package: lush
-Architecture: alpha amd64 arm hppa i386 m68k mips mipsel powerpc s390 sparc
+Architecture: alpha amd64 arm hppa i386 m68k mips mipsel powerpc ppc64 s390 sparc
 Depends: lush-library
 Description: Lisp Universal Shell Executable
  Lush is a programming language and environment that is based on the
