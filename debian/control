@@ -2,27 +2,29 @@ Source: lush
 Section: devel
 Priority: extra
 Maintainer: Daniel Baumann <daniel.baumann@panthera-systems.net>
-Build-Depends: debhelper (>= 4.0.0), binutils-dev, libx11-6
+Build-Depends: debhelper (>= 4.0.0), dpatch, autotools-dev, binutils-dev, libx11-6
 Standards-Version: 3.6.2
 
 Package: lush
+Section: devel
 Architecture: alpha amd64 arm hppa i386 m68k mips mipsel powerpc ppc64 s390 sparc
-Depends: lush-library
+Depends: lush-library (= ${Source-Version})
 Description: Lisp Universal Shell Executable
- Lush is a programming language and environment that is based on the
- Lisp programming language. The lush language is small compared to ANSI
- Common Lisp and is optimized for numeric calculations. Lush includes
- a libraries for numerical analysis and building graphical user interfaces.
+ Lush is a programming language and environment that is based on the Lisp
+ programming language. The lush language is small compared to ANSI Common Lisp
+ and is optimized for numeric calculations. Lush includes a libraries for
+ numerical analysis and building graphical user interfaces.
  .
  This package contains the binary executable.
 
 Package: lush-library
+Section: devel
 Architecture: all
 Depends: lush (= ${Source-Version}), python
 Description: Lisp Universal Shell Library
- These are the libraries for the lush package.
+ Lush is a programming language and environment that is based on the Lisp
+ programming language. The lush language is small compared to ANSI Common Lisp
+ and is optimized for numeric calculations. Lush includes a libraries for
+ numerical analysis and building graphical user interfaces.
  .
- Lush is a programming language and environment that is based on the
- Lisp programming language. The lush language is small compared to ANSI
- Common Lisp and is optimized for numeric calculations. Lush includes
- a libraries for numerical analysis and building graphical user interfaces.
+ This package contains the libraries for the lush package.

@@ -805,6 +805,7 @@ LUSHAPI void module_unload(at *atmodule);
 #define DATE_MINUTE     4
 #define DATE_SECOND     5
 
+extern char *ansidatenames[];
 extern class date_class;
 
 TLAPI char *str_date( at *p, int *pfrom, int *pto );

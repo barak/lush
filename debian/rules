@@ -3,124 +3,112 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-pkg		:= lush
-pkg-lib		:= lush-library
-pkg-emacs	:= lush-el
+include /usr/share/dpatch/dpatch.make
 
-prefix		:= debian/$(pkg)
-prefix-lib	:= debian/$(pkg-lib)
-
-DESTDIR		:= $(shell pwd)/$(prefix)
-DESTDIR-LIB	:= $(shell pwd)/$(prefix-lib)
-
-lush-files	:= usr/lib/$(pkg)
-lib-files	:= usr/lib/$(pkg)
-abs-files	:= $(prefix)/$(lib-files)
-abs-lib-files	:= $(prefix-lib)/$(lib-files)
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 CFLAGS = -Wall -g
 
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	# Add here commands to configure the package.
-	./configure --prefix=/usr --mandir=/usr/share/man
-	touch configure-stamp
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
 
-build-arch: configure-stamp build-arch-stamp
-build-arch-stamp:
+config.status: configure patch
 	dh_testdir
-	# Add here commands to compile the package.
+
+	# Configuring package
+	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=$$\{prefix}/share/man
+
+build: build-stamp
+build-stamp: config.status
+	dh_testdir
+
+	# Building package
 	$(MAKE) all
-	touch build-arch-stamp
 
-build-indep: configure-stamp  build-indep-stamp
-build-indep-stamp:
-	dh_testdir
-	# Add here command to compile/build the arch indep package.
-	touch build-indep-stamp
-
-build: build-arch build-indep
+	touch build-stamp
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
-	# Add here commands to clean up after the build process.
+	rm -f build-stamp
+
+	# Cleaning package
 	-$(MAKE) clean
-	#find . -type f -and -name \*~ -or -name .\*~ -exec rm -f {} \;
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
+
 	dh_clean
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_clean -k 
 	dh_installdirs
-	$(MAKE) install DESTDIR=$(DESTDIR)
-	dh_installdirs -p $(pkg-lib) usr/share
-	mv $(DESTDIR)/usr/share/lush $(DESTDIR-LIB)/usr/share/.
-	mv $(DESTDIR-LIB)/usr/share/lush/etc $(DESTDIR)/usr/share/lush
-	rm -f `find $(DESTDIR-LIB)/usr/share/lush/src -name "*.o"`
-	rm -f $(DESTDIR-LIB)/usr/share/lush/src/lush
-	chmod -x `find $(DESTDIR-LIB) -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train_data`
-	chmod -x `find $(DESTDIR) -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train-data -or -name "*.mat" -or -name "*.cb" -or -name "*.des" -or -name "*.cc" -or -name "*.gz"`
-	chmod -x $(DESTDIR)/usr/share/lush/lush.el
-	chmod -x $(DESTDIR)/usr/share/lush/lush.1
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/svm/libsvm/svm.cpp
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/hopfield/patterns.mat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/torch/demos/IOIdx2Ubyte.cc
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/kanerva/addresses.mat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/bptool/dig.pat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/sla/patterns.mat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/sla/desired.mat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/knnenv/results.cb
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/knnenv/iris_test.cb
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/inventor/demos/sphereMan.iv
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/torch/demos/test_data.gz
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/torch/demos/train_data.gz
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/svm/svqp/svqp.cpp
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/torch/demos/DiskIdx2UbyteDataSet.cc
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/bptool/dig.des
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/knnenv/iris_train.cb
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/perceptron/patterns.mat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/hamming/addresses.mat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sn28/examples/netold/perceptron/desired.mat
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/svm/svqp/svqp2.cpp
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/audio/ronde3-susato.ogg
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/sdl/SDLMain.m
-	chmod -x $(DESTDIR-LIB)/usr/share/lush/packages/fftw/sample-image.mat
-	#rm -f $(DESTDIR-LIB)/usr/share/lush/packages/sdl/SDL_copying.lsh
 
-# Build architecture-independent files here.
-# Pass -i to all debhelper commands in this target to reduce clutter.
+	# Installing package
+	$(MAKE) install prefix=$(CURDIR)/debian/lush/usr
+	install -D -m 644 doc/README debian/lush/usr/share/doc/lush/README.doc
+
+	# Moving files
+	install -d -m 755 debian/lush-library/usr/share
+	mv debian/lush/usr/share/lush debian/lush-library/usr/share
+	mv debian/lush-library/usr/share/lush/etc debian/lush/usr/share/lush
+
+	# Setting permissions
+	chmod -x `find debian/lush -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train-data -or -name "*.mat" -or -name "*.cb" -or -name "*.des" -or -name "*.cc" -or -name "*.gz"`
+	chmod -x `find debian/lush-library -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train_data`
+	chmod -x debian/lush/usr/share/lush/lush.el
+	chmod -x debian/lush/usr/share/lush/lush.1
+	chmod -x debian/lush-library/usr/share/lush/packages/svm/libsvm/svm.cpp
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/hopfield/patterns.mat
+	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/IOIdx2Ubyte.cc
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/kanerva/addresses.mat
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/bptool/dig.pat
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/sla/patterns.mat
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/sla/desired.mat
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/knnenv/results.cb
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/knnenv/iris_test.cb
+	chmod -x debian/lush-library/usr/share/lush/packages/inventor/demos/sphereMan.iv
+	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/test_data.gz
+	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/train_data.gz
+	chmod -x debian/lush-library/usr/share/lush/packages/svm/svqp/svqp.cpp
+	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/DiskIdx2UbyteDataSet.cc
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/bptool/dig.des
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/knnenv/iris_train.cb
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/perceptron/patterns.mat
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/hamming/addresses.mat
+	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/perceptron/desired.mat
+	chmod -x debian/lush-library/usr/share/lush/packages/svm/svqp/svqp2.cpp
+	chmod -x debian/lush-library/usr/share/lush/packages/audio/ronde3-susato.ogg
+	chmod -x debian/lush-library/usr/share/lush/packages/sdl/SDLMain.m
+	chmod -x debian/lush-library/usr/share/lush/packages/fftw/sample-image.mat
+
+	# Removing double files
+	rm -f `find debian/lush-library/usr/share/lush/src -name "*.o"`
+	rm -f debian/lush-library/usr/share/lush/src/lush
+
 binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_installdocs
-	dh_installexamples
-	dh_installchangelogs
-	dh_link
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
 
-# Build architecture-dependent files here.
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installdebconf
-	dh_installdocs
-	dh_installexamples
-	dh_installman -p $(pkg) debian/lush.1
 	dh_installchangelogs
-	dh_strip
+	dh_installdocs
+	dh_install
 	dh_link
+	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
@@ -128,4 +116,4 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build clean binary-indep binary-arch binary install

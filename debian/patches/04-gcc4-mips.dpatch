@@ -1,0 +1,31 @@
+#!/bin/sh /usr/share/dpatch/dpatch-run
+## 04-gcc4-mips.dpatch by Thiemo Seufer <ths@networkno.de>
+##
+## DP: Fixes FTBS on mips and mispel with GCC 4
+
+@DPATCH@
+
+diff -Naur lush-1.1.orig/src/dldbfd.c lush-1.1/src/dldbfd.c
+--- lush-1.1.orig/src/dldbfd.c	2004-11-02 19:32:56.000000000 +0000
++++ lush-1.1/src/dldbfd.c	2005-12-14 12:46:39.180131696 +0000
+@@ -88,9 +88,11 @@
+ 
+ #ifdef bfd_get_section_size_before_reloc   /* bfd<2.15 */
+ # define dldbfd_section_rawsize(p) ((p)->_raw_size)
++# define dldbfd_set_section_rawsize(p, v) ((p)->_raw_size = (v))
+ # define dldbfd_section_size(p) ((p)->_cooked_size)
+ #else
+ # define dldbfd_section_rawsize(p) ((p)->rawsize ? (p)->rawsize : (p)->size)
++# define dldbfd_set_section_rawsize(p, v) ((p)->rawsize ? ((p)->rawsize = (v)) : ((p)->size = (v)))
+ # define dldbfd_section_size(p) ((p)->size)
+ #endif
+ 
+@@ -1190,7 +1192,7 @@
+       sgot = bfd_make_section(ent->abfd, ".got");
+       ASSERT_BFD(sgot);
+       sgot->flags = SEC_ALLOC|SEC_RELOC;
+-      dldbfd_section_rawsize(sgot) = 0;
++      dldbfd_set_section_rawsize(sgot, 0);
+       dldbfd_section_size(sgot) = offset;
+       if (sgot->alignment_power < 4)
+         sgot->alignment_power = 4;

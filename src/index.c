@@ -142,9 +142,6 @@ index_name(at *p)
 }
 
 
-static at *index_set(struct index*,at**,at*,int);
-static at *index_ref(struct index*,at**);
-
 static at *
 index_listeval(at *p, at *q)
 {
@@ -152,6 +149,9 @@ index_listeval(at *p, at *q)
   register int i;
   register at *qsav;
   at *myp[MAXDIMS];
+
+  static at *index_set(struct index*,at**,at*,int);
+  static at *index_ref(struct index*,at**);
 
   ind = p->Object;
 

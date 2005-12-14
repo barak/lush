@@ -1,3 +1,13 @@
+lush (1.1-2) unstable; urgency=low
+
+  * Added patch to fix FTBFS on mips and mipsel (Closes: #336086).
+  * Rewritten debian/rules.
+  * Using dpatch for maintaining patches.
+  * Reformated debian/lush.1.
+  * Minor formal changes.
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Wed, 14 Dec 2005 13:43:00 +0100
+
 lush (1.1-1) unstable; urgency=low
 
   * New upstream release:
@@ -308,4 +318,3 @@ lush (0.1.1.1-1) unstable; urgency=low
   * Initial package (closes: 151326)
 
  -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 28 Jun 2002 15:13:41 -0600
-
