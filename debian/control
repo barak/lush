@@ -7,7 +7,7 @@ Standards-Version: 3.6.2
 
 Package: lush
 Section: devel
-Architecture: alpha amd64 arm hppa i386 m68k mips mipsel powerpc ppc64 s390 sparc
+Architecture: alpha amd64 arm hppa i386 m68k mips mipsel powerpc ppc64 s390 sparc kfreebsd-i386
 Depends: lush-library (= ${Source-Version})
 Description: Lisp Universal Shell Executable
  Lush is a programming language and environment that is based on the Lisp

@@ -1,0 +1,25 @@
+#!/bin/sh /usr/share/dpatch/dpatch-run
+## 05-kfreebsd-gnu.dpatch by Aurelien Jarno <aurel32@debian.org>
+##
+## DP: Fixes FTBFS on GNU/kFreeBSD
+
+@DPATCH@
+
+--- lush-1.1.orig/src/unix.c
++++ lush-1.1/src/unix.c
+@@ -631,6 +631,7 @@
+ #ifndef BROKEN_SETSIG
+ #ifdef I_SETSIG
+ #ifdef I_GETSIG
++#ifdef SIGPOLL
+           flag = 0;
+           ioctl(fd, I_GETSIG, &flag);
+           if (ioctl(fd,I_SETSIG, flag|S_INPUT) != -1)
+@@ -642,6 +643,7 @@
+             }
+ #endif
+ #endif
++#endif
+ #endif /* !BROKEN_SETSIG */
+ #ifndef BROKEN_TIMER
+ #ifdef ITIMER_REAL
