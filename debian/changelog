@@ -1,3 +1,11 @@
+lush (1.1-4) unstable; urgency=low
+
+  * Removed patch for kfreebsd-i386, its obsolete since kfreebsd has SIGPOLL.
+  * Set Architecture back to any, will ask the ia64 buildd admin to add it to
+    p-a-s.
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Thu, 26 Jan 2006 20:32:00 +0100
+
 lush (1.1-3) unstable; urgency=low
 
   * Added patch to fix FTBS on kfreebsd-i386 (Closes: #345266).
