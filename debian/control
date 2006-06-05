@@ -2,8 +2,8 @@ Source: lush
 Section: devel
 Priority: extra
 Maintainer: Daniel Baumann <daniel.baumann@panthera-systems.net>
-Build-Depends: debhelper (>= 4.0.0), dpatch, autotools-dev, binutils-dev, libx11-6
-Standards-Version: 3.6.2
+Build-Depends: debhelper (>= 4.0), dpatch, autotools-dev, binutils-dev, libx11-6
+Standards-Version: 3.7.2
 
 Package: lush
 Section: devel

@@ -1,0 +1,33 @@
+diff -Naur lush-1.1.orig/src/dldbfd.c lush-1.1/src/dldbfd.c
+--- lush-1.1.orig/src/dldbfd.c	2004-11-02 19:32:56.000000000 +0000
++++ lush-1.1/src/dldbfd.c	2006-06-05 08:57:05.000000000 +0000
+@@ -673,7 +673,8 @@
+ {
+     static int initialized = 0;
+     ASSERT(!initialized);
+-    bfd_hash_table_init(&global_symbol_table, init_symbol_entry);
++    bfd_hash_table_init(&global_symbol_table, init_symbol_entry,
++                        sizeof(symbol_entry));
+     initialized = 1;
+ }
+ 
+@@ -1099,7 +1100,8 @@
+   /* Create GOT hash table */
+   info->sgot = NULL;
+   info->gotsize = 0;
+-  bfd_hash_table_init(&info->got_table, mipself_init_got_entry);
++  bfd_hash_table_init(&info->got_table, mipself_init_got_entry,
++                      sizeof(mipself_got_entry));
+   /* Identify pertinent howto information */
+   info->reloc_got16 = bfd_reloc_type_lookup(ent->abfd,BFD_RELOC_MIPS_GOT16);
+   info->reloc_call16 = bfd_reloc_type_lookup(ent->abfd,BFD_RELOC_MIPS_CALL16);
+@@ -2345,7 +2347,8 @@
+     chain_of_bfd *chain;
+ 
+     /* Initialize archive symbol table */
+-    if (! bfd_hash_table_init(&archive_map, init_archive_entry))
++    if (! bfd_hash_table_init(&archive_map, init_archive_entry,
++                              sizeof(archive_entry)))
+         THROW(bfd_errmsg(bfd_error_no_memory));        
+     cookie.armap = &archive_map;
+     cookie.armod = module;
