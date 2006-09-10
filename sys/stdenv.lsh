@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;  $Id: stdenv.lsh,v 1.19 2004/04/14 14:51:58 leonb Exp $
+;;;  $Id: stdenv.lsh,v 1.23 2005/08/10 23:40:57 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -65,7 +65,7 @@
   ;; versions of installed lsh files.
   ;; ------------------------------
   (unlock-symbol varlushdir)
-  (setq varlushdir ())
+  (setq :varlushdir ())
   (when (and getpid (not wintl3p))
     ;; Check for .lush directory
     (let ((home (getenv "HOME")))
@@ -159,6 +159,20 @@
       (lprepend c-include-path (mid flag 3)) ) )
   
   (lprepend c-include-path (concat-fname lushdir "include")) 
+
+  ;; Attempts to be smart about systems using "lib64".
+  (let ((lib64 ()))
+    (each ((f shared-library-path))
+      (setq lib64 (or lib64 (regex-match ".*/lib64$" f))) )
+    (when lib64
+      (setq shared-library-path
+            (all ((f shared-library-path))
+              (let ((ff (regex-subst "/lib$" "/lib64" f)))
+                (if (dirp ff) ff f) ) ) )
+      (setq static-library-path
+            (all ((f static-library-path))
+              (let ((ff (regex-subst "/lib$" "/lib64" f)))
+                (if (dirp ff) ff f) ) ) ) ) )
   
   t )
 

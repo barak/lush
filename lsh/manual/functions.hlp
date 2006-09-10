@@ -1,5 +1,5 @@
-$Id: functions.hlp,v 1.3 2002/11/06 23:35:16 profshadoko Exp $
-#? *** Functions.
+$Id: functions.hlp,v 1.6 2006/02/26 15:34:46 laseray Exp $
+#? *** Functions
 
 A Lush function is an unnamed object which defines how to evaluate a
 list whose first element evaluates to this function. Functions are
@@ -68,7 +68,7 @@ the Lush reader reaches such a character, it calls the function body
 and substitutes the result to the macro-character.
 .PP
 
-#? ** Argument List.
+#? ** Argument List
 
 A formal argument list is associated to each each Lush function (i.e.
 DE, DF, DM or DMD) This argument list defines which symbols will be
@@ -124,7 +124,7 @@ followed by another symbol. The list of all remaining actual arguments
 will be bound to that symbol.
 
 
-#? ** Defining a Function.
+#? ** Defining a Function
 
 #? (de <symb> <args> . <body>) 
 .SEE Argument List.
@@ -463,3 +463,29 @@ Example:
     (apply path newpath) ) )
 = ()
 .PP
+
+
+#? (defun <name> <args> ...<body>...)
+.TYPE DM
+.FILE sysenv.lsh
+.SEE (de <symb> <args> . <body>) 
+.SEE (defmacro <name> <args> ...<body>...)
+.SEE (defvar <name> [<val>])
+
+Function <defun> defines a global DE function named <name>.
+Whereas function <de> defines symbol <name> in the current scope,
+function <defun> defines symbol <name> in the global scope.
+
+
+#? (defmacro <name> <args> ...<body>...)
+.TYPE DM
+.FILE sysenv.lsh
+.SEE (de <symb> <args> . <body>) 
+.SEE (defun <name> <args> ...<body>...)
+.SEE (defvar <name> [<val>])
+
+Function <defun> defines a global DM function named <name>.
+Whereas function <dm> defines symbol <name> in the current scope,
+function <defun> defines symbol <name> in the global scope.
+The argument list <args> only matches the arguments of the macro.
+It should not contain a symbol for matching the function name itself.

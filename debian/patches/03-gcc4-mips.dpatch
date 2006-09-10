@@ -1,5 +1,5 @@
 #!/bin/sh /usr/share/dpatch/dpatch-run
-## 04-gcc4-mips.dpatch by Thiemo Seufer <ths@networkno.de>
+## 03-gcc4-mips.dpatch by Thiemo Seufer <ths@networkno.de>
 ##
 ## DP: Fixes FTBS on mips and mispel with GCC 4
 

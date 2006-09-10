@@ -24,10 +24,19 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: string.c,v 1.29 2005/01/26 03:04:52 leonb Exp $
+ * $Id: string.c,v 1.36 2006/07/13 20:36:13 leonb Exp $
  **********************************************************************/
 
 #include "header.h"
+
+#if HAVE_LANGINFO_H
+# include <langinfo.h>
+#endif
+#if HAVE_ICONV_H
+# include <iconv.h>
+# include <errno.h>
+#endif
+
 
 struct alloc_root alloc_string = {
   NULL,
@@ -105,7 +114,7 @@ new_string_bylen(int n)
  * create a new AT and return it.
  */
 at *
-new_string(char *s)
+new_string(const char *s)
 {
   register struct string *st;
   register at *q;
@@ -147,7 +156,7 @@ string_name(at *p)
 {
   char *s = ((struct string *) (p->Object))->start;
   char *name = string_buffer;
-#if HAVE_WCHAR_T
+#if HAVE_MBRTOWC
   int n = strlen(s);
   mbstate_t ps;
   memset(&ps, 0, sizeof(mbstate_t));
@@ -354,8 +363,93 @@ large_string_collect(struct large_string *ls)
 }
 
 
+/* multibyte strings ---------------------------------- */
 
+#if HAVE_ICONV
+static at *
+recode(const char *s, const char *fromcode, const char *tocode)
+{
+  size_t ilen, olen;
+  char *obuf, *ibuf;
+  struct large_string ls;
+  char buffer[512];
+  at *ans = NIL;
 
+  iconv_t conv = iconv_open(tocode, fromcode);
+  if (conv)
+    {
+      ibuf = (char*)s;
+      ilen = strlen(s);
+      large_string_init(&ls);
+      for(;;)
+        {
+          obuf = buffer;
+          olen = sizeof(buffer);
+          iconv(conv, &ibuf, &ilen, &obuf, &olen);
+          if (obuf > buffer)
+            large_string_add(&ls, buffer, obuf-buffer);
+          if (ilen <= 0 || errno != E2BIG)
+            break;
+        }
+      iconv_close(conv);
+      ans = large_string_collect(&ls);
+      if (ilen <= 0)
+        return ans;
+    }
+  UNLOCK(ans);
+  return NIL;
+}
+#endif
+
+at* 
+str_mb_to_utf8(const char *s)
+{
+  /* best effort conversion from locale encoding to utf8 */
+#if HAVE_ICONV
+  at *ans;
+# if HAVE_NL_LANGINFO
+  if ((ans = recode(s, nl_langinfo(CODESET), "UTF-8")))
+    return ans;
+# endif
+  if ((ans = recode(s, "char", "UTF-8")))
+    return ans;
+  if ((ans = recode(s, "", "UTF-8")))
+    return ans;
+#endif
+  return new_string(s);
+}
+
+at* 
+str_utf8_to_mb(const char *s)
+{
+  /* best effort conversion from locale encoding from utf8 */
+#if HAVE_ICONV
+  at *ans;
+# if HAVE_NL_LANGINFO
+  if ((ans = recode(s, "UTF-8", nl_langinfo(CODESET))))
+    return ans;
+# endif
+  if ((ans = recode(s, "UTF-8", "char")))
+    return ans;
+  if ((ans = recode(s, "UTF-8", "")))
+    return ans;
+#endif
+  return new_string(s);
+}
+
+DX(xstr_locale_to_utf8)
+{
+  ARG_EVAL(1);
+  ASTRING(1);
+  return str_mb_to_utf8(SADD(APOINTER(1)->Object));
+}
+
+DX(xstr_utf8_to_locale)
+{
+  ARG_EVAL(1);
+  ASTRING(1);
+  return str_utf8_to_mb(SADD(APOINTER(1)->Object));
+}
 
 
 /* operations on strings ------------------------------	 */
@@ -823,7 +917,7 @@ DX(xupcase)
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
-#if HAVE_WCHAR_T
+#if HAVE_MBRTOWC
   {
     char buffer[MB_LEN_MAX];
     struct large_string ls;
@@ -880,7 +974,7 @@ DX(xupcase1)
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
-#if HAVE_WCHAR_T
+#if HAVE_MBRTOWC
   {
     char buffer[MB_LEN_MAX];
     struct large_string ls;
@@ -926,7 +1020,7 @@ DX(xdowncase)
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
-#if HAVE_WCHAR_T
+#if HAVE_MBRTOWC
   {
     char buffer[MB_LEN_MAX];
     struct large_string ls;
@@ -976,6 +1070,44 @@ DX(xdowncase)
   return rr;
 }
 
+DX(xisprint)
+{
+  unsigned char *s;
+  ARG_NUMBER(1);
+  ARG_EVAL(1);
+  s = (unsigned char*) ASTRING(1);
+  if (!s || !*s)
+    return NIL;
+#if HAVE_MBRTOWC
+  {
+    int n = strlen((char*)s);
+    mbstate_t ps;
+    memset(&ps, 0, sizeof(mbstate_t));
+    while(n > 0)
+      {
+	wchar_t wc = 0;
+	int m = (int)mbrtowc(&wc, (char*)s, n, &ps);
+	if (m == 0)
+	  break;
+	if (m < 0)
+	  return NIL;
+	if (! iswprint(wc))
+	  return NIL;
+	s += m;
+	n -= m;
+      }
+  }
+#else
+  while (*s) {
+    int c = *(unsigned char*)s;
+    if (! (isascii(c) && isprint(c)))
+      return NIL;
+    s++;
+  }
+#endif
+  return true();
+}
+
 
 /* ----------------------- */
 
@@ -985,7 +1117,7 @@ DX(xstr_asc)
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
-#if  HAVE_WCHAR_T
+#if 0 /* Disabled for compatibility reasons */
   {
     mbstate_t ps;
     wchar_t wc = 0;
@@ -994,8 +1126,12 @@ DX(xstr_asc)
     if (wc)
       return NEW_NUMBER(wc);
   }
+  if (s[0])
+    /* negative to indicate illegal sequence */
+    return NEW_NUMBER((s[0] & 0xff) - 256); 
 #else
   if (s[0])
+    /* assume iso-8859-1 */
     return NEW_NUMBER(s[0] & 0xff);
 #endif
   error(NIL,"Empty string",APOINTER(1));
@@ -1003,7 +1139,7 @@ DX(xstr_asc)
 
 DX(xstr_chr)
 {
-#if HAVE_WCHAR_T
+#if 0 /* Disabled for compatibility reasons */
   char s[MB_LEN_MAX+1];
   size_t m;
   mbstate_t ps;
@@ -1031,43 +1167,135 @@ DX(xstr_chr)
 #endif
 }
 
-DX(xisprint)
+
+/*------------------------ */
+
+static at *
+explode_bytes(char *s)
 {
-  unsigned char *s;
+  at *p = NIL;
+  at **where = &p;
+  while (*s)
+    {
+      int code = *s;
+      *where = cons(NEW_NUMBER(code & 0xff),NIL);
+      where = &((*where)->Cdr);
+      s += 1;
+    }
+  return p;
+}
+
+static at *
+explode_chars(char *s)
+{
+#if HAVE_MBRTOWC
+  at *p = NIL;
+  at **where = &p;
+  int n = strlen(s);
+  mbstate_t ps;
+  memset(&ps, 0, sizeof(mbstate_t));
+  while (n > 0)
+    {
+      wchar_t wc = 0;
+      int m = (int)mbrtowc(&wc, s, n, &ps);
+      if (m == 0)
+        break;
+      if (m > 0)
+        {
+          *where = cons(NEW_NUMBER(wc),NIL);
+          where = &((*where)->Cdr);
+          s += m;
+          n -= m;
+        }
+      else
+        error(NIL,"Illegal characters in string",NIL);
+    }
+  return p;
+#else
+  return explode_bytes(s);
+#endif
+}
+
+static at *
+implode_bytes(at *p)
+{
+  char c;
+  struct large_string ls;
+  large_string_init(&ls);
+  while (CONSP(p))
+    {
+      if (! NUMBERP(p->Car))
+        error(NIL,"Number expected",p->Car);
+      c = (char)(p->Car->Number);
+      if (p->Car->Number != (real)(unsigned char)c)
+        error(NIL,"Integer in range 0..255 expected",p->Car);
+      large_string_add(&ls, &c, 1);
+      p = p->Cdr;
+    }
+  return large_string_collect(&ls);
+}
+
+static at *
+implode_chars(at *p)
+{
+#if HAVE_MBRTOWC
+  mbstate_t ps;
+  struct large_string ls;
+  memset(&ps, 0, sizeof(mbstate_t));
+  large_string_init(&ls);
+  while (CONSP(p))
+    {
+      char buffer[MB_LEN_MAX];
+      wchar_t wc;
+      int d;
+      if (! NUMBERP(p->Car))
+        error(NIL,"Number expected",p->Car);
+      wc = (wchar_t)(p->Car->Number);
+      if (p->Car->Number != (real)wc)
+        error(NIL,"Integer expected",p->Car);
+      d = wcrtomb(buffer, wc, &ps);
+      if (d > 0)
+        large_string_add(&ls, buffer, d);
+      else
+        error(NIL,"Integer is out of range",p->Car);
+      p = p->Cdr;
+    }
+  return large_string_collect(&ls);
+#else
+  return explode_bytes(p);
+#endif
+}
+
+DX(xexplode_bytes)
+{
   ARG_NUMBER(1);
   ARG_EVAL(1);
-  s = (unsigned char*) ASTRING(1);
-  if (!s || !*s)
-    return NIL;
-#if HAVE_WCHAR_T
-  {
-    int n = strlen(s);
-    mbstate_t ps;
-    memset(&ps, 0, sizeof(mbstate_t));
-    while(n > 0)
-      {
-	wchar_t wc = 0;
-	int m = (int)mbrtowc(&wc, s, n, &ps);
-	if (m == 0)
-	  break;
-	if (m < 0)
-	  return NIL;
-	if (! iswprint(wc))
-	  return NIL;
-	s += m;
-	n -= m;
-      }
-  }
-#else
-  while (*s) {
-    int c = *(unsigned char*)s;
-    if (! (isascii(c) && isprint(c)))
-      return NIL;
-    s++;
-  }
-#endif
-  return true();
+  return explode_bytes(ASTRING(1));
 }
+
+DX(xexplode_chars)
+{
+  ARG_NUMBER(1);
+  ARG_EVAL(1);
+  return explode_chars(ASTRING(1));
+}
+
+DX(ximplode_bytes)
+{
+  ARG_NUMBER(1);
+  ARG_EVAL(1);
+  return implode_bytes(APOINTER(1));
+}
+
+DX(ximplode_chars)
+{
+  ARG_NUMBER(1);
+  ARG_EVAL(1);
+  return implode_chars(APOINTER(1));
+}
+
+
+
 
 /*------------------------ */
 
@@ -1893,9 +2121,15 @@ init_string(void)
   dx_define("upcase", xupcase);
   dx_define("upcase1", xupcase1);
   dx_define("downcase", xdowncase);
+  dx_define("isprint", xisprint);
   dx_define("asc", xstr_asc);
   dx_define("chr", xstr_chr);
-  dx_define("isprint", xisprint);
+  dx_define("explode-bytes", xexplode_bytes);
+  dx_define("explode-chars", xexplode_chars);
+  dx_define("implode-bytes", ximplode_bytes);
+  dx_define("implode-chars", ximplode_chars);
+  dx_define("locale-to-utf8", xstr_locale_to_utf8);
+  dx_define("utf8-to-locale", xstr_utf8_to_locale);
   dx_define("stringp", xstringp);
   dx_define("regex-match", xregex_match);
   dx_define("regex-extract", xregex_extract);

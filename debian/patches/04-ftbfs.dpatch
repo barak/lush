@@ -1,5 +1,5 @@
 #!/bin/sh /usr/share/dpatch/dpatch-run
-## 05-ftbfs.dpatch by Matej Vela <vela@debian.org>
+## 04-ftbfs.dpatch by Matej Vela <vela@debian.org>
 ##
 ## DP: Fixes FTBFS due to code errors.
 

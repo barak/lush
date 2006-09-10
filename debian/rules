@@ -18,7 +18,7 @@ else
 	CFLAGS += -O2
 endif
 
-config.status: configure patch
+config.status: patch-stamp configure
 	dh_testdir
 
 	# Configuring package
@@ -33,7 +33,7 @@ build-stamp: config.status
 
 	touch build-stamp
 
-clean:
+clean: unpatch
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
@@ -57,63 +57,65 @@ install: build
 
 	# Installing package
 	$(MAKE) install prefix=$(CURDIR)/debian/lush/usr
-	install -D -m 644 doc/README debian/lush/usr/share/doc/lush/README.doc
+	install -D -m 0644 doc/README debian/lush/usr/share/doc/lush/README.doc
 
 	# Moving files
-	install -d -m 755 debian/lush-library/usr/share
+	install -d -m 0755 debian/lush-library/usr/share
 	mv debian/lush/usr/share/lush debian/lush-library/usr/share
 	mv debian/lush-library/usr/share/lush/etc debian/lush/usr/share/lush
 
-	# Setting permissions
-	chmod -x `find debian/lush -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train-data -or -name "*.mat" -or -name "*.cb" -or -name "*.des" -or -name "*.cc" -or -name "*.gz"`
-	chmod -x `find debian/lush-library -name "*.h" -or -name "*.in" -or -name "*.lsh" -or -name "*.pro" -or -name "*.hlp" -or -name "*.png" -or -name "*.jpg" -or -name "*.c" -or -name "README*" -or -name Makefile -or -name "*.dump" -or -name "*.sn" -or -name train_data`
-	chmod -x debian/lush/usr/share/lush/lush.el
-	chmod -x debian/lush/usr/share/lush/lush.1
-	chmod -x debian/lush-library/usr/share/lush/packages/svm/libsvm/svm.cpp
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/hopfield/patterns.mat
-	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/IOIdx2Ubyte.cc
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/kanerva/addresses.mat
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/bptool/dig.pat
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/sla/patterns.mat
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/sla/desired.mat
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/knnenv/results.cb
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/knnenv/iris_test.cb
-	chmod -x debian/lush-library/usr/share/lush/packages/inventor/demos/sphereMan.iv
-	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/test_data.gz
-	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/train_data.gz
-	chmod -x debian/lush-library/usr/share/lush/packages/svm/svqp/svqp.cpp
-	chmod -x debian/lush-library/usr/share/lush/packages/torch/demos/DiskIdx2UbyteDataSet.cc
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/bptool/dig.des
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/knnenv/iris_train.cb
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/perceptron/patterns.mat
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/hamming/addresses.mat
-	chmod -x debian/lush-library/usr/share/lush/packages/sn28/examples/netold/perceptron/desired.mat
-	chmod -x debian/lush-library/usr/share/lush/packages/svm/svqp/svqp2.cpp
-	chmod -x debian/lush-library/usr/share/lush/packages/audio/ronde3-susato.ogg
-	chmod -x debian/lush-library/usr/share/lush/packages/sdl/SDLMain.m
-	chmod -x debian/lush-library/usr/share/lush/packages/fftw/sample-image.mat
+	# Fixing permissions
+	chmod 0644 debian/lush/usr/share/lush/lush.el
+	chmod 0644 debian/lush/usr/share/lush/lush.1
+	chmod 0644 debian/lush/usr/share/lush/README.ivtools
+
+	find debian/lush-library/usr/share/lush -type f -exec chmod 0644 {} \;
+	find debian/lush-library/usr/share/lush -name "*.py" -exec chmod 0755 {} \;
+	find debian/lush-library/usr/share/lush -name "demo*" -exec chmod 0755 {} \;
+	chmod 0755 debian/lush-library/usr/share/lush/packages/sn28/examples/tsp/tsp
+	chmod 0755 debian/lush-library/usr/share/lush/demos/*
+	chmod 0644 debian/lush-library/usr/share/lush/demos/README
+	chmod 0644 debian/lush-library/usr/share/lush/demos/*.lsh
 
 	# Removing double files
-	rm -f `find debian/lush-library/usr/share/lush/src -name "*.o"`
 	rm -f debian/lush-library/usr/share/lush/src/lush
+	rm -f `find debian/lush-library/usr/share/lush/src -name "*.o"`
+
+	# Installing lintian overrides
+	for LINTIAN in debian/lintian/*; \
+	do \
+		install -D -m 0644 $$LINTIAN debian/`basename $$LINTIAN`/usr/share/lintian/overrides/`basename $$LINTIAN` || exit 1; \
+	done
 
 binary-indep: build install
+	dh_testdir -a
+	dh_testroot -a
+	dh_installchangelogs -a
+	dh_installdocs -a
+	dh_install -a
+	dh_link -a
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_installdeb -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
 
 binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-	dh_install
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+	dh_testdir -i
+	dh_testroot -i
+	dh_installchangelogs -i
+	dh_installdocs -i
+	dh_install -i
+	dh_link -i
+	dh_strip -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install

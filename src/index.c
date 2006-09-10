@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: index.c,v 1.26 2004/04/15 23:45:34 leonb Exp $
+ * $Id: index.c,v 1.28 2005/11/14 15:35:06 leonb Exp $
  **********************************************************************/
 
 /******************************************************************************
@@ -141,6 +141,8 @@ index_name(at *p)
   return string_buffer;
 }
 
+static at *index_set(struct index*,at**,at*,int);
+static at *index_ref(struct index*,at**);
 
 static at *
 index_listeval(at *p, at *q)
@@ -149,9 +151,6 @@ index_listeval(at *p, at *q)
   register int i;
   register at *qsav;
   at *myp[MAXDIMS];
-
-  static at *index_set(struct index*,at**,at*,int);
-  static at *index_ref(struct index*,at**);
 
   ind = p->Object;
 
@@ -1810,9 +1809,9 @@ compatible_p(void)
   warned = 1;
   if (sizeof(int)!=4) 
     {
-      print_string(" ** Warning:\n");
-      print_string(" ** Integers are not four bytes wide on this cpu\n");
-      print_string(" ** Matrix files may be non portable!\n");
+      fprintf(stderr, "+++ Warning:\n");
+      fprintf(stderr, "+++ Integers are not four bytes wide on this cpu\n");
+      fprintf(stderr, "+++ Matrix files may be non portable!\n");
     }
   else 
     {
@@ -1820,9 +1819,9 @@ compatible_p(void)
       u.b = 2.125;
       if (sizeof(flt)!=4 || u.i!=0x40080000) 
         {
-          print_string(" ** Warning:\n");
-          print_string(" ** Flt are not IEEE single precision numbers\n");
-          print_string(" ** Matrix files may be non portable!\n");
+          fprintf(stderr, "+++ Warning:\n");
+          fprintf(stderr, "+++ Flt are not IEEE single precision numbers\n");
+          fprintf(stderr, "+++ Matrix files may be non portable!\n");
         }
     }
 }

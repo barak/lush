@@ -1,3 +1,12 @@
+lush (1.2-1) unstable; urgency=low
+
+  * New email address.
+  * New upstrem release (Closes: #386420).
+  * Removing 03-gcc4-amd64.dpatch, went upstream.
+  * Added lintian overrides.
+
+ -- Daniel Baumann <daniel@debian.org>  Sun, 10 Sep 2006 10:29:00 +0200
+
 lush (1.1-5) unstable; urgency=low
 
   * Added patch to fix FTBFS, thanks Matej (Closes: #367872).

@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: toplevel.c,v 1.31 2005/02/19 18:10:07 leonb Exp $
+ * $Id: toplevel.c,v 1.38 2006/04/12 22:52:55 leonb Exp $
  **********************************************************************/
 
 
@@ -111,9 +111,6 @@ extern void undump (char *s);
 /* From BINARY.C */
 extern int in_bwrite;
 
-/* From OOSTRUCT.C */
-extern int in_object_scope;
-
 /* FORWARD */
 static void recur_doc_init(void);
 
@@ -132,6 +129,7 @@ abort(char *s)
   FMODE_TEXT(stderr);
   fprintf(stderr,"\nLush Fatal Error: %s\n", s);
   exit(10);
+  while(1);
 }
 
 
@@ -242,7 +240,6 @@ start_lisp(int argc, char **argv, int quietflag)
   error_doc.error_call = NIL;
   recur_doc_init();
   dx_sp = dx_stack - 1;
-  in_object_scope = 0;
 
   context = &first_context;
   context->next = NIL;
@@ -307,7 +304,6 @@ start_lisp(int argc, char **argv, int quietflag)
       dx_sp = dx_stack - 1;
       line_pos = line_buffer;
       *line_buffer = 0;
-      in_object_scope = 0;
       in_bwrite = 0;
       p = NIL;
       where = &p;
@@ -336,7 +332,6 @@ start_lisp(int argc, char **argv, int quietflag)
       dx_sp = dx_stack - 1;
       line_pos = line_buffer;
       *line_buffer = 0;
-      in_object_scope = 0;
       in_bwrite = 0;
       for(;;)
         {
@@ -351,7 +346,6 @@ start_lisp(int argc, char **argv, int quietflag)
     }
   /* Finished */
   clean_up();
-  exit(1);
 }
 
 
@@ -453,20 +447,10 @@ recur_pop(struct recur_elt *elt)
  * context stack handling context_push(s) context_pop()
  */
 
-static void
-context_copy(char *c1, char *c2)
-{
-  register int i;
-  i = sizeof(struct context);
-  while (i--)
-    *c1++ = *c2++;
-}
-
-
 void 
 context_push(struct context *newc)
 {
-  context_copy((char *) newc, (char *) context);
+  *newc = *context;
   newc->next = context;
   context = newc;
 }
@@ -474,8 +458,15 @@ context_push(struct context *newc)
 void 
 context_pop(void)
 {
+  struct context *oldcontext = context;
   if (context->next)
     context = context->next;
+  if (oldcontext->input_string && context->input_string)
+    context->input_string = oldcontext->input_string;
+  if (oldcontext->input_tab >= 0)
+    context->input_tab = oldcontext->input_tab;
+  if (oldcontext->output_tab >= 0)
+    context->output_tab = oldcontext->output_tab;
 }
 
 
@@ -519,18 +510,6 @@ toplevel(char *in, char *out, char *prompts)
     context->output_file = f2;
     context->output_tab = 0;
   }
-  if (sigsetjmp(context->error_jump, 1)) {
-    /* An error occurred */
-    if (f1)
-      file_close(f1);
-    if (f2)
-      file_close(f2);
-    if (ps1)
-      free(ps1);
-    context_pop();
-    symbol_pop(at_file);
-    siglongjmp(context->error_jump, -1);
-  }
   /* Split prompt */
   if (prompts) {
     const char d = '|';
@@ -558,6 +537,18 @@ toplevel(char *in, char *out, char *prompts)
           *s = 0;
       }
     }
+  }
+  if (sigsetjmp(context->error_jump, 1)) {
+    /* An error occurred */
+    if (f1)
+      file_close(f1);
+    if (f2)
+      file_close(f2);
+    if (ps1)
+      free(ps1);
+    context_pop();
+    symbol_pop(at_file);
+    siglongjmp(context->error_jump, -1);
   }
   /* Toplevel loop */
   exit_flag = 0;
@@ -822,21 +813,30 @@ error(char *prefix, char *text, at *suffix)
 
 DX(xerror)
 {
-  at *call, *symb, *arg;
-
+  at *call;
+  at *symb = 0;
+  at *arg = 0;
+  char *msg = 0;
+  
   ALL_ARGS_EVAL;
   switch (arg_number) {
   case 1:
-    error("",ASTRING(1),NIL);
+    msg = ASTRING(1);
+    break;
   case 2:
-    ASYMBOL(1);
-    symb=APOINTER(1);
-    arg=NIL;
+    if (ISSYMBOL(1)) {
+      symb = APOINTER(1);
+      msg = ASTRING(2);
+    } else {
+      msg = ASTRING(1);
+      arg = APOINTER(2);
+    }
     break;
   case 3: 
     ASYMBOL(1);
-    symb=APOINTER(1);
-    arg=APOINTER(3);
+    symb = APOINTER(1);
+    msg = ASTRING(2);
+    arg = APOINTER(3);
     break;
   default:
     error(NIL,"illegal arguments",NIL);
@@ -849,7 +849,7 @@ DX(xerror)
     }
     call = call->Cdr;
   }
-  error(NIL,ASTRING(2),arg);
+  error(NIL, msg, arg);
   return NIL;
 }
 

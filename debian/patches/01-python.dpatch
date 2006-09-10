@@ -1,7 +1,7 @@
 #!/bin/sh /usr/share/dpatch/dpatch-run
-## 01-python.dpatch
+## 01-python.dpatch by Daniel Baumann <daniel@debian.org>
 ##
-## DP: Adding python she-bangs
+## DP: Adding python she-bangs.
 
 @DPATCH@
 

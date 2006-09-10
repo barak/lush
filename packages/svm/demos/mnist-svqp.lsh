@@ -24,18 +24,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: mnist-svqp.lsh,v 1.2 2004/09/30 14:13:24 leonb Exp $
+;;; $Id: mnist-svqp.lsh,v 1.6 2006/01/25 15:15:25 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (libload "svm/demos/mnist-kernel")
-(libload "svm/svqpsvm")
+(libload "svm/svqp2svm")
 
+(defvar mnist-svm)
 
 (de run-one (c1)
   (printf "--------------------\nLoading data\n")
   (load-mnist)
-  (defvar mnist-svm (new svqpsvm mnist-kernel 60000))
+  (setq mnist-svm (new svqp2svm mnist-kernel 60000))
   (for (i 0 59999)
     (let ((y (==> mnist-kernel label i)))
       (setq y (if (= y c1) 1 -1))
@@ -45,7 +46,7 @@
   (setq :mnist-svm:cp 10)
   (setq :mnist-svm:cn 10)
   (printf "--------------------\nTraining 1 C-SVC ... Wait\n")
-  (let ((delay (time (==> mnist-svm run))))
+  (let ((delay (cputime (==> mnist-svm run))))
     (printf "Total time: %l cpu seconds (%d SV)\n" delay :mnist-svm:nsv) )
   (let ((nex 0)
         (nerror 0) 
@@ -62,7 +63,7 @@
 
 (de run-pair(c1 c2)
   (printf "--------------------\nLoading data\n")
-  (defvar mnist-svm (new SvqpSVM mnist-kernel 20000) )
+  (setq mnist-svm (new Svqp2SVM mnist-kernel 20000) )
   (let ((k 0))
     (for (i 0 59999)
 	 (let ((y (==> mnist-kernel label i)))
@@ -73,11 +74,11 @@
     (idx-i1resize :mnist-svm:x k)
     (idx-d1resize :mnist-svm:y k)
     (printf "%d examples\n" k) )
-  (setq :mnist-svm:maxcachesize (* 400 1024 1024))
+  (setq :mnist-svm:maxcachesize (* 200 1024 1024))
   (setq :mnist-svm:cp 10)
   (setq :mnist-svm:cn 10)
   (printf "--------------------\nTraining 1 C-SVC ... Wait\n")
-  (let ((delay (time (==> mnist-svm run))))
+  (let ((delay (cputime (==> mnist-svm run))))
     (printf "Total time: %l cpu seconds (%d SV) \n" delay :mnist-svm:nsv) )
   (printf "--------------------\nTesting on 10K test set ... Wait\n")
   (let ((nex 0)

@@ -1,5 +1,5 @@
 #!/bin/sh /usr/share/dpatch/dpatch-run
-## 02-manpage.dpatch by Daniel Baumann <daniel.baumann@panthera-systems.net>
+## 02-manpage.dpatch by Daniel Baumann <daniel@debian.org>
 ##
 ## DP: Updates manpage
 
