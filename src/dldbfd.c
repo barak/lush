@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: dldbfd.c,v 1.50 2005/08/11 17:47:36 leonb Exp $
+ * $Id: dldbfd.c,v 1.54 2006/11/02 16:46:09 leonb Exp $
  **********************************************************************/
 
 #ifdef HAVE_CONFIG_H
@@ -93,6 +93,13 @@
 # define dldbfd_section_rawsize(p) ((p)->rawsize ? (p)->rawsize : (p)->size)
 # define dldbfd_section_size(p) ((p)->size)
 #endif
+
+#if HAVE_BFD_HASH_TABLE_INIT_WANTS_2_ARGS
+# define my_bfd_hash_table_init(a,b,c) bfd_hash_table_init(a,b)
+#else
+# define my_bfd_hash_table_init(a,b,c) bfd_hash_table_init(a,b,c)
+#endif
+
 
 void *bfd_alloc(bfd *abfd, bfd_size_type wanted);
 unsigned int bfd_log2 (bfd_vma x);
@@ -683,7 +690,7 @@ init_global_symbol_table(void)
 {
     static int initialized = 0;
     ASSERT(!initialized);
-    bfd_hash_table_init(&global_symbol_table, init_symbol_entry);
+    my_bfd_hash_table_init(&global_symbol_table, init_symbol_entry, sizeof(symbol_entry));
     initialized = 1;
 }
 
@@ -1129,7 +1136,7 @@ mipself_init_got_info(module_entry *ent,
   /* Create GOT hash table */
   info->sgot = NULL;
   info->gotsize = 0;
-  bfd_hash_table_init(&info->got_table, mipself_init_got_entry);
+  my_bfd_hash_table_init(&info->got_table, mipself_init_got_entry, sizeof(mipself_got_entry));
   /* Identify pertinent howto information */
   info->reloc_got16 = bfd_reloc_type_lookup(ent->abfd,BFD_RELOC_MIPS_GOT16);
   info->reloc_call16 = bfd_reloc_type_lookup(ent->abfd,BFD_RELOC_MIPS_CALL16);
@@ -1511,7 +1518,7 @@ alphaelf_init_got_info(module_entry *ent,
 {
   info->sgot = NULL;
   info->gotsize = 0;
-  bfd_hash_table_init(&info->got_table, alphaelf_init_got_entry);
+  my_bfd_hash_table_init(&info->got_table, alphaelf_init_got_entry, sizeof(alphaelf_got_entry));
   info->reloc_literal = bfd_reloc_type_lookup(ent->abfd,BFD_RELOC_ALPHA_ELF_LITERAL);
   info->reloc_64 = bfd_reloc_type_lookup(ent->abfd,BFD_RELOC_64);
 }
@@ -2283,15 +2290,30 @@ apply_relocations(module_entry *module, int externalp)
 		  if ((hsym->flags & DLDF_DEFD) && !( hsym->flags & DLDF_ALLOC))
 		    {
 		      void **stub = 0;
-		      bfd_byte *data = vmaptr(p->vma);
+		      bfd_byte *data = vmaptr(p->vma) + reloc->address;
 #ifdef __x86_64__
-		      bfd_byte opcode = data[reloc->address-1];
-		      if (opcode==0xe8 || opcode==0xe9)
+		      bfd_byte opcode = data[-1];
+		      if ((opcode==0xe8) || (opcode==0xe9))
 			{
 			  stub = dld_allocate(2*sizeof(void*), 1);
 			  stub[0] = vmaptr(0x0225ff);
 			  stub[1] = vmaptr(value);
 			}
+                      else
+                        {
+                          fprintf(stderr,
+                                  "dldbfd: x86_64 relocation overflow\n"
+                                  "  This happens when accessing data variables\n"
+                                  "  located in a shared object loaded via dlopen\n"
+                                  "  Instead of\n"
+                                  "     extern int remotevar;\n"
+                                  "     if (remotevar = 15) ....\n"
+                                  "  You can do:\n"
+                                  "     extern int remotevar;\n"
+                                  "     int * volatile premotevar = &remotevar\n"
+                                  "     if (*premotevar = 15) ....\n"
+                                  );
+                        }
 #endif
 		      if (stub)
 			{
@@ -2301,7 +2323,7 @@ apply_relocations(module_entry *module, int externalp)
 			  dummy_reloc = *reloc;
 			  dummy_reloc.sym_ptr_ptr = &dummy_symbol_ptr;
 			  dummy_symbol.value = value;
-			  bfd_get_section_contents(abfd, p, data + reloc->address, reloc->address, 
+			  bfd_get_section_contents(abfd, p, data, reloc->address, 
 						   bfd_get_reloc_size(reloc->howto) );
 			  status = bfd_perform_relocation(abfd, &dummy_reloc, 
 							  (bfd_byte*)vmaptr(p->vma), 
@@ -2722,7 +2744,7 @@ link_archive_members(module_entry *module)
     chain_of_bfd *chain;
 
     /* Initialize archive symbol table */
-    if (! bfd_hash_table_init(&archive_map, init_archive_entry))
+    if (! my_bfd_hash_table_init(&archive_map, init_archive_entry, sizeof(archive_entry)))
         THROW(bfd_errmsg(bfd_error_no_memory));        
     cookie.armap = &archive_map;
     cookie.armod = module;
@@ -2920,6 +2942,17 @@ define_symbol_of_main_program(const char *exec)
 
     /* Read symbols of main program */
     abfd = bfd_openr(exec,"default");
+#if defined(__CYGWIN32__) || defined(WIN32)
+    if (! abfd)
+      {
+        char *l = malloc(strlen(exec)+8);
+        ASSERT(l);
+        strcpy(l, exec);
+        strcat(l, ".exe");
+        abfd = bfd_openr(l, "default");
+        free(l);
+      }
+#endif
     TRY
     {
         ASSERT_BFD(abfd);
@@ -3131,6 +3164,7 @@ dld_dlopen(char *path, int mode)
         }
         /* Close everything */
         bfd_close(abfd);
+        abfd = 0;
         /* Resolve everything */
         resolve_newly_defined_symbols(dld_modules);
         perform_all_relocations(dld_modules);

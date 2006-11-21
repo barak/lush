@@ -1,3 +1,10 @@
+lush (1.2.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Dropping 04-ftbfs.dpatch, went upstream.
+
+ -- Daniel Baumann <daniel@debian.org>  Tue, 21 Nov 2006 15:12:00 +0100
+
 lush (1.2-2) unstable; urgency=low
 
   * Corrected accidently mistake in rules wrt/ the -a/-i in
