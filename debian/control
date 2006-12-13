@@ -1,7 +1,7 @@
 Source: lush
 Section: devel
 Priority: extra
-Maintainer: Daniel Baumann <daniel@debian.org>
+Maintainer: Debian QA Group <packages@qa.debian.org>
 Build-Depends: debhelper (>= 4), dpatch, autotools-dev, binutils-dev, libx11-6
 Standards-Version: 3.7.2
 
