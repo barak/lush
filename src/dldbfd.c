@@ -91,9 +91,11 @@
 
 #ifdef bfd_get_section_size_before_reloc   /* bfd<2.15 */
 # define dldbfd_section_rawsize(p) ((p)->_raw_size)
+# define dldbfd_set_section_rawsize(p, v) ((p)->_raw_size = (v))
 # define dldbfd_section_size(p) ((p)->_cooked_size)
 #else
 # define dldbfd_section_rawsize(p) ((p)->rawsize ? (p)->rawsize : (p)->size)
+# define dldbfd_set_section_rawsize(p, v) ((p)->rawsize ? ((p)->rawsize = (v)) : ((p)->size = (v)))
 # define dldbfd_section_size(p) ((p)->size)
 #endif
 
@@ -1230,7 +1232,7 @@ mipself_create_got(module_entry *ent,
       sgot = bfd_make_section(ent->abfd, ".got");
       ASSERT_BFD(sgot);
       sgot->flags = SEC_ALLOC|SEC_RELOC;
-      dldbfd_section_rawsize(sgot) = 0;
+      dldbfd_set_section_rawsize(sgot, 0);
       dldbfd_section_size(sgot) = offset;
       if (sgot->alignment_power < 4)
         sgot->alignment_power = 4;
@@ -1600,7 +1602,7 @@ alphaelf_create_got(module_entry *ent,
       sgot = bfd_make_section(ent->abfd, ".got");
       ASSERT(sgot);
       sgot->flags = SEC_ALLOC|SEC_RELOC|SEC_LOAD;
-      dldbfd_section_rawsize(sgot) = 0;
+      dldbfd_set_section_rawsize(sgot, 0);
       dldbfd_section_size(sgot) = offset;
       if (sgot->alignment_power < 4)
 	sgot->alignment_power = 4;      /* Set GOT relocations */
