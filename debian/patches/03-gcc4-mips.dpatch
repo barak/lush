@@ -1,13 +1,12 @@
 #!/bin/sh /usr/share/dpatch/dpatch-run
-## 03-gcc4-mips.dpatch by Thiemo Seufer <ths@networkno.de>
+## 03-gcc4-mips.dpatch by Matej Vela <vela@debian.org>
 ##
-## DP: Fixes FTBS on mips and mispel with GCC 4
+## DP: Fixes FTBFS on mips, mipsel, and alpha with GCC 4
 
 @DPATCH@
-
-diff -Naur lush-1.1.orig/src/dldbfd.c lush-1.1/src/dldbfd.c
---- lush-1.1.orig/src/dldbfd.c	2004-11-02 19:32:56.000000000 +0000
-+++ lush-1.1/src/dldbfd.c	2005-12-14 12:46:39.180131696 +0000
+diff -urNad lush-1.2.1~/src/dldbfd.c lush-1.2.1/src/dldbfd.c
+--- lush-1.2.1~/src/dldbfd.c	2006-11-02 17:46:09.000000000 +0100
++++ lush-1.2.1/src/dldbfd.c	2006-12-14 12:31:22.000000000 +0100
 @@ -88,9 +88,11 @@
  
  #ifdef bfd_get_section_size_before_reloc   /* bfd<2.15 */
@@ -20,7 +19,7 @@ diff -Naur lush-1.1.orig/src/dldbfd.c lush-1.1/src/dldbfd.c
  # define dldbfd_section_size(p) ((p)->size)
  #endif
  
-@@ -1190,7 +1192,7 @@
+@@ -1227,7 +1229,7 @@
        sgot = bfd_make_section(ent->abfd, ".got");
        ASSERT_BFD(sgot);
        sgot->flags = SEC_ALLOC|SEC_RELOC;
@@ -29,3 +28,12 @@ diff -Naur lush-1.1.orig/src/dldbfd.c lush-1.1/src/dldbfd.c
        dldbfd_section_size(sgot) = offset;
        if (sgot->alignment_power < 4)
          sgot->alignment_power = 4;
+@@ -1597,7 +1599,7 @@
+       sgot = bfd_make_section(ent->abfd, ".got");
+       ASSERT(sgot);
+       sgot->flags = SEC_ALLOC|SEC_RELOC|SEC_LOAD;
+-      dldbfd_section_rawsize(sgot) = 0;
++      dldbfd_set_section_rawsize(sgot, 0);
+       dldbfd_section_size(sgot) = offset;
+       if (sgot->alignment_power < 4)
+ 	sgot->alignment_power = 4;      /* Set GOT relocations */
