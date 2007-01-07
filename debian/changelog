@@ -1,3 +1,27 @@
+lush (1.2.1-4) unstable; urgency=low
+
+  * New maintainer. (Closes: #402989: ITA: lush -- Lisp Universal Shell
+    Executable - Debian Bug report logs)
+  * Moved copying of config.{sub,guess} under rule autotools, which has to be
+    manually invoked to provide deterministic update of those files and to
+    don't freak out svn-buildpackage. TODO: Need to clarify since that
+    statement was added by dh_make
+  * Tiny adjustment of debian/copyright file
+  * Added homepage to the description in debian/control
+  * Multiple changes within debian/rules
+  * Added proper Build-Depends, which includes libxt-dev and others necessary
+    to build lush so it could run demos (Closes: #336570)
+  * Added development packages for on-fly-compilation done by lush into
+    Recommends and Suggests, depending on how common they are. libcv-dev was
+    added to Suggests (Closes: #312081)
+  * Ship and properly enable lush.el along with lush-library package to
+    enable lush command within emacs
+  * Mentioned demos in README.Debian
+  * Adjusted paths in the manpage patch
+  * More things to do in future. But enough for current upload I hope
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Sun,  7 Jan 2007 14:03:44 -0500
+
 lush (1.2.1-3) unstable; urgency=medium
 
   * QA upload.

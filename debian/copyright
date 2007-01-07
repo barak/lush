@@ -6,8 +6,6 @@ It was downloaded from <http://lush.sourceforge.net/>.
 Copyright Holder: Leon Bottou <leon@bottou.org>,
 		  Yann Le Cun, AT&T Corp., NECI, Leon Bottou, and Neuristique
 
-License:
-
 	Copyright (C) 2002 Leon Bottou <leon@bottou.org>
 	Copyright (C) 2002 Yann Le Cun
 	Copyright (C) 2002 AT&T Corp
@@ -15,6 +13,8 @@ License:
 	Copyright (C) 1991-2001 AT&T Corp.
 	Copyright (C) 1987-1999 Leon Bottou
 	Copyright (C) 1987-1999 Neuristique
+
+License:
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,3 +32,12 @@ License:
 
 On Debian systems, the complete text of the GNU General Public License
 can be found in /usr/share/common-licenses/GPL file.
+
+The Debian packaging is (C) 2006, Yaroslav Halchenko <debian@onerussian.com>
+and is licensed under the GPL, see above.
+
+The Debian packaging is
+(C) 2002, Kevin M. Rosenberg <kmr@debian.org>
+(C) 2007, Yaroslav Halchenko <debian@onerussian.com>
+and is licensed under the GPL, see above.
+

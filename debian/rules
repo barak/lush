@@ -3,6 +3,9 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
 include /usr/share/dpatch/dpatch.make
 
 # These are used for cross-compiling and for saving the configure script
@@ -22,7 +25,16 @@ config.status: patch-stamp configure
 	dh_testdir
 
 	# Configuring package
-	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=$$\{prefix}/share/man
+	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=$$\{prefix}/share/man  CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs"
+
+# grr - those lines were added by dh_make originally -- I need to clarify
+autotools:
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
 
 build: build-stamp
 build-stamp: config.status
@@ -40,13 +52,6 @@ clean: unpatch
 
 	# Cleaning package
 	-$(MAKE) clean
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
-
 	dh_clean
 
 install: build
@@ -60,8 +65,7 @@ install: build
 	install -D -m 0644 doc/README debian/lush/usr/share/doc/lush/README.doc
 
 	# Moving files
-	install -d -m 0755 debian/lush-library/usr/share
-	mv debian/lush/usr/share/lush debian/lush-library/usr/share
+	mv debian/lush/usr/share/lush             debian/lush-library/usr/share
 	mv debian/lush-library/usr/share/lush/etc debian/lush/usr/share/lush
 
 	# Fixing permissions
@@ -77,6 +81,9 @@ install: build
 	chmod 0644 debian/lush-library/usr/share/lush/demos/README
 	chmod 0644 debian/lush-library/usr/share/lush/demos/*.lsh
 
+	# Moving emacs script to proper location
+	mv debian/lush/usr/share/lush/lush.el     debian/lush-library/usr/share/emacs/site-lisp/lush/
+
 	# Removing double files
 	rm -f debian/lush-library/usr/share/lush/src/lush
 	rm -f `find debian/lush-library/usr/share/lush/src -name "*.o"`
@@ -87,35 +94,35 @@ install: build
 		install -D -m 0644 $$LINTIAN debian/`basename $$LINTIAN`/usr/share/lintian/overrides/`basename $$LINTIAN` || exit 1; \
 	done
 
+# Must not depend on anything. This is to be called by
+# binary-arch/binary-indep
+# in another 'make' thread.
+binary-common:
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+# keep debconf - might be necessary for emacsen
+#	dh_installdebconf
+	dh_installemacsen
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+# Build architecture independant packages using the common target.
 binary-indep: build install
-	dh_testdir -i
-	dh_testroot -i
-	dh_installchangelogs -i
-	dh_installdocs -i
-	dh_install -i
-	dh_link -i
-	dh_strip -i
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
+# Build architecture dependant packages using the common target.
 binary-arch: build install
-	dh_testdir -a
-	dh_testroot -a
-	dh_installchangelogs -a
-	dh_installdocs -a
-	dh_install -a
-	dh_link -a
-	dh_strip -a
-	dh_compress -a
-	dh_fixperms -a
-	dh_installdeb -a
-	dh_gencontrol -a
-	dh_md5sums -a
-	dh_builddeb -a
+	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+.PHONY: build clean binary-indep binary-arch binary-common binary install

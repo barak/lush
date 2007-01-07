@@ -4,10 +4,9 @@
 ## DP: Updates manpage
 
 @DPATCH@
-
-diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
---- lush-1.1.orig/etc/lush.1	2004-10-20 21:21:19.000000000 +0000
-+++ lush-1.1/etc/lush.1	2005-12-14 13:10:59.351151960 +0000
+diff -urNad trunk~/etc/lush.1 trunk/etc/lush.1
+--- trunk~/etc/lush.1	2007-01-06 22:15:55.000000000 -0500
++++ trunk/etc/lush.1	2007-01-07 18:29:52.000000000 -0500
 @@ -1,53 +1,49 @@
 +.TH LUSH 1 "2005-12-14" "1.1" "Lisp Universal Shell"
  
@@ -20,10 +19,16 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
  
 -.SH "SYNOPSIS"
 -.B lush [@initfile] [lushfile ...args...]
--
++.SH SYNOPSIS
++.B lush
++.RI [ @initfile ] [ lushfile ...args...]
+ 
 -.SH "DESCRIPTION"
 -\fIlush\fP starts the Lisp Universal Shell.
--
++.SH DESCRIPTION
++.B lush
++starts the Lisp Universal Shell.
+ 
 -Lush is an object-oriented Lisp interpreter/compiler with features
 -designed to please people who want to prototype large numerical 
 -applications. Lush includes an extensive library of vector/matrix/tensor
@@ -31,14 +36,6 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
 -and interfaces to various libraries such as OpenGL, SDL, the SGI
 -Multimedia library (video/audio grabbing) , the Numerical Recipes 
 -library, and others. Lush is an ideal frontend script language for 
-+.SH SYNOPSIS
-+.B lush
-+.RI [ @initfile ] [ lushfile ...args...]
-+
-+.SH DESCRIPTION
-+.B lush
-+starts the Lisp Universal Shell.
-+
 +Lush is an object-oriented Lisp interpreter/compiler with features designed to
 +please people who want to prototype large numerical applications. Lush includes
 +an extensive library of vector/matrix/tensor manipulation, a set of graphic
@@ -52,36 +49,34 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
 -Online help on the standard library is available 
 -by typing (helptool) at the Lush prompt. You can 
 -leave Lush by typing CTRL-D at the prompt.
--
++Online help on the standard library is available by typing (helptool) at the
++Lush prompt. You can leave Lush by typing CTRL-D at the prompt.
+ 
 -On startup, Lush loads various libraries from the sys and lsh 
 -directories, as well as a .lushrc file in the user's home directory.
 -It is recommended to add a directory lsh in your home directory and
 -to include the line (addpath "your-home-directory/lsh") to your .lushrc
 -so that your own Lush programs are found in Lush's search path.
--
--It is quite convenient to run Lush from within Emacs, 
--which can be done by creating somewhere in your path a symbolic 
--link named "lisp" to the lush executable. Then, type ESC-X run-lisp
--in Emacs. It is probably a good idea to add the following line
--in your .emacs so Emacs switches to Lisp mode when editing a Lush file:
-+Online help on the standard library is available by typing (helptool) at the
-+Lush prompt. You can leave Lush by typing CTRL-D at the prompt.
- 
--  (setq auto-mode-alist (append (cons "\\.lsh$" 'lisp-mode) auto-mode-alist))
 +On startup, Lush loads various libraries from the sys and lsh directories, as
 +well as a .lushrc file in the user's home directory. It is recommended to add a
 +directory lsh in your home directory and to include the line (addpath
 +"your-home-directory/lsh") to your .lushrc so that your own Lush programs are
 +found in Lush's search path.
-+
+ 
+-It is quite convenient to run Lush from within Emacs, 
+-which can be done by creating somewhere in your path a symbolic 
+-link named "lisp" to the lush executable. Then, type ESC-X run-lisp
+-in Emacs. It is probably a good idea to add the following line
+-in your .emacs so Emacs switches to Lisp mode when editing a Lush file:
 +It is quite convenient to run Lush from within Emacs, which can be done by
 +creating somewhere in your path a symbolic link named "lisp" to the lush
 +executable. Then, type ESC-X run-lisp in Emacs. It is probably a good idea to
 +add the following line in your .emacs so Emacs switches to Lisp mode when
 +editing a Lush file:
  
-+  (setq auto-mode-alist (append (cons "\\.lsh$" 'lisp-mode) auto-mode-alist))
+   (setq auto-mode-alist (append (cons "\\.lsh$" 'lisp-mode) auto-mode-alist))
  
+-
  .SH "RUNNING NON-INTERACTIVE LUSH SCRIPTS"
 -In Unix, Lush can be used to write scripts that can be
 -called from a shell prompt (like shell or Perl scripts).
@@ -108,8 +103,26 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
  
    % capargs asd gfdf
    capitalizing the arguments:
-@@ -82,8 +78,8 @@
- /usr/lib/lush/sys
+@@ -67,86 +63,91 @@
+ .SH "FILES"
+ .PD 0
+ .TP 2
+-/usr/lib/lush
++/usr/share/lush
+ .PP
+ .RS
+ The top of the Lush directory structure
+ .RE
+ .TP 2
+-/usr/lib/lush/src
++/usr/share/lush/src
+ .PP
+ .RS
+ Source code of the interpreter
+ .RE
+ .TP 2
+-/usr/lib/lush/sys
++/usr/share/lush/sys
  .PP
  .RS
 -Core libraries (lush sources) without which Lush cannot run.  
@@ -118,9 +131,22 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
 +minimal/customized version of Lush needs only that directory to run.
  .RE
  .TP 2
- /usr/lib/lush/etc
-@@ -101,52 +97,51 @@
- /usr/lib/lush/lsh
+-/usr/lib/lush/etc
++/usr/share/lush/etc
+ .PP
+ .RS
+ Various shell scripts and utilities
+ .RE
+ .TP 2
+-/usr/lib/lush/include
++/usr/share/lush/include
+ .PP
+ .RS
+ .h files
+ .RE
+ .TP 2
+-/usr/lib/lush/lsh
++/usr/share/lush/lsh
  .PP
  .RS
 -Library files (lush sources) that are part of the standard distribution. 
@@ -130,7 +156,8 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
 +them.
  .RE
  .TP 2
- /usr/lib/lush/packages
+-/usr/lib/lush/packages
++/usr/share/lush/packages
  .PP
  .RS
 -Library files (lush sources) for special applications or platforms, 
@@ -141,8 +168,9 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
 +present/working in all installations of Lush.
  .RE
 -.TP 2 
+-/usr/lib/lush/local
 +.TP 2
- /usr/lib/lush/local
++/usr/share/lush/local
  .PP
  .RS
  Lush libraries that are specific to your site.
@@ -154,6 +182,12 @@ diff -Naur lush-1.1.orig/etc/lush.1 lush-1.1/etc/lush.1
  .RS
  Personal Lush initialization file
  .RE
++.TP 2
++~/.lush
++.PP
++.RS
++Personal Lush directory: on-demand built libraries, etc
++.RE
  .PD
  
 -.SH "AUTHORS"

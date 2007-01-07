@@ -1,18 +1,22 @@
 Source: lush
 Section: devel
 Priority: extra
-Maintainer: Debian QA Group <packages@qa.debian.org>
-Build-Depends: debhelper (>= 4), dpatch, autotools-dev, binutils-dev, libx11-6
+Maintainer: Yaroslav Halchenko <debian@onerussian.com>
+Build-Depends: debhelper (>= 4), dpatch, autotools-dev, binutils-dev, libxt-dev, libxft-dev, g77, indent, pkg-config, libncurses-dev, libreadline-dev, libgsl0-dev, lapack3-dev, libgl1-mesa-dev | libgl-dev, libsdl-dev, libcv-dev, libasound2-dev, libaudiofile-dev
 Standards-Version: 3.7.2
 
 Package: lush
 Architecture: any
-Depends: lush-library (>= ${Source-Version})
+Depends: lush-library (>= ${Source-Version}), ${shlibs:Depends}, ${misc:Depends}
+Recommends: indent, libxt-dev, libxft-dev, libgsl0-dev, lapack3-dev, freeglut3-dev, libsdl-dev, libsdl-image1.2-dev
+Suggests: g77, libgl1-mesa-dev, libcv-dev, libasound2-dev, libaudiofile-dev
 Description: Lisp Universal Shell Executable
  Lush is a programming language and environment that is based on the Lisp
  programming language. The lush language is small compared to ANSI Common Lisp
  and is optimized for numeric calculations. Lush includes a libraries for
  numerical analysis and building graphical user interfaces.
+ .
+ Homepage: http://lush.sourceforge.net/
  .
  This package contains the binary executable.
 
@@ -25,5 +29,7 @@ Description: Lisp Universal Shell Library
  programming language. The lush language is small compared to ANSI Common Lisp
  and is optimized for numeric calculations. Lush includes a libraries for
  numerical analysis and building graphical user interfaces.
+ .
+ Homepage: http://lush.sourceforge.net/
  .
  This package contains the libraries for the lush package.
