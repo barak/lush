@@ -6,6 +6,10 @@
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
+# To fetch upstream CVS snapshot -- relative path to it
+# from the root of packaging project
+CVS_ROOT_PATH=branches/upstream/cvs/lush
+CVS_TIMESTAMP=$(shell date +"20%y%m%d")
 include /usr/share/dpatch/dpatch.make
 
 # These are used for cross-compiling and for saving the configure script
@@ -35,6 +39,14 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
+
+cvs-snapshot:
+	#cd ../$(CVS_ROOT_PATH) && cvs update
+	cd .. && \
+	 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk $(CVS_ROOT_PATH) | \
+	 dpatch patch-template -p "cvs$(CVS_TIMESTAMP)" "Dated CVS snapshot" >| trunk/debian/patches/cvs$(CVS_TIMESTAMP).dpatch && \
+	 { echo "cvs$(CVS_TIMESTAMP)"; grep -v '^cvs[0-9]*' trunk/debian/patches/00list; } >| patches.new && \
+	 mv patches.new trunk/debian/patches/00list
 
 build: build-stamp
 build-stamp: config.status
@@ -116,6 +128,7 @@ binary-common:
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
+
 # Build architecture independant packages using the common target.
 binary-indep: build install
 	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common

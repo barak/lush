@@ -1,3 +1,10 @@
+lush (1.2.1-5.cvs20070918) unstable; urgency=low
+
+  * Semi-automated introduction of CVS snapshots to benefit having up-to-date
+    LUSH before next release.
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Tue, 18 Sep 2007 01:28:20 -0400
+
 lush (1.2.1-4) unstable; urgency=low
 
   * New maintainer. (Closes: #402989: ITA: lush -- Lisp Universal Shell
