@@ -1,31 +1,11 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## cvs20070918.dpatch by Yaroslav Halchenko <debian@onerussian.com>
+## cvs20080204.dpatch by Yaroslav Halchenko <debian@onerussian.com>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: Dated CVS snapshot
 
 @DPATCH@
 
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/Makefile.in branches/upstream/cvs/lush/Makefile.in
---- trunk/Makefile.in	2007-01-06 22:16:08.000000000 -0500
-+++ branches/upstream/cvs/lush/Makefile.in	2007-09-08 09:27:01.000000000 -0400
-@@ -24,7 +24,7 @@
- #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
- #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
--#;;; $Id: Makefile.in,v 1.31 2005/06/03 04:09:56 leonb Exp $
-+#;;; $Id: Makefile.in,v 1.32 2007/04/24 16:11:22 leonb Exp $
- #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
- @SET_MAKE@
-@@ -39,6 +39,7 @@
- prefix = @prefix@
- exec_prefix = @exec_prefix@
- bindir = @bindir@
-+datarootdir = @datarootdir@
- datadir = @datadir@
- libdir = @libdir@
- mandir = @mandir@
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/aclocal.m4 branches/upstream/cvs/lush/aclocal.m4
 --- trunk/aclocal.m4	2007-01-06 22:16:08.000000000 -0500
 +++ branches/upstream/cvs/lush/aclocal.m4	2006-12-17 09:08:04.000000000 -0500
@@ -16566,12 +16546,6 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libs
 +	 0 10 0.1 (alloccolor 1 0 0))
 +    (==> p redisplay)
 +    ()))
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/README branches/upstream/cvs/lush/lsh/libtex/README
---- trunk/lsh/libtex/README	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libtex/README	2007-01-19 18:55:16.000000000 -0500
-@@ -0,0 +1,2 @@
-+
-+Lush functions that help manipulating TeX/BibTex files.
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/bibtex.lsh branches/upstream/cvs/lush/lsh/libtex/bibtex.lsh
 --- trunk/lsh/libtex/bibtex.lsh	1969-12-31 19:00:00.000000000 -0500
 +++ branches/upstream/cvs/lush/lsh/libtex/bibtex.lsh	2007-09-08 09:27:27.000000000 -0400
@@ -16988,6 +16962,12 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libt
 +  (printf "}\n") )
 +
 +
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/README branches/upstream/cvs/lush/lsh/libtex/README
+--- trunk/lsh/libtex/README	1969-12-31 19:00:00.000000000 -0500
++++ branches/upstream/cvs/lush/lsh/libtex/README	2007-01-19 18:55:16.000000000 -0500
+@@ -0,0 +1,2 @@
++
++Lush functions that help manipulating TeX/BibTex files.
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/texhtml.lsh branches/upstream/cvs/lush/lsh/libtex/texhtml.lsh
 --- trunk/lsh/libtex/texhtml.lsh	1969-12-31 19:00:00.000000000 -0500
 +++ branches/upstream/cvs/lush/lsh/libtex/texhtml.lsh	2007-02-04 03:16:12.000000000 -0500
@@ -17394,6 +17374,26 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/manu
 +
 +Example
 +.EX (implode-bytes '(226 130 172 50 51))
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/Makefile.in branches/upstream/cvs/lush/Makefile.in
+--- trunk/Makefile.in	2007-01-06 22:16:08.000000000 -0500
++++ branches/upstream/cvs/lush/Makefile.in	2007-09-08 09:27:01.000000000 -0400
+@@ -24,7 +24,7 @@
+ #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
+ #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+-#;;; $Id: Makefile.in,v 1.31 2005/06/03 04:09:56 leonb Exp $
++#;;; $Id: Makefile.in,v 1.32 2007/04/24 16:11:22 leonb Exp $
+ #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
+ @SET_MAKE@
+@@ -39,6 +39,7 @@
+ prefix = @prefix@
+ exec_prefix = @exec_prefix@
+ bindir = @bindir@
++datarootdir = @datarootdir@
+ datadir = @datadir@
+ libdir = @libdir@
+ mandir = @mandir@
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/audiofile/demos/kde_beep_honk.wav branches/upstream/cvs/lush/packages/audiofile/demos/kde_beep_honk.wav
 --- trunk/packages/audiofile/demos/kde_beep_honk.wav	1969-12-31 19:00:00.000000000 -0500
 +++ branches/upstream/cvs/lush/packages/audiofile/demos/kde_beep_honk.wav	2007-01-10 18:51:29.000000000 -0500
@@ -18302,125 +18302,6 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-+
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg-internal.h branches/upstream/cvs/lush/packages/jpeg/tinyjpeg-internal.h
---- trunk/packages/jpeg/tinyjpeg-internal.h	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/jpeg/tinyjpeg-internal.h	2007-05-19 22:56:15.000000000 -0400
-@@ -0,0 +1,115 @@
-+/*
-+ * Small jpeg decoder library (Internal header)
-+ *
-+ * Copyright (c) 2006, Luc Saillard <luc@saillard.org>
-+ * All rights reserved.
-+ * Redistribution and use in source and binary forms, with or without
-+ * modification, are permitted provided that the following conditions are met:
-+ * 
-+ * - Redistributions of source code must retain the above copyright notice,
-+ *  this list of conditions and the following disclaimer.
-+ *
-+ * - Redistributions in binary form must reproduce the above copyright notice,
-+ *  this list of conditions and the following disclaimer in the documentation
-+ *  and/or other materials provided with the distribution.
-+ *
-+ * - Neither the name of the author nor the names of its contributors may be
-+ *  used to endorse or promote products derived from this software without
-+ *  specific prior written permission.
-+ * 
-+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-+ * POSSIBILITY OF SUCH DAMAGE.
-+ *
-+ */
-+
-+
-+#ifndef __TINYJPEG_INTERNAL_H_
-+#define __TINYJPEG_INTERNAL_H_
-+
-+#include <setjmp.h>
-+
-+struct jdec_private;
-+
-+#define HUFFMAN_HASH_NBITS 9
-+#define HUFFMAN_HASH_SIZE  (1UL<<HUFFMAN_HASH_NBITS)
-+#define HUFFMAN_HASH_MASK  (HUFFMAN_HASH_SIZE-1)
-+
-+#define HUFFMAN_TABLES	   4
-+#define COMPONENTS	   4
-+#define JPEG_MAX_WIDTH	   2048
-+#define JPEG_MAX_HEIGHT	   2048
-+
-+struct huffman_table
-+{
-+  /* Fast look up table, using HUFFMAN_HASH_NBITS bits we can have directly the symbol,
-+   * if the symbol is <0, then we need to look into the tree table */
-+  short int lookup[HUFFMAN_HASH_SIZE];
-+  /* code size: give the number of bits of a symbol is encoded */
-+  unsigned char code_size[HUFFMAN_HASH_SIZE];
-+  /* some place to store value that is not encoded in the lookup table 
-+   * FIXME: Calculate if 256 value is enough to store all values
-+   */
-+  uint16_t slowtable[16-HUFFMAN_HASH_NBITS][256];
-+};
-+
-+struct component 
-+{
-+  unsigned int Hfactor;
-+  unsigned int Vfactor;
-+  float *Q_table;		/* Pointer to the quantisation table to use */
-+  struct huffman_table *AC_table;
-+  struct huffman_table *DC_table;
-+  short int previous_DC;	/* Previous DC coefficient */
-+  short int DCT[64];		/* DCT coef */
-+};
-+
-+
-+typedef void (*decode_MCU_fct) (struct jdec_private *priv);
-+typedef void (*convert_colorspace_fct) (struct jdec_private *priv);
-+
-+struct jdec_private
-+{
-+  /* Public variables */
-+  uint8_t *components[COMPONENTS];
-+  unsigned int width, height;	/* Size of the image */
-+  unsigned int flags;
-+
-+  /* Private variables */
-+  const unsigned char *stream_begin, *stream_end;
-+  unsigned int stream_length;
-+
-+  const unsigned char *stream;	/* Pointer to the current stream */
-+  unsigned int reservoir, nbits_in_reservoir;
-+
-+  struct component component_infos[COMPONENTS];
-+  float Q_tables[COMPONENTS][64];		/* quantization tables */
-+  struct huffman_table HTDC[HUFFMAN_TABLES];	/* DC huffman tables   */
-+  struct huffman_table HTAC[HUFFMAN_TABLES];	/* AC huffman tables   */
-+  int default_huffman_table_initialized;
-+  int restart_interval;
-+  int restarts_to_go;				/* MCUs left in this restart interval */
-+  int last_rst_marker_seen;			/* Rst marker is incremented each time */
-+
-+  /* Temp space used after the IDCT to store each components */
-+  uint8_t Y[64*4], Cr[64], Cb[64];
-+
-+  jmp_buf jump_state;
-+  /* Internal Pointer use for colorspace conversion, do not modify it !!! */
-+  uint8_t *plane[COMPONENTS];
-+
-+};
-+
-+#define IDCT tinyjpeg_idct_float
-+void tinyjpeg_idct_float (struct component *compptr, uint8_t *output_buf, int stride);
-+
-+#endif
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg.c branches/upstream/cvs/lush/packages/jpeg/tinyjpeg.c
 --- trunk/packages/jpeg/tinyjpeg.c	1969-12-31 19:00:00.000000000 -0500
@@ -20646,6 +20527,125 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg-internal.h branches/upstream/cvs/lush/packages/jpeg/tinyjpeg-internal.h
+--- trunk/packages/jpeg/tinyjpeg-internal.h	1969-12-31 19:00:00.000000000 -0500
++++ branches/upstream/cvs/lush/packages/jpeg/tinyjpeg-internal.h	2007-05-19 22:56:15.000000000 -0400
+@@ -0,0 +1,115 @@
++/*
++ * Small jpeg decoder library (Internal header)
++ *
++ * Copyright (c) 2006, Luc Saillard <luc@saillard.org>
++ * All rights reserved.
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ * 
++ * - Redistributions of source code must retain the above copyright notice,
++ *  this list of conditions and the following disclaimer.
++ *
++ * - Redistributions in binary form must reproduce the above copyright notice,
++ *  this list of conditions and the following disclaimer in the documentation
++ *  and/or other materials provided with the distribution.
++ *
++ * - Neither the name of the author nor the names of its contributors may be
++ *  used to endorse or promote products derived from this software without
++ *  specific prior written permission.
++ * 
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ */
++
++
++#ifndef __TINYJPEG_INTERNAL_H_
++#define __TINYJPEG_INTERNAL_H_
++
++#include <setjmp.h>
++
++struct jdec_private;
++
++#define HUFFMAN_HASH_NBITS 9
++#define HUFFMAN_HASH_SIZE  (1UL<<HUFFMAN_HASH_NBITS)
++#define HUFFMAN_HASH_MASK  (HUFFMAN_HASH_SIZE-1)
++
++#define HUFFMAN_TABLES	   4
++#define COMPONENTS	   4
++#define JPEG_MAX_WIDTH	   2048
++#define JPEG_MAX_HEIGHT	   2048
++
++struct huffman_table
++{
++  /* Fast look up table, using HUFFMAN_HASH_NBITS bits we can have directly the symbol,
++   * if the symbol is <0, then we need to look into the tree table */
++  short int lookup[HUFFMAN_HASH_SIZE];
++  /* code size: give the number of bits of a symbol is encoded */
++  unsigned char code_size[HUFFMAN_HASH_SIZE];
++  /* some place to store value that is not encoded in the lookup table 
++   * FIXME: Calculate if 256 value is enough to store all values
++   */
++  uint16_t slowtable[16-HUFFMAN_HASH_NBITS][256];
++};
++
++struct component 
++{
++  unsigned int Hfactor;
++  unsigned int Vfactor;
++  float *Q_table;		/* Pointer to the quantisation table to use */
++  struct huffman_table *AC_table;
++  struct huffman_table *DC_table;
++  short int previous_DC;	/* Previous DC coefficient */
++  short int DCT[64];		/* DCT coef */
++};
++
++
++typedef void (*decode_MCU_fct) (struct jdec_private *priv);
++typedef void (*convert_colorspace_fct) (struct jdec_private *priv);
++
++struct jdec_private
++{
++  /* Public variables */
++  uint8_t *components[COMPONENTS];
++  unsigned int width, height;	/* Size of the image */
++  unsigned int flags;
++
++  /* Private variables */
++  const unsigned char *stream_begin, *stream_end;
++  unsigned int stream_length;
++
++  const unsigned char *stream;	/* Pointer to the current stream */
++  unsigned int reservoir, nbits_in_reservoir;
++
++  struct component component_infos[COMPONENTS];
++  float Q_tables[COMPONENTS][64];		/* quantization tables */
++  struct huffman_table HTDC[HUFFMAN_TABLES];	/* DC huffman tables   */
++  struct huffman_table HTAC[HUFFMAN_TABLES];	/* AC huffman tables   */
++  int default_huffman_table_initialized;
++  int restart_interval;
++  int restarts_to_go;				/* MCUs left in this restart interval */
++  int last_rst_marker_seen;			/* Rst marker is incremented each time */
++
++  /* Temp space used after the IDCT to store each components */
++  uint8_t Y[64*4], Cr[64], Cb[64];
++
++  jmp_buf jump_state;
++  /* Internal Pointer use for colorspace conversion, do not modify it !!! */
++  uint8_t *plane[COMPONENTS];
++
++};
++
++#define IDCT tinyjpeg_idct_float
++void tinyjpeg_idct_float (struct component *compptr, uint8_t *output_buf, int stride);
++
++#endif
++
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/libnum/interpolator.lsh branches/upstream/cvs/lush/packages/libnum/interpolator.lsh
 --- trunk/packages/libnum/interpolator.lsh	2007-01-06 22:15:59.000000000 -0500
 +++ branches/upstream/cvs/lush/packages/libnum/interpolator.lsh	2007-09-08 09:27:41.000000000 -0400
@@ -21516,211 +21516,6 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +;;    (libload cv-lib))
    (setq cv-libs-loaded t) 
  )
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cv-statistics.lsh branches/upstream/cvs/lush/packages/opencv/cv-statistics.lsh
---- trunk/packages/opencv/cv-statistics.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/cv-statistics.lsh	2007-09-02 21:32:58.000000000 -0400
-@@ -0,0 +1,201 @@
-+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-+;;;
-+;;; LUSH Lisp Universal Shell
-+;;;   Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
-+;;; Includes parts of TL3:
-+;;;   Copyright (C) 1987-1999 Leon Bottou and Neuristique.
-+;;; Includes selected parts of SN3.2:
-+;;;   Copyright (C) 1991-2001 AT&T Corp.
-+;;;
-+;;; Includes information derived from the GSL (Gnu Scientific Library)
-+;;;   header files which are copyrighted and distributed under the GPL
-+;;;   by their respective authors.
-+;;;
-+;;; This program is free software; you can redistribute it and/or modify
-+;;; it under the terms of the GNU General Public License as published by
-+;;; the Free Software Foundation; either version 2 of the License, or
-+;;; (at your option) any later version.
-+;;;
-+;;; This program is distributed in the hope that it will be useful,
-+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+;;; GNU General Public License for more details.
-+;;;
-+;;; You should have received a copy of the GNU General Public License
-+;;; along with this program; if not, write to the Free Software
-+;;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
-+;;;
-+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-+
-+(libload "opencv/cv-config")
-+
-+
-+
-+#? *** statistics
-+
-+;; dummy function that adds OpenCV C header files in C file
-+(eval `(de dummy_cv_statistics () ,cv-cpheader-cmd ()))
-+
-+;; #? * (dummy_statistics)
-+;; #? * (cvsum <array> <s>)
-+;; #? * (cvcountnonzero <array>)
-+;; #? * (cvavg <array> <mask> <s>)
-+;; #? * (cvavgsdv <array> <mean> <std_dev> <mask>)
-+;; #? * (cvminmaxloc <array> <min_val> <max_val> <min_loc> <max_loc> <mask>)
-+
-+;; ********************************************************
-+
-+;;  /****************************************************************************************\
-+;;  *      Image statistics functions support the next image formats:                        *
-+;;  *         single-channel: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_32F                      *
-+;;  *         three-channel: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_32F (COI must be != 0)    *
-+;;  \****************************************************************************************/
-+
-+#? (cvSum  <array> <s>)
-+;;.VP
-+;;  /*F///////////////////////////////////////////////////////////////////////////////////////
-+;;  //
-+;;  //    Name:    cvSum
-+;;  //    Purpose:
-+;;  //      Sums all the elements in the image ROI or in the matrix
-+;;  //    Context:
-+;;  //    Parameters:
-+;;  //        array - image or matrix.
-+;;  //    Returns:
-+;;  //        sum of every channel.
-+;;  //    Note:
-+;;  //        In case of COI is set the sum over the selected channel is saved
-+;;  //        if the 0-th element of the returned CvScalar structure.
-+;;  //F*/
-+;;  OPENCVAPI  CvScalar  cvSum( const CvArr* array );
-+
-+(de cvSum (array s)
-+    ((-gptr- "const CvArr *") array)
-+    ((-gptr- "CvScalar *") s)
-+    #{ {
-+    CvScalar tmp;
-+    tmp=cvSum($array);
-+    memcpy($s,&tmp,sizeof(CvScalar));
-+    } #}
-+    ())
-+    
-+#? (cvCountNonZero <array>)
-+;;.VP
-+;;  /*F///////////////////////////////////////////////////////////////////////////////////////
-+;;  //
-+;;  //    Name:    cvCountNonZero
-+;;  //    Purpose:
-+;;  //        Counts all the non-zero elements in the image ROI or in the matrix
-+;;  //    Context:
-+;;  //    Parameters:
-+;;  //        array - image or matrix.
-+;;  //    Returns:
-+;;  //        count of non-zero pixels
-+;;  //    Note:
-+;;  //        For multi-channel images COI must be set.
-+;;  //F*/
-+;;  OPENCVAPI  int  cvCountNonZero( const CvArr* array );
-+
-+(de cvCountNonZero(array)
-+    ((-gptr- "const CvArr *") array)
-+    (let ((s 0))
-+      ((-int-) s)
-+      #{ $s = cvCountNonZero($array); #}
-+      s))
-+
-+#? (cvAvg <array> <mask> <s>)
-+;;.VP
-+;;  /*F///////////////////////////////////////////////////////////////////////////////////////
-+;;  //
-+;;  //    Name:    cvAvg
-+;;  //    Purpose:
-+;;  //      Calculates average value of the image region or the matrix.
-+;;  //    Context:
-+;;  //    Parameters:
-+;;  //        array - input image or matrix.
-+;;  //        mask - optional parameter: 8uC1 or 8sC1 array that specifies
-+;;  //               the processed region of the input array
-+;;  //    Returns:
-+;;  //        average value for every channel. In case of COI is set, average value
-+;;  //        of the selected COI is stored into 0-th element
-+;;  //        of the returned CvScalar structure
-+;;  //F*/
-+;;  OPENCVAPI  CvScalar  cvAvg( const CvArr* array, const CvArr* mask CV_DEFAULT(0) );
-+
-+(de cvAvg(array mask s)
-+    ((-gptr- "const CvArr *") array)
-+    ((-gptr- "const CvArr *") mask)
-+    ((-gptr- "CvScalar *") s)
-+    #{ { CvScalar tmp;
-+    tmp = cvAvg($array, $mask);
-+    memcpy($s, &tmp, sizeof(CvScalar));
-+    } #}
-+    ())
-+
-+#? (cvAvgSdv  <array> <mean> <std_dev> <mask>)
-+;;.VP
-+;;  /*F///////////////////////////////////////////////////////////////////////////////////////
-+;;  //
-+;;  //    Name:    cvAvgSdv
-+;;  //    Purpose:
-+;;  //      Calculates mean and standard deviation of pixels in the image region
-+;;  //    Context:
-+;;  //    Parameters:
-+;;  //        img - input image.
-+;;  //        mean - mean value
-+;;  //        std_dev - standard deviation
-+;;  //        mask - mask(byte-depth, single channel)
-+;;  //    Returns:
-+;;  //
-+;;  //F*/
-+;;  OPENCVAPI  void  cvAvgSdv( const CvArr* array, CvScalar* mean, CvScalar* std_dev,
-+;;                             const CvArr* mask CV_DEFAULT(0) );
-+
-+(de cvAvgSdv( array mean std_dev mask)
-+    ((-gptr- "const CvArr *") array mask)
-+    ((-gptr- "CvScalar *") mean std_dev)
-+    #{ cvAvgSdv($array, $mean, $std_dev, $mask); #}
-+    ())
-+ 
-+#? (cvMinMaxLoc  <array> <min_val> <max_val> <min_loc> <max_loc> <mask>)
-+;;.VP
-+;;  /*F///////////////////////////////////////////////////////////////////////////////////////
-+;;  //
-+;;  //    Name:    cvMinMaxLoc
-+;;  //    Purpose:
-+;;  //      Finds minimum and maximum pixel values in the image region
-+;;  //      and determines their locations.
-+;;  //    Context:
-+;;  //    Parameters:
-+;;  //        img - input image.
-+;;  //        minVal - minimum value
-+;;  //        maxVal - maximum value
-+;;  //        minLoc - location of the minimum
-+;;  //        maxLoc - location of the maximum
-+;;  //        mask - mask(byte-depth, single channel)
-+;;  //    Returns:
-+;;  //    Note:
-+;;  //      If there are several global minimums and/or maximums,
-+;;  //      function returns the most top-left extremums.
-+;;  //F*/
-+;;  OPENCVAPI  void  cvMinMaxLoc( const CvArr* array, double* min_val, double* max_val,
-+;;                                CvPoint* min_loc CV_DEFAULT(0),
-+;;                                CvPoint* max_loc CV_DEFAULT(0),
-+;;                                const CvArr* mask CV_DEFAULT(0) );
-+
-+(de cvMinMaxLoc (array min_val max_val min_loc max_loc mask)
-+    ((-gptr- "const CvArr *") array mask)
-+    ((-gptr- "double *") min_val max_val)
-+    ((-gptr- "CvPoint *") min_loc max_loc)
-+    #{ cvMinMaxLoc($array, $min_val, $max_val, $min_loc, $max_loc, $mask);  #}
-+    ())
-+;; ********************************************************
-+
-+(dhc-make ()
-+  dummy_cv_statistics
-+  cvsum
-+  cvcountnonzero
-+  cvavg
-+  cvavgsdv
-+  cvminmaxloc
-+)
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cvmatrix.lsh branches/upstream/cvs/lush/packages/opencv/cvmatrix.lsh
 --- trunk/packages/opencv/cvmatrix.lsh	1969-12-31 19:00:00.000000000 -0500
 +++ branches/upstream/cvs/lush/packages/opencv/cvmatrix.lsh	2007-03-31 12:18:00.000000000 -0400
@@ -22573,6 +22368,211 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +  cvmahalanobis
 +  cvmahalonobis
 +  cvperspectivetransform
++)
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cv-statistics.lsh branches/upstream/cvs/lush/packages/opencv/cv-statistics.lsh
+--- trunk/packages/opencv/cv-statistics.lsh	1969-12-31 19:00:00.000000000 -0500
++++ branches/upstream/cvs/lush/packages/opencv/cv-statistics.lsh	2007-09-02 21:32:58.000000000 -0400
+@@ -0,0 +1,201 @@
++;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++;;;
++;;; LUSH Lisp Universal Shell
++;;;   Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
++;;; Includes parts of TL3:
++;;;   Copyright (C) 1987-1999 Leon Bottou and Neuristique.
++;;; Includes selected parts of SN3.2:
++;;;   Copyright (C) 1991-2001 AT&T Corp.
++;;;
++;;; Includes information derived from the GSL (Gnu Scientific Library)
++;;;   header files which are copyrighted and distributed under the GPL
++;;;   by their respective authors.
++;;;
++;;; This program is free software; you can redistribute it and/or modify
++;;; it under the terms of the GNU General Public License as published by
++;;; the Free Software Foundation; either version 2 of the License, or
++;;; (at your option) any later version.
++;;;
++;;; This program is distributed in the hope that it will be useful,
++;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
++;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++;;; GNU General Public License for more details.
++;;;
++;;; You should have received a copy of the GNU General Public License
++;;; along with this program; if not, write to the Free Software
++;;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
++;;;
++;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++
++(libload "opencv/cv-config")
++
++
++
++#? *** statistics
++
++;; dummy function that adds OpenCV C header files in C file
++(eval `(de dummy_cv_statistics () ,cv-cpheader-cmd ()))
++
++;; #? * (dummy_statistics)
++;; #? * (cvsum <array> <s>)
++;; #? * (cvcountnonzero <array>)
++;; #? * (cvavg <array> <mask> <s>)
++;; #? * (cvavgsdv <array> <mean> <std_dev> <mask>)
++;; #? * (cvminmaxloc <array> <min_val> <max_val> <min_loc> <max_loc> <mask>)
++
++;; ********************************************************
++
++;;  /****************************************************************************************\
++;;  *      Image statistics functions support the next image formats:                        *
++;;  *         single-channel: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_32F                      *
++;;  *         three-channel: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_32F (COI must be != 0)    *
++;;  \****************************************************************************************/
++
++#? (cvSum  <array> <s>)
++;;.VP
++;;  /*F///////////////////////////////////////////////////////////////////////////////////////
++;;  //
++;;  //    Name:    cvSum
++;;  //    Purpose:
++;;  //      Sums all the elements in the image ROI or in the matrix
++;;  //    Context:
++;;  //    Parameters:
++;;  //        array - image or matrix.
++;;  //    Returns:
++;;  //        sum of every channel.
++;;  //    Note:
++;;  //        In case of COI is set the sum over the selected channel is saved
++;;  //        if the 0-th element of the returned CvScalar structure.
++;;  //F*/
++;;  OPENCVAPI  CvScalar  cvSum( const CvArr* array );
++
++(de cvSum (array s)
++    ((-gptr- "const CvArr *") array)
++    ((-gptr- "CvScalar *") s)
++    #{ {
++    CvScalar tmp;
++    tmp=cvSum($array);
++    memcpy($s,&tmp,sizeof(CvScalar));
++    } #}
++    ())
++    
++#? (cvCountNonZero <array>)
++;;.VP
++;;  /*F///////////////////////////////////////////////////////////////////////////////////////
++;;  //
++;;  //    Name:    cvCountNonZero
++;;  //    Purpose:
++;;  //        Counts all the non-zero elements in the image ROI or in the matrix
++;;  //    Context:
++;;  //    Parameters:
++;;  //        array - image or matrix.
++;;  //    Returns:
++;;  //        count of non-zero pixels
++;;  //    Note:
++;;  //        For multi-channel images COI must be set.
++;;  //F*/
++;;  OPENCVAPI  int  cvCountNonZero( const CvArr* array );
++
++(de cvCountNonZero(array)
++    ((-gptr- "const CvArr *") array)
++    (let ((s 0))
++      ((-int-) s)
++      #{ $s = cvCountNonZero($array); #}
++      s))
++
++#? (cvAvg <array> <mask> <s>)
++;;.VP
++;;  /*F///////////////////////////////////////////////////////////////////////////////////////
++;;  //
++;;  //    Name:    cvAvg
++;;  //    Purpose:
++;;  //      Calculates average value of the image region or the matrix.
++;;  //    Context:
++;;  //    Parameters:
++;;  //        array - input image or matrix.
++;;  //        mask - optional parameter: 8uC1 or 8sC1 array that specifies
++;;  //               the processed region of the input array
++;;  //    Returns:
++;;  //        average value for every channel. In case of COI is set, average value
++;;  //        of the selected COI is stored into 0-th element
++;;  //        of the returned CvScalar structure
++;;  //F*/
++;;  OPENCVAPI  CvScalar  cvAvg( const CvArr* array, const CvArr* mask CV_DEFAULT(0) );
++
++(de cvAvg(array mask s)
++    ((-gptr- "const CvArr *") array)
++    ((-gptr- "const CvArr *") mask)
++    ((-gptr- "CvScalar *") s)
++    #{ { CvScalar tmp;
++    tmp = cvAvg($array, $mask);
++    memcpy($s, &tmp, sizeof(CvScalar));
++    } #}
++    ())
++
++#? (cvAvgSdv  <array> <mean> <std_dev> <mask>)
++;;.VP
++;;  /*F///////////////////////////////////////////////////////////////////////////////////////
++;;  //
++;;  //    Name:    cvAvgSdv
++;;  //    Purpose:
++;;  //      Calculates mean and standard deviation of pixels in the image region
++;;  //    Context:
++;;  //    Parameters:
++;;  //        img - input image.
++;;  //        mean - mean value
++;;  //        std_dev - standard deviation
++;;  //        mask - mask(byte-depth, single channel)
++;;  //    Returns:
++;;  //
++;;  //F*/
++;;  OPENCVAPI  void  cvAvgSdv( const CvArr* array, CvScalar* mean, CvScalar* std_dev,
++;;                             const CvArr* mask CV_DEFAULT(0) );
++
++(de cvAvgSdv( array mean std_dev mask)
++    ((-gptr- "const CvArr *") array mask)
++    ((-gptr- "CvScalar *") mean std_dev)
++    #{ cvAvgSdv($array, $mean, $std_dev, $mask); #}
++    ())
++ 
++#? (cvMinMaxLoc  <array> <min_val> <max_val> <min_loc> <max_loc> <mask>)
++;;.VP
++;;  /*F///////////////////////////////////////////////////////////////////////////////////////
++;;  //
++;;  //    Name:    cvMinMaxLoc
++;;  //    Purpose:
++;;  //      Finds minimum and maximum pixel values in the image region
++;;  //      and determines their locations.
++;;  //    Context:
++;;  //    Parameters:
++;;  //        img - input image.
++;;  //        minVal - minimum value
++;;  //        maxVal - maximum value
++;;  //        minLoc - location of the minimum
++;;  //        maxLoc - location of the maximum
++;;  //        mask - mask(byte-depth, single channel)
++;;  //    Returns:
++;;  //    Note:
++;;  //      If there are several global minimums and/or maximums,
++;;  //      function returns the most top-left extremums.
++;;  //F*/
++;;  OPENCVAPI  void  cvMinMaxLoc( const CvArr* array, double* min_val, double* max_val,
++;;                                CvPoint* min_loc CV_DEFAULT(0),
++;;                                CvPoint* max_loc CV_DEFAULT(0),
++;;                                const CvArr* mask CV_DEFAULT(0) );
++
++(de cvMinMaxLoc (array min_val max_val min_loc max_loc mask)
++    ((-gptr- "const CvArr *") array mask)
++    ((-gptr- "double *") min_val max_val)
++    ((-gptr- "CvPoint *") min_loc max_loc)
++    #{ cvMinMaxLoc($array, $min_val, $max_val, $min_loc, $max_loc, $mask);  #}
++    ())
++;; ********************************************************
++
++(dhc-make ()
++  dummy_cv_statistics
++  cvsum
++  cvcountnonzero
++  cvavg
++  cvavgsdv
++  cvminmaxloc
 +)
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d01_sample.lsh branches/upstream/cvs/lush/packages/opencv/demos/d01_sample.lsh
 --- trunk/packages/opencv/demos/d01_sample.lsh	2007-01-06 22:16:00.000000000 -0500
@@ -24302,16 +24302,6 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/README branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/README
---- trunk/packages/opengl/nehe_tutorial/README	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/README	2007-05-23 01:12:17.000000000 -0400
-@@ -0,0 +1,6 @@
-+
-+Fu Jie Huang, May 2007
-+
-+The set of popular "nehe" OpenGL tutorials (http://nehe.gamedev.net) 
-+translated into Lush.
-+
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/nehe.png branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/nehe.png
 --- trunk/packages/opengl/nehe_tutorial/nehe.png	1969-12-31 19:00:00.000000000 -0500
 +++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/nehe.png	2007-05-25 01:28:59.000000000 -0400
@@ -24468,6 +24458,16 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +d†ƒﬁΩ≠ù{3£
 +,á§úà≥kß÷ZÉnê∆°Rtîgìkü_˝äPMÆˇÊ›ÈŒNˆ⁄€Œø˙ìÛ˜KΩ[5UMŒJ\äo≤œˇÔˇætÈ£Ì≠çGÃ#ûœ0∞√ù∂ŸåÌAî¥ZΩA{aâ…Ä™Î2Ìè˜∂ã|‚Ï7TÏ≠åˇÅ=ºy¸ÕI)ã“Vw∞úˆRÜ∆ö∫òéˆ∂'ªu˘Ãáø~àOQ∞ı˝Oté9^L<€Ë€ß∂9«/†:Ùs|sò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8—ò`éç9Ê8— s’ˇ9N2˛?,vô&ﬂ<BÑ    IENDÆB`Ç
 \ No newline at end of file
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/README branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/README
+--- trunk/packages/opengl/nehe_tutorial/README	1969-12-31 19:00:00.000000000 -0500
++++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/README	2007-05-23 01:12:17.000000000 -0400
+@@ -0,0 +1,6 @@
++
++Fu Jie Huang, May 2007
++
++The set of popular "nehe" OpenGL tutorials (http://nehe.gamedev.net) 
++translated into Lush.
++
 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/demos/mnist-svqp.lsh branches/upstream/cvs/lush/packages/svm/demos/mnist-svqp.lsh
 --- trunk/packages/svm/demos/mnist-svqp.lsh	2007-01-06 22:16:07.000000000 -0500
 +++ branches/upstream/cvs/lush/packages/svm/demos/mnist-svqp.lsh	2007-09-08 09:27:56.000000000 -0400

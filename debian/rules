@@ -29,7 +29,7 @@ config.status: patch-stamp configure
 	dh_testdir
 
 	# Configuring package
-	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=$$\{prefix}/share/man  CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs"
+	F77=gfortran ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=$$\{prefix}/share/man  CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs"
 
 # grr - those lines were added by dh_make originally -- I need to clarify
 autotools:
@@ -63,7 +63,7 @@ clean: unpatch
 	rm -f build-stamp
 
 	# Cleaning package
-	-$(MAKE) clean
+	[ ! -f Makefile ] || $(MAKE) distclean
 	dh_clean
 
 install: build

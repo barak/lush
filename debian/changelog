@@ -1,3 +1,16 @@
+lush (1.2.1-6+cvs20080204) unstable; urgency=low
+
+  * Fresh CVS snapshot.
+  * g77 -> gfortran, lapack3-dev -> liblapack-dev transition (Closes: #463966).
+    Thanks Kumar Appaiah.
+  * Homepage migrated into header field.
+  * Changing versioing scheme to include CVS snapshot date into debian
+    revision after + (instead of . which is used for NMUs)
+  * Boosted standards to 3.7.3:
+   - ${source:Version} instead of ${Source-Version}
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Mon, 04 Feb 2008 23:27:34 -0500
+
 lush (1.2.1-5.cvs20070918) unstable; urgency=low
 
   * Semi-automated introduction of CVS snapshots to benefit having up-to-date
