@@ -1,8 +1,7 @@
 /***********************************************************************
  * 
- *  PSU Lush
- *    Copyright (C) 2005 Ralf Juengling.
- *  Derived from LUSH Lisp Universal Shell
+ *  LUSH Lisp Universal Shell
+ *    Copyright (C) 2009 Leon Bottou, Yann Le Cun, Ralf Juengling.
  *    Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
  *  Includes parts of TL3:
  *    Copyright (C) 1987-1999 Leon Bottou and Neuristique.
@@ -10,9 +9,9 @@
  *    Copyright (C) 1991-2001 AT&T Corp.
  * 
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  it under the terms of the Lesser GNU General Public License as 
+ *  published by the Free Software Foundation; either version 2 of the
+ *  License, or (at your option) any later version.
  * 
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,10 +23,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
  * 
  ***********************************************************************/
-
-/***********************************************************************
- * $Id: index.c,v 1.30 2007/10/13 15:03:36 leonb Exp $
- **********************************************************************/
 
 /******************************************************************************
  *
@@ -563,7 +558,7 @@ static char *chk_nonempty(index_t *ind)
 
 /* raise error if dimension d is invalid          */
 /* yield equivalent non-negative value otherwise  */
-static inline int validate_dimension(index_t *ind, int d)
+static int validate_dimension(index_t *ind, int d)
 {
    d = d<0 ? IND_NDIMS(ind)+d : d;
    if (d<0 || d>=IND_NDIMS(ind))
@@ -574,7 +569,7 @@ static inline int validate_dimension(index_t *ind, int d)
 /* raise error if subscript s for dimension d is invalid */
 /* yield equivalent non-negative value otherwise         */
 /* NOTE: validate_subscript does not validate d          */
-static inline size_t validate_subscript(index_t *ind, int d, ptrdiff_t s)
+static size_t validate_subscript(index_t *ind, int d, ptrdiff_t s)
 {
    s = s<0 ? IND_DIM(ind, d)+s : s;
    if (s<0 || s>=IND_DIM(ind, d))
@@ -809,7 +804,9 @@ DX(xidx_broadcast2)
    ARG_NUMBER(2);
    index_t *ba = NULL;
    index_t *bb = NULL;
-   index_broadcast2(AINDEX(1), AINDEX(2), &ba, &bb);
+   index_t *a = (NUMBERP(APOINTER(1))) ? make_array(ST_DOUBLE, SHAPE0D, APOINTER(1)) : AINDEX(1);
+   index_t *b = (NUMBERP(APOINTER(2))) ? make_array(ST_DOUBLE, SHAPE0D, APOINTER(2)) : AINDEX(2);
+   index_broadcast2(a, b, &ba, &bb);
    return bb->backptr;
 }
 
@@ -984,17 +981,27 @@ DX(xindex_shape)
 {
    index_t *ind = NULL;
    if (arg_number == 2) {
-      shape_t *shp = parse_shape(APOINTER(2), NULL);
-      ind = index_reshape(AINDEX(1), shp);
+      ind = AINDEX(1);
+      int d = validate_dimension(ind, AINTEGER(2));
+      return NEW_NUMBER(IND_DIM(ind, d));
 
    } else if (arg_number == 1) {
-      ind = index_shape(AINDEX(1));
+      return index_shape(AINDEX(1))->backptr; 
 
    } else
       ARG_NUMBER(-1);
 
+   return NIL;
+}
+
+DX(xindex_reshape)
+{
+   ARG_NUMBER(2);
+   shape_t *shp = parse_shape(APOINTER(2), NULL);
+   index_t *ind = index_reshape(AINDEX(1), shp);
    return ind->backptr;
 }
+
 
 DX(xidx_modulo)
 {
@@ -3643,6 +3650,7 @@ void init_index(void)
 
    /* index manipulation */
    dx_define("idx-reshape", xidx_reshape);
+   dx_define("$$",xindex_reshape);
    dx_define("idx-flatten", xidx_flatten);
    dx_define("idx-nick", xidx_nick);
    dx_define("idx-extend", xidx_extend);

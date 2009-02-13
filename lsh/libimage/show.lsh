@@ -1,8 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
-;;; PSU Lush
-;;;   Copyright (C) Ralf Juengling 2005
-;;; Derived from LUSH Lisp Universal Shell
+;;; LUSH Lisp Universal Shell
+;;;   Copyright (C) 2009 Leon Bottou, Yann Le Cun, Ralf Juengling.
 ;;;   Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
 ;;; Includes parts of TL3:
 ;;;   Copyright (C) 1987-1999 Leon Bottou and Neuristique.
@@ -10,9 +9,9 @@
 ;;;   Copyright (C) 1991-2001 AT&T Corp.
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
-;;; it under the terms of the GNU General Public License as published by
-;;; the Free Software Foundation; either version 2 of the License, or
-;;; (at your option) any later version.
+;;; it under the terms of the Lesser GNU General Public License as 
+;;; published by the Free Software Foundation; either version 2 of the
+;;; License, or (at your option) any later version.
 ;;;
 ;;; This program is distributed in the hope that it will be useful,
 ;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -140,6 +139,13 @@
   (recompute-geometry this) )
 
 
+#? *image-disp-autoscale*
+;; {<see> image-disp}
+;; Boolean variable. When true, <image-disp> will linearly scale
+;; graylevel images to use the full dynamic range of the display
+;; device (default: <t>).
+(defparameter *image-disp-autoscale* t)
+
 #? (image-disp <img> [<win> [<mag>]])
 ;; Display image in window.
 ;; 
@@ -150,8 +156,14 @@
   (let* (((m n) (mat-shape img))
          (win (or win (new-window (* n s) (* m s))))
          (draw (selectq (idx-rank img)
-                 (2 (lambda (img s)
-                      (gray-draw-matrix 0 0 img 0 255 s s) ))
+                 (2 (if *image-disp-autoscale*
+                        (lambda (img s)
+                          (let ((i ((idx-inf img)))
+                                (a ((idx-sup img))) )
+                            (setq a (max (+ i 0.1) a))
+                            (gray-draw-matrix 0 0 img i a s s) ))
+                      (lambda (img s)
+                        (gray-draw-matrix 0 0 img 0 255 s s) )))
                  (3 (lambda (img s)
                       (rgb-draw-matrix 0 0 img s s) ))
                  (t (error "not an image" img)) )))

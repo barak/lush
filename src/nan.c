@@ -1,6 +1,7 @@
 /***********************************************************************
  * 
  *  LUSH Lisp Universal Shell
+ *    Copyright (C) 2009 Leon Bottou, Yann Le Cun, Ralf Juengling.
  *    Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
  *  Includes parts of TL3:
  *    Copyright (C) 1987-1999 Leon Bottou and Neuristique.
@@ -8,9 +9,9 @@
  *    Copyright (C) 1991-2001 AT&T Corp.
  * 
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  it under the terms of the Lesser GNU General Public License as 
+ *  published by the Free Software Foundation; either version 2 of the
+ *  License, or (at your option) any later version.
  * 
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,10 +23,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
  * 
  ***********************************************************************/
-
-/***********************************************************************
- * $Id: nan.c,v 1.17 2006/11/07 20:57:43 leonb Exp $
- **********************************************************************/
 
 #include "header.h"
 
@@ -177,9 +174,15 @@ int isnanD(real x)
 
 /* this requires C99 support */
 
-double eps(double x) {
+double epsD(double x) {
    x = copysign(x, 1.0);
    double y = nextafter(x, INFINITY);
+   return y-x;
+}
+
+float epsF(float x) {
+   x = copysignf(x, 1.0);
+   float y = nextafterf(x, INFINITY);
    return y-x;
 }
 
@@ -223,13 +226,13 @@ DX(xnot_nan)
    return isnanD(AREAL(1)) ? NIL : APOINTER(1);
 }
 
-DX(xeps) 
+DX(xeps)
 {
    ARG_NUMBER(1);
    double x = AREAL(1);
    if (isinfD(x) || isnanD(x))
       RAISEF("eps not defined for number", NEW_NUMBER(x));
-   return NEW_NUMBER(eps(x));
+   return NEW_NUMBER(epsD(x));
 }
 
 /*================

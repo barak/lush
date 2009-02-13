@@ -1,8 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
-;;; PSU Lush
-;;;   Copyright (C) 2005 Ralf Juengling
-;;; Derived from LUSH Lisp Universal Shell
+;;; LUSH Lisp Universal Shell
+;;;   Copyright (C) 2009 Leon Bottou, Yann Le Cun, Ralf Juengling.
 ;;;   Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
 ;;; Includes parts of TL3:
 ;;;   Copyright (C) 1987-1999 Leon Bottou and Neuristique.
@@ -10,9 +9,9 @@
 ;;;   Copyright (C) 1991-2001 AT&T Corp.
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
-;;; it under the terms of the GNU General Public License as published by
-;;; the Free Software Foundation; either version 2 of the License, or
-;;; (at your option) any later version.
+;;; it under the terms of the Lesser GNU General Public License as 
+;;; published by the Free Software Foundation; either version 2 of the
+;;; License, or (at your option) any later version.
 ;;;
 ;;; This program is distributed in the hope that it will be useful,
 ;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -338,9 +337,7 @@
 (defun array-combine args
   (let* ((sa (apply box (mapcar idx-lift (idx-broadcast . args) 1s)))
 	 (boxed-shape (cons (length sa) (make-list (1- (idx-rank (sa 0))) 1))) )
-    (array-splice (idx-reshape sa boxed-shape)) ))
-
-(defalias .ac array-combine)
+    (array-splice ($$ sa boxed-shape)) ))
 
 #? (array-combine* <m1> <m2>...<mn>)
 ;; {<see> array-combine, idx-broadcast, mat-catrows}
@@ -357,7 +354,7 @@
 (defun array-combine* args
   (let* ((sa (apply box (mapcar idx-sink (idx-broadcast . args) 1s)))
 	 (boxed-shape (nconc1 (make-list (1- (idx-rank (sa 0))) 1) (length sa))) )
-    (array-splice (idx-reshape sa boxed-shape)) ))
+    (array-splice ($$ sa boxed-shape)) ))
 
 (lock-symbol array-map array-mapc array-map-to
              box box1

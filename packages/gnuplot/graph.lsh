@@ -1,3 +1,30 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; LUSH Lisp Universal Shell
+;;;   Copyright (C) 2009 Leon Bottou, Yann Le Cun, Ralf Juengling.
+;;;   Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
+;;; Includes parts of TL3:
+;;;   Copyright (C) 1987-1999 Leon Bottou and Neuristique.
+;;; Includes selected parts of SN3.2:
+;;;   Copyright (C) 1991-2001 AT&T Corp.
+;;;
+;;; This program is free software; you can redistribute it and/or modify
+;;; it under the terms of the Lesser GNU General Public License as 
+;;; published by the Free Software Foundation; either version 2 of the
+;;; License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(libload "gnuplot")
 
 (defclass GnuplotGraph object
   command    ; plot command
@@ -27,7 +54,8 @@
   (setq i-ls 1)
   (setq i-obj 1)
   (when linestyles
-    (==> this add-preamble "set style increment user") )
+    (==> this add-preamble "set style increment user")
+    (==> this add-preamble "set datafile missing 'nan'") )
   ;(==> this add-preamble "set style arrow 1 front head filled size screen 0.02,15,45")
   (==> this add-preamble "set style arrow 1 front head filled")
   () )
@@ -46,6 +74,22 @@
   (prog1 i-ls
     (incr i-ls) ))
 
+;; add a new line for plotting style <ps> and arrange for it to be
+(defmethod GnuplotGraph add-line-binary (ps extra data)
+  (declare (-str-) ps extra)
+  (assert (or  (listp data) (numericp data)))
+  (let* ((bd (if (= (rank data) 3)
+                 (-binary-descriptor (idx-select data 2 0))
+               (-binary-descriptor data)) )
+               
+         (text (if (index "title" extra)
+                   (sprintf "'-' %s %s with %s" bd extra ps)
+                 (sprintf "'-' %s %s notitle with %s" bd extra ps) )))
+    (setq lines (nconc1 lines (cons text (new GnuplotBinary data)))) )
+  (when linestyles
+    (==> this add-preamble (sprintf "set style line %d %s" i-ls (next linestyles))) )
+  (prog1 i-ls
+    (incr i-ls) ))
 
 ;; add pair of command-text and data to objects. Return the object index.
 (defmethod GnuplotGraph add-object (textf data)
@@ -53,9 +97,11 @@
   (assert (vectorp data))
   ;; check that textf and data are compatible
   (apply sprintf textf (data ()))
-  (if (str-startswith textf "object")
-      (setq textf (concat (sprintf "set object %d " i-obj) textf))
-    (setq textf (concat (sprintf "set arrow %d arrowstyle 1 " i-obj) (right textf -5))) )
+  (setq textf (selectq (left textf 5)
+                ("arrow" (concat (sprintf "set arrow %d arrowstyle 1 " i-obj)
+                                 (right textf -5)) )
+                ("label" (concat (sprintf "set label %d " i-obj) (right textf -5)))
+                (t       (concat (sprintf "set object %d " i-obj) textf)) ))
   (setq objects (nconc1 objects (cons textf data)))
   (prog1 i-obj
     (incr i-obj) ))
@@ -85,12 +131,13 @@
   (if filename
       (writing (open-write filename) (==> this dump))
     (dolist (s (==> this serialize))
-      (if (stringp s)
-          (printf "%s\n" s)
-        (if (indexp s)
-            (print-array s)
-          (dolist (a s) (print-array a)) )
-        (printf "e\n") )))
+      (cond
+       ((stringp s)           (printf "%s\n" s))
+       ((indexp s)            (print-array s) (printf "e\n"))
+       ((isa s GnuplotBinary) (printf "# %l\n" s))
+       ((listp s)             (dolist (a s) (print-array a) (printf "e\n")) )
+       (t (error "don't know how to dump" s)) )
+      ))
   ())
 
 (defmacro chk-graph ()

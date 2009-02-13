@@ -1,3 +1,28 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; LUSH Lisp Universal Shell
+;;;   Copyright (C) 2009 Leon Bottou, Yann Le Cun, Ralf Juengling.
+;;;   Copyright (C) 2002 Leon Bottou, Yann Le Cun, AT&T Corp, NECI.
+;;; Includes parts of TL3:
+;;;   Copyright (C) 1987-1999 Leon Bottou and Neuristique.
+;;; Includes selected parts of SN3.2:
+;;;   Copyright (C) 1991-2001 AT&T Corp.
+;;;
+;;; This program is free software; you can redistribute it and/or modify
+;;; it under the terms of the Lesser GNU General Public License as 
+;;; published by the Free Software Foundation; either version 2 of the
+;;; License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (libload "gnuplot/gnuplot")
 (libload "gnuplot/styles")
@@ -53,7 +78,7 @@
     ;[a pm3d           () () () ()]     ; splot only
     ;[a labelpoints    () () () () (3)] ; do by hand
     ;[a histograms     () () ()  t (1)] ; do by hand
-    ;[a image          () () () () (3)] ; do by hand
+    [a image          () () () () (3)] ; do by hand
     ;[a rgbimage       () () () () (5)] ; do by hand
     ;[a rgbalpha       () () () () (6)] ; do by hand
     [a circles         t () ()  t (3)]] )
@@ -66,13 +91,19 @@
         (let (((f arg) x))
           (when (member f '(ps-variable ps pt))
             (when (not (has-point style))
-              (error f "plotting style has no points" style) ))
-          (when (member f '(lc-variable lc-rgb lw lt))
+              (error "plotting style has no points" style) ))
+          (when (member f '(lw lt))
             (when (not (has-line style))
-              (error f "plotting style has no lines" style) ))
+              (error "plotting style has no lines" style) ))
+          (when (member f '(lc-variable lc-rgb))
+            (when (not (or (has-point style) (has-line style)))
+              (error "plotting style has not lines or points") ))
           (when (member f '(fill bc))
             (when (not (has-fill style))
-              (error f "plotting style has no fill" style) ))
+              (error "plotting style has no fill" style) ))
+          (when (member f '(origin dx dy))
+            (when (<> style 'image)
+              (error "modifier only valid with plot-style image" f) ))
           
           (selectq f
             (fill (setq fs-d (sprintf "transparent solid %f" arg)))
@@ -112,6 +143,11 @@
             (lw (setq args (cons (sprintf "lw %l" arg) args)))
             
             (lt (setq args (cons (sprintf "lt %l" arg) args)))
+
+            ;; for plot-style image only
+            (origin  (setq args (cons (sprintf "origin=(%f,%f)" (arg 0) (arg 1)) args)) )
+            
+            ((dx dy) (setq args (cons (sprintf "%l=%f" f arg) args)) )
             
             (t (error style "invalid plot-line modifier" (list f arg))) ))))
     (setq args (str-join " " args))
@@ -119,23 +155,22 @@
       (setq args (concat args (sprintf " fs %s %s" fs-d fs-bc))) )
     (list args data) ))
 
-
-(df def-plot (style valid-ncols)
+(defmacro def-plot (style valid-ncols)
   (assert (symbolp style))
   (assert (listp valid-ncols))
-  (eval `(defun ,style args
-           (chk-graph)
-           (let (((data . extra) (validate-plot-args args ',valid-ncols)))
-             (let (((extra data) (process-line-args '#:,style extra data)))
-               (==> graph add-line ,(nameof style) extra data) ))
-           ())
-        ))
+  `(defun ,style args
+     (chk-graph)
+     (let (((data . extra) (validate-plot-args args ',valid-ncols)))
+       (let (((extra data) (process-line-args #:(quote ,style) extra data)))
+         (==> graph add-line ,(nameof style) extra data) ))
+     ())
+  )
 
 #? (plot* <l1> .. <ln>)
 ;; {<see> Plot-line generating functions}
 ;; Compose a new graph from plot instructions <l1> .. <ln> and return it.
 ;;
-;; When already <plot*> appears within the scope of another <plot*> or
+;; When <plot*> appears within the scope of another <plot*> or
 ;; <plot> then the plot instructions are added to the graph of the 
 ;; enclosing <plot*>-form. 
 (df plot* forms
@@ -199,6 +234,26 @@
 #? (dots <data> [...])
 ;; Plot data with dots.
 
+#? (image <data> [...])
+;; Plot <data> as image. When <data> is a plain matrix, plot as grayscale
+;; image. When <data> is <m>x<n>x<3>-dimensional, plot as RGB image,
+;; when <m>x<n>x<4>-dimensional, as RGBA image.
+;;
+;; Note that every data point is visualized as a colored rectangle. The
+;; coordinates of the rectangle's center points may be controlled by the
+;; <origin>, <dx>, and <dy> modifiers, respectively. 
+(defun image (data . args)
+  (chk-graph)
+  (let ((ps "") ((extra data) (process-line-args #:'image args data)))
+    (selectq (rank data)
+      (2 (==> graph add-line-binary "image" extra data))
+      (3 (selectq (shape data 2)
+           (1 (==> graph add-line-binary "image" extra data))
+           (3 (==> graph add-line-binary "rgbimage" extra data))
+           (4 (==> graph add-line-binary "rgbaimage" extra data))
+           (t (error "number of data planes not supported" data)) ))
+      (t (error "not valid plot data (not a matrix)" data)) )))
+
 #? (lines <data> [...])
 ;; Plot data with lines.
 
@@ -224,7 +279,12 @@
 ;; function.
 ;;
 ;; Example:
-;; {<code> (linespoints xy (key "temperature") (axes 'x1y2) (ps p)))
+;; {<code> (linespoints xy (key "temperature") (axes 'x1y2) (ps p))) </code>}
+;;
+;; Note: Not all plot-line modifiers are applicable with all plot styles.
+;; While all styles except the image styles accept <lc>, the <points> type,
+;; for instance, has no interior and no lines. Therefore <lw>, <lt>, <fill>
+;; and <bc> are not applicable with <points>.
 
 #? (key <s>)
 ;; Add key <s> to legend for this plot-line.
@@ -236,6 +296,7 @@
 
 #? (axes <a>)
 ;; Select axes for this plot-line.
+;; Possible values are <'x1y1>, <'x1y2>, <'x2y1>, and <'x2y2>.
 (defun axes (arg)
   (if (member arg '(x1y1 x1y2 x2y1 x2y2))
       (sprintf "axes %l" arg)
@@ -316,13 +377,45 @@
 ;; don't draw a border.
 ;;
 ;; Example:
-;; {<code> (bc 'black)}
+;; {<code> (bc 'black) </code>}
 (defun bc (&optional arg)
   (cond
    ((null arg)    `(noborder ()))
    ((symbolp arg) `(bc-rgb ,arg))
    ((stringp arg) `(bc-rgb ,(named arg)))
    (t (error "invalid argument" arg)) ))
+
+#? * Modifiers for Images
+;; The following modifiers apply to the <image> plot style only.
+
+#? (origin <[x0 y0]>)
+;; Set coordinates for the lower left data point or pixel (default is [0 0]).
+(defun origin (arg)
+  (when (not (and (vectorp arg) (= (length arg) 2)))
+    (error "invalid origin" arg) )
+  #:`(origin ,arg)
+  )
+
+#? (dx <d>)
+;; Set sampling interval for grid-data.
+(defun dx (arg)
+  (when (not (number arg))
+    (error "not a number" arg) )
+  (when (not (> arg 0))
+    (error "sampling interval must be positive" arg))
+  #:`(dx ,arg)
+  )
+
+#? (dy <d>)
+;; {<see> dx}
+;; Set different sampling interval for Y-direction.
+(defun dy (arg)
+  (when (not (number arg))
+    (error "not a number" arg) )
+  (when (not (> arg 0))
+    (error "sampling interval must be positive" arg))
+  #:`(dy ,arg)
+  )
 
 (import all from gnuplot-other-)
 
@@ -336,9 +429,9 @@
 
 (defmethod |INDEX| -plot ()
   (selectq (rank this)
-    (1 (line this))
+    (1 (lines this))
     (2 (if (= (shape this 1) 2)
-           (line this)
+           (lines this)
          (error "don't know how to plot" this) ))
     (t (error "don't know how to plot" this)) ))
 
