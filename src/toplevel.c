@@ -25,6 +25,7 @@
  ***********************************************************************/
 
 #include "header.h"
+#include <fenv.h>
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
@@ -316,7 +317,7 @@ void start_lisp(int argc, char **argv, int quietflag)
       }
       q = apply(Value(at_startup),p);
    }
-   MM_EXIT; /* reset transient stack after an error */
+   MM_EXIT;     /* reset transient stack after an error */
 
    /* No interactive loop in quiet mode */
    if (! quiet) {
@@ -332,6 +333,7 @@ void start_lisp(int argc, char **argv, int quietflag)
       top_link = NULL;
       recur_doc_init();
       reset_dx_stack();
+      fpu_reset();
 
       line_pos = line_buffer;
       *line_buffer = 0;
@@ -697,12 +699,27 @@ DX(xload)
       
    } else if (arg_number == 2) {
       toplevel(ASTRING(1), ASTRING(2), NIL);
-      
+
    } else {
       ARG_NUMBER(1);
-      toplevel(ASTRING(1), NIL, NIL);
-   }
 
+      static int excepts = 0;
+      excepts = fetestexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
+#ifdef HAVE_FEENABLEEXCEPT
+      static int traps = 0;
+      traps = fegetexcept();
+#endif
+      toplevel(ASTRING(1), NIL, NIL);
+      bool fpu_changed = excepts != fetestexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
+#ifdef HAVE_FEENABLEEXCEPT
+      fpu_changed |= traps != fegetexcept();
+#endif
+      if (fpu_changed) {
+         fprintf(stderr, "*** Warning: FPU state changed while loading file\n");
+         fprintf(stderr, "***        : '%s'\n", ASTRING(1));
+      }
+   }
+   
    return make_string(file_name); /* fishy */
 }
 
