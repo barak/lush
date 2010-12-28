@@ -26,7 +26,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: svqp2.cpp,v 1.11 2006/04/18 00:04:03 leonb Exp $
+ * $Id: svqp2.cpp,v 1.14 2006/10/02 12:58:08 leonb Exp $
  **********************************************************************/
 
 //////////////////////////////////////
@@ -38,8 +38,6 @@
 ///
 /////////////////////////////////////
 
-
-#include "svqp2.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -62,6 +60,21 @@
 # endif
 #endif
 
+#ifndef SHRINK
+# define SHRINK 1
+#endif
+
+#ifndef KSTATS
+# define KSTATS 0
+#endif
+
+#include "svqp2.h"
+
+
+#if KSTATS
+long long SVQP2::kcalcs = 0;
+long long SVQP2::kreqs = 0;
+#endif
 
 // --------- utilities
 
@@ -243,6 +256,7 @@ SVQP2::cache_init()
 	  p = new Arow(ai);
 #if HMG
           p->diag = (*Afunction)(ai, ai, Aclosure);
+          SVQP2::kcalcs += 1;
 #endif
 	  p->next = c[h];
 	  c[h] = p;
@@ -329,6 +343,9 @@ SVQP2::getrow(int i, int len, bool hot)
 {
   Arow *row = rows[i];
   int osz = row->sz;
+#if KSTATS
+  SVQP2::kreqs += len;
+#endif
   if (osz >= len)
     {
       if (hot)
@@ -338,6 +355,9 @@ SVQP2::getrow(int i, int len, bool hot)
   curcachesize += row->resize(len);
   float *d = row->d;
   int ai = Aperm[i];
+#if KSTATS
+  SVQP2::kcalcs += len - osz;
+#endif  
   for (int j=osz; j<len; j++)
     d[j] = (*Afunction)(ai, Aperm[j], Aclosure);
   if (hot)
@@ -823,7 +843,7 @@ SVQP2::iterate_gs2()
 	    }
 	}
       else if (curvature + epskt < 0)
-	return error("Function is not convex (negative curvature)");
+	return error("Function is not concave (curvature sign is incorrect)");
       // update x and g
       x[imax] += step;
       x[imin] -= step;
@@ -895,7 +915,9 @@ SVQP2::run(bool initialize, bool finalize)
 	    break;
 	  // shrink
 	  int p = l;
+#if SHRINK
           shrink();
+#endif
           // display
 	  gn = max(0.0, gmax-gmin);
           if (l < p)

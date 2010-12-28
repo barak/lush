@@ -1,6 +1,7 @@
 
 (defvar dc1394-libdc1394-loaded)
 (defvar dc1394-libdc1394)
+(defvar dc1394-lib1394)
 (defvar raw1394-lib1394)
 (defvar dc1394-libname "libdc1394_control")
 (defvar raw1394-libname "libraw1394")
@@ -31,13 +32,11 @@
     '(progn
        (cpheader "#include <libraw1394/raw1394.h>")
        (cpheader "#include <libdc1394/dc1394_control.h>")
+       (cpheader "#define MAX_PORTS 4")
+       (cpheader "#define MAX_CAMERAS 8")
+       (cpheader "#define NUM_BUFFERS 1")
+       (cpheader "#define DROP_FRAMES 1")
        ))
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; load libraries
-  ;; THIS IS COMPLETELY WRONG **AGAIN**
-  ;; THE INTERFACE SHOULD USE DHC-MAKE-WITH-LIBS INSTEAD OF THIS HACK
-  ;; AND IN FACT IT DOES NOT WORK WITH A STATIC LIBRARY!!!!!
-  (mod-load raw1394-lib1394)
-  (mod-load dc1394-lib1394)
   (setq dc1394-libdc1394-loaded t) )
