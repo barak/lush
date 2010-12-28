@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: x11_driver.c,v 1.11 2003/11/10 16:48:22 leonb Exp $
+ * $Id: x11_driver.c,v 1.13 2004/11/22 19:54:18 leonb Exp $
  **********************************************************************/
 
 /***********************************************************************
@@ -108,6 +108,7 @@ static struct X_window {
   int x1, y1, x2, y2;
   int resizestate, xdown, ydown;
   int hilitestate, okhilite, xhilite, yhilite, whilite, hhilite;
+  int dpos;
 } xwind[MAXWIN];
 
 
@@ -1109,6 +1110,41 @@ x11_setfont(struct window *linfo, char *f)
   info->font = xfs;
 }
 
+static void
+x11_linestyle(struct window *linfo, int ls)
+{
+  static char dotted[] = {1,2};
+  static char dashed[] = {5,3};
+  static char dotdashed[] = {7,2,1,2};
+  struct X_window *info = (struct X_window*)linfo;
+  int dpos;
+  if (ls >= 0)
+    info->dpos = 0;
+  else
+    ls = linfo->linestyle;
+  switch (ls)
+    {
+    case 1:
+      dpos = info->dpos % 3;
+      XSetDashes(xdef.dpy, info->gc, dpos, dotted, 2);
+      break;
+    case 2:
+      dpos = info->dpos % 8;
+      XSetDashes(xdef.dpy, info->gc, dpos, dashed, 2);
+      break;
+    case 3:
+      dpos = info->dpos % 12;
+      XSetDashes(xdef.dpy, info->gc, dpos, dotdashed, 4);
+      break;
+    }
+  if (ls)
+    XSetLineAttributes(xdef.dpy, info->gc, 0, 
+		       LineOnOffDash, CapButt, JoinMiter);
+  else
+    XSetLineAttributes(xdef.dpy, info->gc, 0, 
+		       LineSolid, CapButt, JoinMiter);
+}
+
 static void 
 x11_clear(struct window *linfo)
 {
@@ -1127,6 +1163,14 @@ x11_draw_line(struct window *linfo, int x1, int y1, int x2, int y2)
   struct X_window *info = (struct X_window*)linfo;
   XDrawLine(xdef.dpy, info->backwin, info->gc, x1, y1, x2, y2);
   grow_rect(info, x1, y1, x2, y2);
+  /* adjust dash starting point */
+  if (info->lwin.linestyle)
+    {
+      int dx = abs(x2-x1);
+      int dy = abs(y2-y1);
+      info->dpos += ((dx>dy) ? dx : dy);
+      x11_linestyle(linfo, -1);
+    }
 }
 
 static void 
@@ -1515,6 +1559,7 @@ struct gdriver x11_driver = {
   /* import from sn3.2*/
   x11_get_image,
   x11_get_mask,
+  x11_linestyle,
 };
 
 
@@ -1588,6 +1633,7 @@ x11_window(int x, int y, unsigned int w, unsigned int h, char *name)
   info->lwin.eventhandler = 0;
   info->lwin.clipw = 0;
   info->lwin.cliph = 0;
+  info->lwin.linestyle = 0;
 
   ans = new_extern(&window_class, info);
   info->lwin.backptr = ans;

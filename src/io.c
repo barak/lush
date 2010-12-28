@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: io.c,v 1.11 2004/01/18 05:35:31 leonb Exp $
+ * $Id: io.c,v 1.16 2005/02/20 20:03:34 leonb Exp $
  **********************************************************************/
 
 /***********************************************************************
@@ -43,6 +43,7 @@ static at *at_pname, *at_print, *at_pprint;
 
 char *line_buffer;
 char *line_pos;
+int   line_flush_stdout;
 char *print_buffer;
 char *pname_buffer;
 
@@ -156,8 +157,10 @@ print_char(register char c)
 	context->output_tab = 0;
 	if (context->output_file)
 	  test_file_error(context->output_file);
+	if (line_flush_stdout && context->output_file == stdout)
+	  fflush(stdout);
 	break;
-
+	
       case '\b':
 	context->output_tab--;
 	break;
@@ -228,7 +231,7 @@ fill_line_buffer(void)
 char 
 read_char(void)
 {
-  char c = (char) EOF;
+  int c = EOF;
   if (context->input_file==stdin && prompt_string) {
     fill_line_buffer();
     c = *line_pos++;
@@ -242,7 +245,7 @@ read_char(void)
       return read_char();
   }
   /* Simulate newline when on EOF */
-  if (c == (char) EOF && context->input_tab)
+  if (c == EOF && context->input_tab)
     c = '\n';
   /* Adjust imput tab */
   if (isprint(toascii((unsigned char)c)))
@@ -283,7 +286,7 @@ read_char(void)
       putc(c, error_doc.script_file);
     }
   }
-  return c;
+  return (char) c;
 }
 
 
@@ -293,20 +296,20 @@ read_char(void)
 char 
 next_char(void)
 {
-  char c = (char) EOF;
+  int c = EOF;
   if (context->input_file==stdin && prompt_string) {
     fill_line_buffer();
     c = *line_pos;
   } else if (context->input_file) {
     c = getc(context->input_file);
-    if (c != (char)EOF)
+    if (c != EOF)
       ungetc(c,context->input_file);
   }
   if (c == '\r')
     c = '\n';
-  if (c == (char) EOF && context->input_tab)
+  if (c == EOF && context->input_tab)
     c = '\n';
-  return c;
+  return (char) c;
 }
 
 
@@ -365,7 +368,7 @@ ask(char *t)
     {
       char question[1024];
       strncpy(question,t,1000);
-      strcat(question," [y/n] ?");
+      strcat(question," [y/N] ?");
       console_getline(question, line_buffer, LINE_BUFFER - 2);
       CHECK_MACHINE("on read");
       line_pos = "";
@@ -454,7 +457,9 @@ make_testchar_map(char *s, char *buf)
 char 
 skip_char(char *s)
 {
-  char c, map[256];
+  int c;
+  char map[256];
+
   make_testchar_map(s, map);
   map[255] = FALSE;
   map['\r'] |= map['\n'];
@@ -498,11 +503,19 @@ skip_char(char *s)
               c = getc(context->input_file);
 #endif
             }
-          test_file_error(context->input_file);
 #ifdef HAVE_FLOCKFILE
           funlockfile(context->input_file);
 #endif
-          if (c != (char)EOF)
+	  if (ferror(context->input_file))
+	    {
+#ifdef EINTR
+	      if (errno == EINTR)
+		clearerr(context->input_file);
+	      else
+#endif
+		test_file_error(context->input_file);
+	    }
+          if (c != EOF)
             ungetc(c, context->input_file);
         }
     }
@@ -722,10 +735,20 @@ rl_string(register char *s)
 	*d++ = (s[1]) & (0x1f);
 	s += 2;
 	
-      } else if (*s == '+' && s[1]) {	/* high bit */
-	*d++ = (s[1]) | (0x80);
+      } else if (*s == '+' && s[1]) {	/* high bit latin1*/
+#if HAVE_WCHAR_T
+	wchar_t wc = s[1] | 0x80;
+	char buffer[MB_LEN_MAX];
+	int m = wcrtomb(buffer, wc, NULL);
+	if (m > 0)
+	  {
+	    memcpy(d, buffer, m);
+	    d += m;
+	  }
+	else
+#endif	
+	  *d++ = (s[1]) | (0x80);
 	s += 2;
-	
       } else if (*s == '\n') {	/* end of line */
 	s++;
 	
@@ -890,7 +913,7 @@ DX(xread)
 
   ARG_NUMBER(0);
   answer = read_list();
-  if (feof(context->input_file))
+  if (!answer && feof(context->input_file))
     error(NIL, "End of file", NIL);
   return answer;
 }
@@ -1372,7 +1395,6 @@ convert(register char *s, register at *list, register char *end)
       UNLOCK(q);
       return s;
     }
-  
  exit_convert:
   *s = 0;
   strcpy(s, " ... ");

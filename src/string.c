@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: string.c,v 1.21 2003/07/01 18:41:14 leonb Exp $
+ * $Id: string.c,v 1.29 2005/01/26 03:04:52 leonb Exp $
  **********************************************************************/
 
 #include "header.h"
@@ -145,33 +145,101 @@ string_dispose(at *p)
 static char *
 string_name(at *p)
 {
-  char *s, *ind, *name;
-  unsigned char c;
-  
-  s = ((struct string *) (p->Object))->start;
-  name = string_buffer;
-
-  *name++ = '\"';  /*"*/
-  while ((c = *s)) {
-    if (name<string_buffer+STRING_BUFFER-10) {
-      if ((ind = strchr(special_string, c))) {
-	*name++ = '\\';
-	*name++ = aspect_string[ind - special_string];
-      } else if (isprint(toascii((unsigned char)c))) {
-	*name++ = c;
-      } else if (c<=' ') {
-	*name++ = '\\';
-	*name++ = '^';
-	*name++ = c | 0x40;
-      } else {
-	*name++ = '\\';
-	*name++ = 'x';
-	*name++ = digit_string[(c >> 4) & 15];
-	*name++ = digit_string[c & 15];
-      }
+  char *s = ((struct string *) (p->Object))->start;
+  char *name = string_buffer;
+#if HAVE_WCHAR_T
+  int n = strlen(s);
+  mbstate_t ps;
+  memset(&ps, 0, sizeof(mbstate_t));
+  *name++ = '\"'; 
+  for(;;)
+    {
+      char *ind;
+      int c = *(unsigned char*)s;
+      wchar_t wc = 0;
+      int m;
+      if (name>=string_buffer+STRING_BUFFER-10)
+	break;
+      if (c == 0)
+	break;
+      if ((ind = strchr(special_string, c)))
+	{
+	  *name++ = '\\';
+	  *name++ = aspect_string[ind - special_string];
+	  s += 1;
+	  continue;
+	} 
+      m = (int)mbrtowc(&wc, s, n, &ps);
+      if (m <= 0)
+	{
+	  *name++ = '\\';
+	  *name++ = 'x';
+	  *name++ = digit_string[(c >> 4) & 15];
+	  *name++ = digit_string[c & 15];
+	  memset(&ps, 0, sizeof(mbstate_t));
+	  s += 1;
+	  continue;
+	}
+      if (iswprint(wc))
+	{
+	  memcpy(name, s, m);
+	  name += m;
+	}
+      else if (m==1 && c<=' ')
+	{
+	  *name++ = '\\';
+	  *name++ = '^';
+	  *name++ = (char)(c | 0x40);
+	}
+      else
+	{
+	  int i;
+	  for (i=0; i<m; i++)
+	    if (name < string_buffer+STRING_BUFFER-10)
+	      {
+		c =  *(unsigned char*)(s+i);
+		*name++ = '\\';
+		*name++ = 'x';
+		*name++ = digit_string[(c >> 4) & 15];
+		*name++ = digit_string[c & 15];
+	      }
+	}
+      s += m;
+      n -= m;
     }
-    s++;
-  }
+#else
+  int c;
+  *name++ = '\"'; 
+  while ((c = *(unsigned char*)s)) 
+    {
+      char *ind;
+      if (name >= string_buffer+STRING_BUFFER-10)
+	break;
+      if ((ind = strchr(special_string, c))) 
+	{
+	  *name++ = '\\';
+	  *name++ = aspect_string[ind - special_string];
+	} 
+      else if (isascii(c) && isprint(c)) 
+	{
+	  *name++ = c;
+	} 
+      else if (c<=' ') 
+	{
+	  *name++ = '\\';
+	  *name++ = '^';
+	  *name++ = (char)(c | 0x40);
+	} 
+      else 
+	{
+	  *name++ = '\\';
+	  *name++ = 'x';
+	  *name++ = digit_string[(c >> 4) & 15];
+	  *name++ = digit_string[c & 15];
+	}
+      s++;
+    }
+#endif
   *name++ = '\"';  /*"*/
   *name++ = 0;
   return string_buffer;
@@ -747,51 +815,164 @@ DX(xstrsubst)
 /*------------------------ */
 
 
+
 DX(xupcase)
 {
-  char *s,*r,c;
   at *rr;
-
+  char *s;
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
-  rr = new_string_bylen(strlen(s));
-  r = SADD(rr->Object);
-  while ((c = *s++)) 
-    *r++ = toupper((unsigned char)c);
-  *r = 0;
+#if HAVE_WCHAR_T
+  {
+    char buffer[MB_LEN_MAX];
+    struct large_string ls;
+    mbstate_t ps1;
+    mbstate_t ps2;
+    int n = strlen(s);
+    memset(&ps1, 0, sizeof(mbstate_t));
+    memset(&ps2, 0, sizeof(mbstate_t));
+    large_string_init(&ls);
+    while(n > 0)
+      {
+	wchar_t wc = 0;
+	int m = (int)mbrtowc(&wc, s, n, &ps1);
+	if (m == 0)
+	  break;
+	if (m > 0)
+	  {
+	    int d = wcrtomb(buffer, towupper(wc), &ps2);
+	    if (d <= 0)
+	      large_string_add(&ls, s, m);
+	    else
+	      large_string_add(&ls, buffer, d);
+	    s += m;
+	    n -= m;
+	  }
+	else
+	  {
+	    memset(&ps1, 0, sizeof(mbstate_t));	 
+	    memset(&ps2, 0, sizeof(mbstate_t));	 
+	    large_string_add(&ls, s, 1);
+	    s += 1;
+	    n -= 1;
+	  }
+      }
+    rr = large_string_collect(&ls);
+  }
+#else
+ {
+   char c, *r;
+   rr = new_string_bylen(strlen(s));
+   r = SADD(rr->Object);
+   while ((c = *s++)) 
+     *r++ = toupper((unsigned char)c);
+   *r = 0;
+ }
+#endif
   return rr;
 }
 
 DX(xupcase1)
 {
-  char *s,*r, c;
+  char *s;
   at *rr;
-
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
-  rr = new_string_bylen(strlen(s));
-  r = SADD(rr->Object);
-  strcpy(r,s);
-  if ((c = *r))
-    *r =  toupper((unsigned char)c);
+#if HAVE_WCHAR_T
+  {
+    char buffer[MB_LEN_MAX];
+    struct large_string ls;
+    int n = strlen(s);
+    int m;
+    wchar_t wc;
+    mbstate_t ps1;
+    mbstate_t ps2;
+    memset(&ps1, 0, sizeof(mbstate_t));
+    memset(&ps2, 0, sizeof(mbstate_t));
+    large_string_init(&ls);
+    m = (int)mbrtowc(&wc, s, n, &ps1);
+    if (m > 0)
+      {
+	int d = wcrtomb(buffer, towupper(wc), &ps2);
+	if (d > 0)
+	  {
+	    large_string_add(&ls, buffer, d);
+	    s += m;
+	    n -= m;
+	  }
+      }
+    large_string_add(&ls, s, n);
+    rr = large_string_collect(&ls);
+  }
+#else
+  {
+    char *r, c;
+    rr = new_string_bylen(strlen(s));
+    r = SADD(rr->Object);
+    strcpy(r,s);
+    if ((c = *r))
+      *r =  toupper((unsigned char)c);
+  }
+#endif
   return rr;
 }
 
 DX(xdowncase)
 {
-  char *s,*r,c;
   at *rr;
-  
+  char *s;
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
-  rr = new_string_bylen(strlen(s));
-  r = SADD(rr->Object);
-  while ((c = *s++))
-    *r++ = tolower((unsigned char)c);
-  *r = 0;
+#if HAVE_WCHAR_T
+  {
+    char buffer[MB_LEN_MAX];
+    struct large_string ls;
+    mbstate_t ps1;
+    mbstate_t ps2;
+    int n = strlen(s);
+    memset(&ps1, 0, sizeof(mbstate_t));
+    memset(&ps2, 0, sizeof(mbstate_t));
+    large_string_init(&ls);
+    while(n > 0)
+      {
+	wchar_t wc = 0;
+	int m = (int)mbrtowc(&wc, s, n, &ps1);
+	if (m == 0)
+	  break;
+	if (m > 0)
+	  {
+	    int d = wcrtomb(buffer, towlower(wc), &ps2);
+	    if (d <= 0)
+	      large_string_add(&ls, s, m);
+	    else
+	      large_string_add(&ls, buffer, d);
+	    s += m;
+	    n -= m;
+	  }
+	else
+	  {
+	    memset(&ps1, 0, sizeof(mbstate_t));	 
+	    memset(&ps2, 0, sizeof(mbstate_t));	 
+	    large_string_add(&ls, s, 1);
+	    s += 1;
+	    n -= 1;
+	  }
+      }
+    rr = large_string_collect(&ls);
+  }
+#else
+  {
+    char c, *r;
+    rr = new_string_bylen(strlen(s));
+    r = SADD(rr->Object);
+    while ((c = *s++)) 
+      *r++ = tolower((unsigned char)c);
+    *r = 0;
+  }
+#endif
   return rr;
 }
 
@@ -804,24 +985,50 @@ DX(xstr_asc)
   ARG_NUMBER(1);
   ARG_EVAL(1);
   s = ASTRING(1);
+#if  HAVE_WCHAR_T
+  {
+    mbstate_t ps;
+    wchar_t wc = 0;
+    memset(&ps, 0, sizeof(mbstate_t));
+    mbrtowc(&wc, s, strlen(s), &ps);
+    if (wc)
+      return NEW_NUMBER(wc);
+  }
+#else
   if (s[0])
-    return NEW_NUMBER(s[0]);
-  else
-    error(NIL,"Empty string",APOINTER(1));
+    return NEW_NUMBER(s[0] & 0xff);
+#endif
+  error(NIL,"Empty string",APOINTER(1));
 }
 
 DX(xstr_chr)
 {
+#if HAVE_WCHAR_T
+  char s[MB_LEN_MAX+1];
+  size_t m;
+  mbstate_t ps;
+  int i;
+  ARG_NUMBER(1);
+  ARG_EVAL(1);
+  i = AINTEGER(1);
+  memset(s, 0, sizeof(s));
+  memset(&ps, 0, sizeof(mbstate_t));
+  m = wcrtomb(s, (wchar_t)i, &ps);
+  if (m==0 || m==(size_t)-1)
+    error(NIL,"Out of range",APOINTER(1));
+  return new_string(s);
+#else
   int i;
   char s[2];
   ARG_NUMBER(1);
   ARG_EVAL(1);
   i = AINTEGER(1);
   if (i<0 || i>255)
-    error(NIL,"Ascii code out of range",APOINTER(1));
+    error(NIL,"Out of range",APOINTER(1));
   s[0]=i;
   s[1]=0;
   return new_string(s);
+#endif
 }
 
 DX(xisprint)
@@ -832,11 +1039,33 @@ DX(xisprint)
   s = (unsigned char*) ASTRING(1);
   if (!s || !*s)
     return NIL;
+#if HAVE_WCHAR_T
+  {
+    int n = strlen(s);
+    mbstate_t ps;
+    memset(&ps, 0, sizeof(mbstate_t));
+    while(n > 0)
+      {
+	wchar_t wc = 0;
+	int m = (int)mbrtowc(&wc, s, n, &ps);
+	if (m == 0)
+	  break;
+	if (m < 0)
+	  return NIL;
+	if (! iswprint(wc))
+	  return NIL;
+	s += m;
+	n -= m;
+      }
+  }
+#else
   while (*s) {
-    if ( ((*s)&0x7f)<0x20 || ((*s)&0x7f)==0x7f )
+    int c = *(unsigned char*)s;
+    if (! (isascii(c) && isprint(c)))
       return NIL;
     s++;
   }
+#endif
   return true();
 }
 
@@ -941,17 +1170,17 @@ static char *err[] = {
 /* ----------- private routines ------------ */
 
 
-static bounds regex_alternate(bounds buf, int *rnum);
+static void regex_alternate(bounds*, bounds, int*);
 
-static bounds
-regex_single(bounds buf, int *rnum)
+static void
+regex_single(bounds *ans, bounds buf, int *rnum)
 {
-  bounds ans,tmp;
+  bounds tmp;
   unsigned short *set;
   int toggle=0,last=0;
   unsigned char c;
 
-  ans.beg = ans.end = buf.beg;
+  ans->beg = ans->end = buf.beg;
 
   switch (c = *pat++) {
 
@@ -966,29 +1195,29 @@ regex_single(bounds buf, int *rnum)
 
   case '\\':
     if (!*pat) serror(3);
-    concatc(ans,*pat,buf);
+    concatc((*ans),*pat,buf);
     pat++;
-    return ans;
+    break;
     
   case '.':
-    concatc(ans,RE_ANY,buf);
-    return ans;
+    concatc((*ans),RE_ANY,buf);
+    break;
 
   case '(':
     last = *rnum;
     *rnum = *rnum + 1;
-    concatc(ans,RE_START+last,buf);
+    concatc((*ans),RE_START+last,buf);
     buf.beg += 1;
-    tmp = regex_alternate(buf,rnum);
-    concatb(ans,tmp,buf);
+    regex_alternate(&tmp, buf,rnum);
+    concatb((*ans),tmp,buf);
     if (*pat!=')') serror(1);
-    concatc(ans,RE_END+last,buf);
+    concatc((*ans),RE_END+last,buf);
     pat++;
-    return ans;
+    break;
     
   case '[':
-    if (ans.end>buf.beg+18) serror(0);
-    set = ans.end+1;
+    if (ans->end>buf.beg+18) serror(0);
+    set = ans->end+1;
     charset_zero(set);
     toggle = last = 0;
     if (*pat=='^')  { toggle=1; pat++; }
@@ -1013,114 +1242,111 @@ regex_single(bounds buf, int *rnum)
     last = 15;
     while (set[last]==0 && last>0) 
       last--;
-    concatc(ans,RE_RNG+last+1,buf);
-    ans.end += last+1;
-    return ans;
+    concatc((*ans),RE_RNG+last+1,buf);
+    ans->end += last+1;
+    break;
 
   case '^':
-    concatc(ans,RE_CARET,buf);
-    return ans;
+    concatc((*ans),RE_CARET,buf);
+    break;
     
   case '$':
-    concatc(ans,RE_DOLLAR,buf);
-    return ans;
+    concatc((*ans),RE_DOLLAR,buf);
+    break;
     
   default:
-    concatc(ans,c,buf);
-    return ans;
+    concatc((*ans),c,buf);
+    break;
     
   }
 }
 
 
-static bounds
-regex_several(bounds buf, int *rnum)
+static void
+regex_several(bounds *ans, bounds buf, int *rnum)
 {
   bounds b;
-  bounds ans,rem;
+  bounds rem;
 
-  ans.beg = buf.beg;
-  ans.end = buf.beg;
-  rem.beg = ans.beg+2;
+  ans->beg = buf.beg;
+  ans->end = buf.beg;
+  rem.beg = ans->beg+2;
   rem.end = buf.end;
 
-  b = regex_single(rem,rnum);
+  regex_single(&b, rem,rnum);
 
   switch (*pat) {
 
   case '?':
-    concatc(ans, RE_FAIL+(b.end-b.beg), buf);
-    concatb(ans, b, buf);
+    concatc((*ans), RE_FAIL+(b.end-b.beg), buf);
+    concatb((*ans), b, buf);
     pat++;
-    return ans;
+    break;
 
   case '+':
-    concatb(ans,b,buf);
-    concatc(ans, RE_FAIL+1, buf);
-    concatc(ans, RE_JMP+(b.beg-b.end)-2, buf);
+    concatb((*ans),b,buf);
+    concatc((*ans), RE_FAIL+1, buf);
+    concatc((*ans), RE_JMP+(b.beg-b.end)-2, buf);
     pat++;
-    return ans;
+    break;
 
   case '*':
-    concatc(ans, RE_FAIL+(b.end-b.beg)+1, buf);
-    concatb(ans,b,buf);
-    concatc(ans, RE_JMP+(b.beg-b.end)-2, buf);
+    concatc((*ans), RE_FAIL+(b.end-b.beg)+1, buf);
+    concatb((*ans),b,buf);
+    concatc((*ans), RE_JMP+(b.beg-b.end)-2, buf);
     pat++;
-    return ans;
+    break;
 
   default:
-    concatb(ans,b,buf);
-    return ans;
+    concatb((*ans),b,buf);
+    break;
   }
 }
 
-static bounds
-regex_catenate(bounds buf, int *rnum)
+static void
+regex_catenate(bounds *ans, bounds buf, int *rnum)
 {
   bounds b;
-  bounds ans,rem;
+  bounds rem;
 
-  ans.beg = buf.beg;
-  ans.end = buf.beg;
+  ans->beg = buf.beg;
+  ans->end = buf.beg;
   rem.beg = buf.beg;
   rem.end = buf.end;
 
   do {
-    rem.beg = ans.end;
-    b = regex_several(rem,rnum);
-    concatb(ans,b,buf);
+    rem.beg = ans->end;
+    regex_several(&b,rem,rnum);
+    concatb((*ans),b,buf);
   } while (*pat && *pat!='|' && *pat!=')');
-  return ans;
 }
 
-static bounds
-regex_alternate(bounds buf, int *rnum)
+static void
+regex_alternate(bounds *ans, bounds buf, int *rnum)
 {
   bounds b1,b2;
-  bounds ans,rem;
+  bounds rem;
   int newrnum;
 
-  ans.beg = buf.beg;
-  ans.end = buf.beg;
+  ans->beg = buf.beg;
+  ans->end = buf.beg;
   rem.beg = buf.beg+1;
   rem.end = buf.end;
 
   newrnum = *rnum;
-  b1 = regex_catenate(rem,rnum);
+  regex_catenate(&b1,rem,rnum);
   if (*pat == '|') {
     pat++;
     rem.beg = b1.end+1;
-    b2 = regex_alternate(rem,&newrnum);
+    regex_alternate(&b2,rem,&newrnum);
     if (newrnum>*rnum)
       *rnum = newrnum;
-    concatc(ans, RE_FAIL+(b1.end-b1.beg+1), buf);
-    concatb(ans, b1, buf);
-    concatc(ans, RE_JMP +(b2.end-b2.beg), buf);
-    concatb(ans, b2, buf);
-    return ans;
+    concatc((*ans), RE_FAIL+(b1.end-b1.beg+1), buf);
+    concatb((*ans), b1, buf);
+    concatc((*ans), RE_JMP +(b2.end-b2.beg), buf);
+    concatb((*ans), b2, buf);
   } else {
-    concatb(ans, b1, buf);
-    return ans;
+    concatb((*ans), b1, buf);
   }
 }
 
@@ -1236,7 +1462,7 @@ regex_compile(char *pattern,
     }
   else 
     {
-      bounds buf;
+      bounds buf, tmp;
       buf.beg = (unsigned short*) bufstart;
       buf.end = (unsigned short*) bufend;
       if (strict) 
@@ -1244,7 +1470,8 @@ regex_compile(char *pattern,
 	  *buf.beg++ = RE_CARET;
 	  buf.end--;
 	}
-      buf = regex_alternate(buf,rnum); 
+      regex_alternate(&tmp,buf,rnum); 
+      buf = tmp;
       if (strict) 
 	*buf.end++ = RE_DOLLAR;
       *buf.end = 0;

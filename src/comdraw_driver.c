@@ -1409,11 +1409,14 @@ comdraw_window(int x, int y, unsigned int w, unsigned int h, char*name)
   at *ans;
   info = comdraw_new_window(x,y,w,h,name);
   ans = new_extern( &window_class, info);
-  info->lwin.used       = 1;
-  info->lwin.font       = new_safe_string(FONT_STD);
-  info->lwin.color      = COLOR_FG;
-  info->lwin.gdriver    = &comdraw_driver;
-  info->lwin.backptr    = ans;
+  info->lwin.used = 1;
+  info->lwin.font = new_safe_string(FONT_STD);
+  info->lwin.color = COLOR_FG;
+  info->lwin.gdriver = &comdraw_driver;
+  info->lwin.clipw = 0;
+  info->lwin.cliph = 0;
+  info->lwin.linestyle = 0;
+  info->lwin.backptr = ans;
   return ans;
 }
 

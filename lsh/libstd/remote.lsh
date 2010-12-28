@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: remote.lsh,v 1.1 2003/06/21 17:21:10 leonb Exp $
+;;; $Id: remote.lsh,v 1.9 2005/02/21 15:50:38 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -43,6 +43,8 @@
 
 
 (defclass RemoteLush Object
+  name
+  info ;; (host port pid)
   fin
   fout
   status
@@ -63,8 +65,11 @@
 ;; remote processes.
 
 (defmethod RemoteLush RemoteLush(host &optional (port 4000))
+  (setq name (sprintf "%s:%d" host port))
   (setq status 'ok)
-  (socketopen host port 'fin 'fout) )
+  (when (socketopen host port 'fin 'fout) 
+    (setq info (list host port ()))
+    (rplaca (cddr info) (==> this exec '(getpid))) ) )
 
 #? (==> <remotelush> exec <command>)
 ;; Executes command <command> on the remote Lush process.
@@ -87,8 +92,8 @@
 ;; empty list until method <receive> is called.
 
 (defmethod RemoteLush send(cmd)
-  (when (not status)
-    (==> this receive))
+  (when (not status) (==> this receive))
+  (while (and (socketselect fin 0) (<> (read8 fin) -1)) t)
   (writing fout (bwrite cmd))
   (setq status ()) )
 
@@ -118,3 +123,12 @@
        (t
         (setq error (if (consp ans) (cdr ans) "Unknown error"))
         (setq status 'error) ) ) ) ) )
+
+
+#? (==> <remotelush> print)
+;; Prints informative stuff.
+
+(demethod RemoteLush print()
+  (if (stringp name)
+      (printf "::remotelush:%s" name)
+    (printf "::remotelush:%l" info) ) )

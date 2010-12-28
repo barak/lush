@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: ogre.lsh,v 1.19 2003/10/27 21:46:27 profshadoko Exp $
+;;; $Id: ogre.lsh,v 1.22 2004/12/09 23:50:59 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -741,23 +741,22 @@
    (t this) ) )
 
 (defmethod Container activate(k)
+  ;; normalize k
+  (when (or (not (is-of-class k VisualObject))
+	    (<> this :k:itscontainer) )
+    (setq k (not (not k))) )
+  ;; deactivate activated child
+  (when (and (is-of-class activated VisualObject) 
+	     (not (== k activated)) )
+    (let ((leaf (==> activated isactivated)))
+      (when leaf (==> leaf activate ())) ) )
+  ;; perform activation
   (let ((oldactivated activated))
-    ;; normalize k
-    (when (or (not (is-of-class k VisualObject))
-              (<> this :k:itscontainer) )
-      (setq k (not (not k))) )
-    ;; deactivate activated child
-    (when (and (is-of-class activated VisualObject) 
-               (not (== k activated)) )
-      (let ((leaf (==> activated isactivated)))
-        (when leaf (==> leaf activate ())) ) )
-    ;; perform activation
     (if (setq activated k)
         (when (and itscontainer (not oldactivated))
           (==> itscontainer activate this) )
       (when itscontainer
         (==> itscontainer activate ()) ) ) ) )
-
 
 ;; EVENEMENTS
 
@@ -1173,7 +1172,8 @@
     ;; full context for asynchronous repairs
     (letslot this
       (gsave
-	(graphics-batch
+        (graphics-batch
+          (linestyle 0)
 	  (let ((rectlist damaged-area))
 	    (setq damaged-area ())
 	    (each ((rect rectlist)) 
@@ -1210,6 +1210,7 @@
 
 ;; constructor
 (defmethod WindowObject WindowObject(x y w h title . contenu)
+  (setq thisform this)
   (setq thiswindowobject this)
   (setq color-palette :color-palette)
   (each ((i contenu))
