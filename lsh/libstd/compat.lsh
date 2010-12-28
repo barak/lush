@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: compat.lsh,v 1.22 2004/04/17 20:09:29 profshadoko Exp $
+;;; $Id: compat.lsh,v 1.26 2006/08/06 12:33:32 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -92,12 +92,9 @@
 (defvar imatrix int-matrix)
 (defvar dmatrix double-matrix)
 (defvar fmatrix float-matrix)
-(when (not (functionp array))
-  (defvar array atom-matrix) )
-(when (not (functionp matrix))
-  (defvar matrix float-matrix) )
-(when (not (functionp submatrix))
-  (defvar submatrix sub-index) )
+(defvar array atom-matrix)
+(defvar matrix float-matrix) 
+(defvar submatrix sub-index)
 
 
 
@@ -149,10 +146,9 @@
 (defvar save-packed-matrix save-matrix)
 
 ;; From SN1
-(dm dim(f v . l) `(defvar ,v (float-matrix ,@l)))
+(dm dim(f v . l) `(setq :,v (float-matrix ,@l)))
 
 ;; From SN1ATT
-(defvar defun de)
 (defvar += incr)
 (defvar << setq)
 (defvar diff-lists diff-listes)
@@ -178,9 +174,7 @@
     (a `((atom-matrix) ,v))))
 
 (dmd idx-m2timesm2 (a b c)
-  (list 'idx-eloop (list (list 'bi b) (list 'ci c))
-    (cons 'idx_m2dotm1 (cons a '(bi ci))) ) )
-
+  `(let ((aa ,a)) (idx-eloop ((bi ,b) (ci ,c)) (idx_m2dotm1 aa bi ci)))))
 
 
 ;;; ----------------------------------------

@@ -24,12 +24,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: constants.lsh,v 1.9 2003/06/26 16:25:55 leonb Exp $
+;;; $Id: constants.lsh,v 1.11 2006/02/27 15:43:46 laseray Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
-#? *** Symbolic constants.
+#? *** Symbolic Constants
 ;; header files of C libraries are often filled with large 
 ;; amounts of #define directives that define numerical macros, 
 ;; flags and other constants. Interfacing these libraries
@@ -45,8 +45,7 @@
 ;;.SEE @<identifier>
 ;;.SEE (defconstant <identifier> <val>)
 
-(when (not |*CONSTANTS|)
-  (defvar |*CONSTANTS| (htable)) )
+(defvar |*CONSTANTS| (htable))
 
 #? (defconstant <identifier> <val>)
 ;; Defines a symbolic constant named <identifier> and equal to <val>.

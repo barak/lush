@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: date.c,v 1.6 2003/07/11 13:03:45 leonb Exp $
+ * $Id: date.c,v 1.8 2006/02/21 19:54:32 leonb Exp $
  **********************************************************************/
 
 /***********************************************************************
@@ -311,16 +311,18 @@ date_name(at *p)
   return string_buffer;
 }
 
+static at *make_date(struct date *d);
+
 static void
 date_serialize(at **pp, int code)
 {
-  static at *make_date(struct date *d);
-  void *p;
+  void *p = 0;
 
   if (code == SRZ_READ)
   {
     serialize_chars(&p,code,-1);
     *pp = make_date(p);
+    free(p);
   }
   else
   {

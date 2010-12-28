@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: oostruct.c,v 1.20 2005/02/23 21:23:13 leonb Exp $
+ * $Id: oostruct.c,v 1.22 2005/08/19 14:38:53 leonb Exp $
  **********************************************************************/
 
 /***********************************************************************
@@ -35,8 +35,6 @@
 #include "dh.h"
 
 extern struct alloc_root symbol_alloc;
-
-int in_object_scope = 0;
 
 static at *at_progn;
 static at *at_mexpand;
@@ -838,9 +836,7 @@ letslot(at *obj, at *f, at *q, int howmuch)
       at_this->Object = symb;
       LOCK(obj);
       
-      in_object_scope++;
       ans = apply(f,q);
-      in_object_scope--;
 
       /* Unstack THIS */
       UNLOCK(symb->value);
@@ -860,14 +856,31 @@ letslot(at *obj, at *f, at *q, int howmuch)
 
 DY(yletslot)
 {
-  at *q,*p,*ans;
+  at *q,*p,*l,*ans;
+  int howmuch = -1;
 
   ifn ( CONSP(ARG_LIST) )
     error(NIL,"some argument expected",NIL);
 
-  q = eval(ARG_LIST->Car);
+  l = ARG_LIST;
+  q = eval(l->Car);
+  if (EXTERNP(q,&class_class))
+    {
+      p = q;
+      l = l->Cdr;
+      q = eval(l->Car);
+      if (q && (q->flags & X_OOSTRUCT))
+        {
+          class *cl = q->Class;
+          while (cl && cl != p->Object)
+            cl = cl->super;
+          if (! cl)
+            error(NIL,"object is not an instance of this superclass", p);
+          howmuch = cl->slotssofar;
+        }
+    }
   p = eval(at_progn);
-  ans = letslot(q, p, ARG_LIST->Cdr, -1);
+  ans = letslot(q, p, l->Cdr, howmuch);
   UNLOCK(q);
   UNLOCK(p);
   return ans;

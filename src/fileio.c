@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: fileio.c,v 1.21 2004/05/12 21:13:36 leonb Exp $
+ * $Id: fileio.c,v 1.26 2006/06/05 07:29:33 leonb Exp $
  **********************************************************************/
 
 
@@ -1087,6 +1087,12 @@ search_lushdir(char *progname)
       "../share/lush/sys/stdenv.dump",
       "../share/lush/sys/stdenv.lshc",
       "../share/lush/sys/stdenv.lsh",
+      "../../sys/stdenv.dump",
+      "../../sys/stdenv.lshc",
+      "../../sys/stdenv.lsh",
+      "../../share/lush/sys/stdenv.dump",
+      "../../share/lush/sys/stdenv.lshc",
+      "../../share/lush/sys/stdenv.lsh",
 #ifdef DIR_DATADIR
       DIR_DATADIR "/lush/sys/stdenv.dump",
       DIR_DATADIR "/lush/sys/stdenv.lshc",
@@ -1413,22 +1419,23 @@ attempt_open_read(char *s, char *suffixes)
   /*** stdin ***/
   if (! strcmp(s, "$stdin"))
     return stdin;
-
+  
   /*** pipes ***/
   if (*s == '|') {
     errno = 0;
-    f = popen(s + 1, "r");
-    if (f)
+    if ((f = popen(s + 1, "r"))) {
+      FMODE_BINARY(f);
       return f;
-    else
+    } else
       return NIL;
   }
-
+  
   /*** search and open ***/
   name = search_file(s,suffixes);
-  if (name && ((f = fopen(name, "r"))))
+  if (name && ((f = fopen(name, "rb")))) {
+    FMODE_BINARY(f);
     return f;
-  else
+  } else
     return NIL;
 }
 
@@ -1484,9 +1491,10 @@ attempt_open_write(char *s, char *suffixes)
   /*** pipes ***/
   if (*s == '|') {
     errno = 0;
-    if ((f = popen(s + 1, "w")))
+    if ((f = popen(s + 1, "w"))) {
+      FMODE_BINARY(f);
       return f;
-    else
+    } else
       return NIL;
   }
 
@@ -1497,9 +1505,10 @@ attempt_open_write(char *s, char *suffixes)
   }
 
   /*** open ***/
-  if ((f = fopen(s, "w")))
+  if ((f = fopen(s, "w"))) {
+    FMODE_BINARY(f);
     return f;
-  else
+  } else
     return NIL;
 }
 
@@ -1548,9 +1557,10 @@ attempt_open_append(char *s, char *suffixes)
   /*** pipes ***/
   if (*s == '|') {
     errno = 0;
-    if ((f = popen(s + 1, "w")))
+    if ((f = popen(s + 1, "w"))) {
+      FMODE_BINARY(f);
       return f;
-    else
+    } else
       return NIL;
   }
 
@@ -1561,9 +1571,10 @@ attempt_open_append(char *s, char *suffixes)
   }
   
   /*** open ***/
-  if ((f = fopen(s, "a")))
+  if ((f = fopen(s, "a"))) {
+    FMODE_BINARY(f);
     return f;
-  else
+  } else
     return NIL;
 }
 
@@ -1822,6 +1833,7 @@ DY(yreading)
 
   context_push(&mycontext);
   context->input_tab = 0;
+  context->input_string = 0;
   context->input_file = f;
 
   if (sigsetjmp(context->error_jump, 1)) {
@@ -1831,6 +1843,8 @@ DY(yreading)
         if (pclose(f) < 0)
            fclose(f);
     }
+    context->input_tab = -1;
+    context->input_string = NULL;
     context_pop();
     UNLOCK(fdesc);
     siglongjmp(context->error_jump, -1L);
@@ -1840,6 +1854,8 @@ DY(yreading)
   if (fdesc->flags & X_STRING)
     file_close(context->input_file);
 
+  context->input_tab = -1;
+  context->input_string = NULL;
   context_pop();
   UNLOCK(fdesc);
   return answer;
@@ -1877,6 +1893,7 @@ DY(ywriting)
            fclose(f);
     } else
       fflush(f);
+    context->output_tab = -1;
     context_pop();
     UNLOCK(fdesc);
     siglongjmp(context->error_jump, -1L);
@@ -1887,11 +1904,45 @@ DY(ywriting)
     file_close(context->output_file);
   else
     fflush(context->output_file);
+  context->output_tab = -1;
   context_pop();
   UNLOCK(fdesc);
   return answer;
 }
 
+/*
+ * writing - reading - appending LISP I/O FUNCTIONS
+ * (reading "filename" | filedesc ( ..l1.. ) .......ln.. ) )	
+ * (writing "filename" | filedesc ( ..l1.. ) ........... ) )
+ */
+
+DY(yreading_string)
+{
+  struct context mycontext;
+  at *answer;
+  at *str;
+  if (! (CONSP(ARG_LIST) && CONSP(ARG_LIST->Cdr)))
+    error(NIL, "syntax error", NIL);
+  str = eval(ARG_LIST->Car);
+  if (! EXTERNP(str,&string_class))
+    error("reading-string", "string expected", str);
+  context_push(&mycontext);
+  context->input_tab = 0;
+  context->input_string = SADD(str->Object);
+  if (sigsetjmp(context->error_jump, 1)) {
+    context->input_tab = -1;
+    context->input_string = NULL;
+    context_pop();
+    UNLOCK(str);
+    siglongjmp(context->error_jump, -1L);
+  }
+  answer = progn(ARG_LIST->Cdr);
+  context->input_tab = -1;
+  context->input_string = NULL;
+  context_pop();
+  UNLOCK(str);
+  return answer;
+}
 
 
 
@@ -1974,7 +2025,8 @@ init_fileio(char *program_name)
   at_tl3dir = var_define("tl3dir");
   
   if (!(s=search_lushdir(program_name)))
-    abort("Cannot locate library files");
+    if (!(s=search_lushdir("lush")))
+      abort("Cannot locate library files");
 #ifdef UNIX
   unix_setenv("LUSHDIR",s);
 #endif
@@ -2016,6 +2068,7 @@ init_fileio(char *program_name)
   dx_define("open-append", xopen_append);
   dy_define("reading", yreading);
   dy_define("writing", ywriting);
+  dy_define("reading-string", yreading_string);
   dx_define("read8", xread8);
   dx_define("write8", xwrite8);
   dx_define("fsize", xfsize);

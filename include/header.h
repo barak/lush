@@ -24,7 +24,7 @@
  ***********************************************************************/
 
 /***********************************************************************
- * $Id: header.h,v 1.63 2005/01/06 02:09:38 leonb Exp $
+ * $Id: header.h,v 1.67 2006/02/22 22:28:06 leonb Exp $
  **********************************************************************/
 
 #ifndef HEADER_H
@@ -492,6 +492,7 @@ extern TLAPI struct error_doc {
 extern TLAPI struct context {
   struct context *next;
   sigjmp_buf error_jump;
+  char *input_string;
   FILE *input_file;
   FILE *output_file;
   short input_tab;
@@ -526,7 +527,7 @@ struct string {
 
 #define SADD(str)       (((struct string *)(str))->start)
 
-TLAPI at *new_string(char *s);
+TLAPI at *new_string(const char *s);
 TLAPI at *new_safe_string(char *s);
 TLAPI at *new_string_bylen(int n);
 TLAPI int str_index(char *s1, char *s2, int start);
@@ -559,6 +560,9 @@ struct large_string {
 LUSHAPI void large_string_init(struct large_string *ls);
 LUSHAPI void large_string_add(struct large_string *ls, char *s, int len);
 LUSHAPI at * large_string_collect(struct large_string *ls);
+
+LUSHAPI at* str_mb_to_utf8(const char *s);
+LUSHAPI at* str_utf8_to_mb(const char *s);
 
 
 /* FUNCTION.H -------------------------------------------------- */
@@ -805,7 +809,6 @@ LUSHAPI void module_unload(at *atmodule);
 #define DATE_MINUTE     4
 #define DATE_SECOND     5
 
-extern char *ansidatenames[];
 extern class date_class;
 
 TLAPI char *str_date( at *p, int *pfrom, int *pto );
@@ -1005,7 +1008,7 @@ LUSHAPI void storage_save(at*, FILE*);
 
 /* INDEX.H ---------------------------------------------- */
 
-#define MAXDIMS 8
+#define MAXDIMS 11
 
 #define IDF_HAS_NR0  1
 #define IDF_HAS_NR1  2

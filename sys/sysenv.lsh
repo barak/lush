@@ -24,9 +24,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;  $Id: sysenv.lsh,v 1.115 2004/09/02 20:37:46 leonb Exp $
+;;;  $Id: sysenv.lsh,v 1.124 2006/04/10 18:36:21 laseray Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
 ;;; --------- Miscellaneous macro-chars ---------
@@ -68,13 +67,27 @@
 
 ;;; --------- Defining variables ---------
 
-(dm defvar(f name value)
-  (list 'setq (list 'scope name) value) )
-(lock_symbol defvar)
+
+(dm defvar(f name &optional value)
+  (when (null (symbol-globally-bound-p name))
+    (list 'progn (list 'setq (list 'scope name) value) (list 'quote name)) ) )
+
+(dm defparameter(f name value)
+  (list 'progn (list 'setq (list 'scope name) value) (list 'quote name)) )
+
+(dm defun(f name args . body)
+  (let ((f (cons 'lambda (cons args body))))
+    (list 'progn (list 'setq (list 'scope name) f) (list 'quote name)) ) )
+
+(dm defmacro(f name args . body)
+  (let ((f (cons 'mlambda (cons (cons '|__F__| args) body))))
+    (list 'progn (list 'setq (list 'scope name) f) (list 'quote name)) ) )
 
 (defvar not null)
+
 (defvar nil ())
-(lock_symbol not nil)
+
+(lock_symbol defvar defparameter defun defmacro not nil)
 
 
 
@@ -93,13 +106,13 @@
 (dm on-error (f p . l)
   (cons 'let
 	(cons
-	  (list (list 'debug-action
-		      (list 'cons (list 'quote p) 'debug-action) ))
-	  l )) )
+	 (list (list 'debug-action
+		     (list 'cons (list 'quote p) 'debug-action) ))
+	 l )) )
 
 (dm on-error-macro (n onem . r)
-    `(eval (cons 'on-error (cons ,onem (quote ,r))))
-    )
+  (list 'eval
+	(list 'cons ''on-error (list 'cons onem (list 'quote r))) ) )
 
 (dm on-break(f p . l)
   (cons 'let
@@ -151,8 +164,8 @@
     (printf "\n") )
   (load "$stdin" "$stdout" "[Pause] ? ") )
 
-(defvar break-hook simple-break-hook)
-(defvar debug-hook simple-debug-hook)
+(setq :break-hook simple-break-hook)
+(setq :debug-hook simple-debug-hook)
 
 (lock-symbol toplevel 
 	     break-hook debug-hook pause
@@ -464,10 +477,10 @@
     (each ((x l)) (when (f x) (setq r (cons x r))))
     (reverse r)))
 
-(de hset(l)
+(de hset(l &optional flag)
   (let ((r (htable)))
     (each ((x l))
-      (r x t) )
+      (r x (or (not flag) (1+ (or (r x) 0)))) )
     r ) )
 
 (de hset-and(ht1 ht2)
@@ -600,12 +613,13 @@
   (let* ((arglist ())
          (letlist ())
          (sellist ())
-         (lvar ()))
+         (lvar ())
+         (tmpseed 0))
     (each ((x vars)) 
       (selectq (length x)
         (3
          ;; a permutation syntax
-         (let* ((z (uniq-symbol)))
+         (let* ((z (named (sprintf "_UNIQ_%d" (incr tmpseed)))))
            (setq arglist (cons (list z (cadr x)) arglist))
            (setq letlist
                  (cons (list (car x) (list 'select (last x) 0 (list z)))
@@ -827,7 +841,7 @@
                       (set (car f) ())
                       (libload ,l " (autoload)")
                       f) )))
-    `(progn ,@(all ((i s)) `(setq ,i ,f))) ) )
+    `(progn ,@(all ((i s)) `(setq :,i ,f))) ) )
 
 
 (defvar last-loaded-file ())
@@ -1054,7 +1068,7 @@
 	      (if (consp i)
 		  (setq i (car i)))
               (tab tb)
-	      (printf ";;\t%l=%l\n" i (apply letslot (list this i))) )
+	      (printf ";;\t%l=%l\n" i (apply letslot (list cl this i))) )
 	(setq cl (super cl)) ) ) )
 
 (de pretty-method(class method)
@@ -1694,9 +1708,12 @@
        (setq |*HELPFILES| (cons file-being-loaded |*HELPFILES|)) )
      () )
 
+(dmc |^H| (helptool))
+
 (de help () 
-  (printf "Type (helptool) for a GUI documentation browser\n")
-  (printf "Type ^Atopic for help at the console on a particular topic\n"))
+  (printf "Enter ^H or (helptool) to open the Lush documentation browser window.\n")
+  (printf "Enter ^A<topic> for console-based topic help.\n"))
+
 
 
 ;;; --------- File searching -----------
@@ -1741,7 +1758,7 @@
 	  (let ((d (read-string "~\n\r\t\b ")))
 	    (when (and (dirp d) (not (member d p)))
 	      (setq p (cons d p)) ) ) ) ) )
-    (find-file p name extlist) ) )
+    (find-file (reverse p) name extlist) ) )
 
 (de find-shared-or-static-library(name &optional extlist)
   (or (find-shared-library name extlist)

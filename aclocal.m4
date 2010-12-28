@@ -96,6 +96,11 @@ AC_DEFUN(AC_CC_OPTIMIZE,[
         AC_HELP_STRING([--enable-debug],
                        [Compile with debugging options (default: no)]),
         [ac_debug=$enableval],[ac_debug=no])
+   AC_ARG_WITH(cpu,
+        AC_HELP_STRING([--with-cpu=NAME],
+                       [Compile for specified cpu (default: ${host_cpu})]),
+        [ac_cpu=$withval])
+
    AC_ARG_VAR(OPTS, [Optimization flags for all compilers.])
    if test x${OPTS+set} = xset ; then
      saved_CFLAGS="$CFLAGS"
@@ -123,12 +128,20 @@ AC_DEFUN(AC_CC_OPTIMIZE,[
        AC_CHECK_CC_OPT([-Wall],[OPTS="$OPTS -Wall"])
        AC_CHECK_CC_OPT([-O3],[OPTS="$OPTS -O3"],
          [ AC_CHECK_CC_OPT([-O2], [OPTS="$OPTS -O2"] ) ] )
-       cpu=${host_cpu}
-       if test -n "${cpu}" ; then
-         opt="-march=${cpu}"
-         AC_CHECK_CC_OPT([$opt], [OPTS="$OPTS $opt"],
-	  [ opt="-mcpu=${cpu}"
+       if test -z "$ac_cpu" ; then
+        AC_MSG_WARN([guessing cpu type (use --with-cpu=cpuname to override.)])
+       fi
+       opt="-march=${ac_cpu-${host_cpu}}"
+       AC_CHECK_CC_OPT([$opt], [OPTS="$OPTS $opt"],
+	  [ opt="-mcpu=${ac_cpu-${host_cpu}}"
             AC_CHECK_CC_OPT([$opt], [OPTS="$OPTS $opt"]) ] )
+       if test -z "$ac_cpu" -a "$host_cpu" = "i686" ; then
+            AC_CHECK_CC_OPT([-mmmx],[OPTS="$OPTS -mmmx"
+              AC_MSG_WARN([use --with-cpu=cpuname to avoid assuming that MMX works.])])
+            if test -r /proc/cpuinfo && grep -q sse /proc/cpuinfo ; then
+              AC_CHECK_CC_OPT([-msse],[OPTS="$OPTS -msse"
+                AC_MSG_WARN([use --with-cpu=cpuname to avoid assuming that SSE works.])])
+            fi
        fi
      fi
    fi
@@ -286,5 +299,71 @@ if test x"$acx_pthread_ok" = xyes; then
 else
         ifelse([$2],,:,[$2])
 fi
+])
+
+
+
+
+dnl -------------------------------------------------------
+dnl @synopsis AC_PROG_PKGCONFIG
+dnl Checks for existence of pkg-config.
+dnl Sets variable PKGCONFIG to its path
+dnl -------------------------------------------------------
+
+AC_DEFUN([AC_PROG_PKGCONFIG], [
+  AC_PATH_PROG(PKGCONFIG,pkg-config)
+])
+
+dnl -------------------------------------------------------
+dnl @synopsis AC_APPEND_OPTION(variable,option)
+dnl Adds option into variable unless it is already there.
+dnl -------------------------------------------------------
+
+AC_DEFUN([AC_APPEND_OPTION], [
+  again=no
+  for n in $[$1] ; do test "[$2]" = "$n" && again=yes ; done
+  test x$again = xno && [$1]="$[$1] [$2]"
+])
+
+
+
+dnl -------------------------------------------------------
+dnl @synopsis AC_PATH_XFT([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
+dnl Checks for existence of library Xft.
+dnl Sets variable HAVE_XFT when present.
+dnl Update x_libraries and x_cflags to handle Xft.
+dnl -------------------------------------------------------
+
+AC_DEFUN([AC_PATH_XFT], [
+  AC_REQUIRE([AC_PROG_PKGCONFIG])
+  AC_CACHE_CHECK(for library Xft, ac_cv_cc_xft, [
+    ac_cv_cc_xft=no
+    if test -x "$PKGCONFIG" && $PKGCONFIG --exists xft ; then
+      ac_cv_cc_xft=yes
+      cflags="`$PKGCONFIG --cflags xft`"
+      for cflag in $cflags ; do 
+        AC_APPEND_OPTION(X_CFLAGS, $cflag)
+      done
+      libs="`$PKGCONFIG --libs xft` $X_LIBS"
+      X_LIBS=
+      for lib in $libs ; do
+        case $lib in
+          -L*) AC_APPEND_OPTION(X_LIBS, $lib) ;;
+        esac
+      done
+      for lib in $libs ; do
+        case $lib in
+          -L*)  ;;
+          *) AC_APPEND_OPTION(X_LIBS, $lib) ;;
+        esac
+      done
+    fi
+  ])
+  if test x$ac_cv_cc_xft = xyes ; then
+    AC_DEFINE(HAVE_XFT,1, [Define to 1 if you have the "Xft" library.])
+    ifelse([$1],,:,[$1])
+  else 
+    ifelse([$2],,:,[$2])
+  fi
 ])
 

@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; $Id: lasvm.lsh,v 1.5 2005/02/18 16:19:43 leonb Exp $
+;;; $Id: lasvm.lsh,v 1.10 2005/11/11 20:44:59 leonb Exp $
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -186,6 +186,7 @@
     (setq :lsvm:scale 1)
     (setq :lsvm:positive-class +1)
     (setq :lsvm:negative-class -1)
+    (setq :lsvm:userdata (double-matrix 1))
     lsvm ) )
 
 (defmethod LaSVM load-expansion(e)
@@ -241,6 +242,7 @@
     (when epsgr
       (printf "Finishing: L= %d, D=%f, W2=%f\n" 
 	      l (==> this get-delta) (==> this get-w2) )
+      (setq reprocess t)
       (while reprocess
 	(when (not (==> this finish epsgr))
 	  (setq reprocess ()) ) ) )
