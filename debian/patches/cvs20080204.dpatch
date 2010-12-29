@@ -6,9 +6,9 @@
 
 @DPATCH@
 
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/aclocal.m4 branches/upstream/cvs/lush/aclocal.m4
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/aclocal.m4 cvs/aclocal.m4
 --- trunk/aclocal.m4	2007-01-06 22:16:08.000000000 -0500
-+++ branches/upstream/cvs/lush/aclocal.m4	2006-12-17 09:08:04.000000000 -0500
++++ cvs/aclocal.m4	2006-12-17 09:08:04.000000000 -0500
 @@ -129,7 +129,8 @@
         AC_CHECK_CC_OPT([-O3],[OPTS="$OPTS -O3"],
           [ AC_CHECK_CC_OPT([-O2], [OPTS="$OPTS -O2"] ) ] )
@@ -19,9 +19,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/aclocal.
         fi
         opt="-march=${ac_cpu-${host_cpu}}"
         AC_CHECK_CC_OPT([$opt], [OPTS="$OPTS $opt"],
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/configure branches/upstream/cvs/lush/configure
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/configure cvs/configure
 --- trunk/configure	2007-01-06 22:16:08.000000000 -0500
-+++ branches/upstream/cvs/lush/configure	2007-09-08 09:27:04.000000000 -0400
++++ cvs/configure	2007-09-08 09:27:04.000000000 -0400
 @@ -1,26 +1,55 @@
  #! /bin/sh
  # From configure.ac Id: configure.ac.
@@ -15640,9 +15640,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/configur
  
  { (exit 0); exit 0; }
  _ACEOF
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/configure.ac branches/upstream/cvs/lush/configure.ac
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/configure.ac cvs/configure.ac
 --- trunk/configure.ac	2007-01-06 22:16:08.000000000 -0500
-+++ branches/upstream/cvs/lush/configure.ac	2007-09-08 09:27:04.000000000 -0400
++++ cvs/configure.ac	2007-09-08 09:27:04.000000000 -0400
 @@ -5,7 +5,7 @@
  
  AC_PREREQ(2.50)
@@ -15670,9 +15670,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/configur
          ;;
      *-freebsd2*)
          CC_PIC_FLAG='-fPIC'
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/etc/lush.el branches/upstream/cvs/lush/etc/lush.el
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/etc/lush.el cvs/etc/lush.el
 --- trunk/etc/lush.el	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/etc/lush.el	2007-09-08 09:27:12.000000000 -0400
++++ cvs/etc/lush.el	2007-09-08 09:27:12.000000000 -0400
 @@ -24,18 +24,153 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -15831,9 +15831,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/etc/lush
  
  ;; detection
  (setq auto-mode-alist (cons (cons "\\.sn$" 'lisp-mode) auto-mode-alist))
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/include/header.h branches/upstream/cvs/lush/include/header.h
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/include/header.h cvs/include/header.h
 --- trunk/include/header.h	2007-01-06 22:15:52.000000000 -0500
-+++ branches/upstream/cvs/lush/include/header.h	2007-09-08 09:27:14.000000000 -0400
++++ cvs/include/header.h	2007-09-08 09:27:14.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -15854,9 +15854,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/include/
    short output_tab;
  } *context;
  
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/include/idxops.h branches/upstream/cvs/lush/include/idxops.h
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/include/idxops.h cvs/include/idxops.h
 --- trunk/include/idxops.h	2007-01-06 22:15:52.000000000 -0500
-+++ branches/upstream/cvs/lush/include/idxops.h	2006-11-12 01:31:43.000000000 -0500
++++ cvs/include/idxops.h	2006-11-12 01:31:43.000000000 -0500
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -15875,9 +15875,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/include/
  
  #define Midx_m1copy(i1,i2, Type1, Type2) \
  { Type1 *c1; \
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/local/local-manual.hlp branches/upstream/cvs/lush/local/local-manual.hlp
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/local/local-manual.hlp cvs/local/local-manual.hlp
 --- trunk/local/local-manual.hlp	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/local/local-manual.hlp	2003-01-14 18:34:33.000000000 -0500
++++ cvs/local/local-manual.hlp	2003-01-14 18:34:33.000000000 -0500
 @@ -0,0 +1,7 @@
 +
 +#? **** Local Packages
@@ -15886,17 +15886,17 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/local/lo
 +Those packages can be found in the <local> directory in the 
 +Lush installation directory.
 + 
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/local/mnist/README branches/upstream/cvs/lush/local/mnist/README
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/local/mnist/README cvs/local/mnist/README
 --- trunk/local/mnist/README	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/local/mnist/README	2004-02-11 13:11:38.000000000 -0500
++++ cvs/local/mnist/README	2004-02-11 13:11:38.000000000 -0500
 @@ -0,0 +1,4 @@
 +The mnist data files should be 
 +manually added in this directory.
 +You can find them at
 +http://yann.lecun.com/exdb/mnist/index.html
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/compiler/dh-util.lsh branches/upstream/cvs/lush/lsh/compiler/dh-util.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/compiler/dh-util.lsh cvs/lsh/compiler/dh-util.lsh
 --- trunk/lsh/compiler/dh-util.lsh	2007-01-06 22:15:53.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/compiler/dh-util.lsh	2006-11-16 11:28:16.000000000 -0500
++++ cvs/lsh/compiler/dh-util.lsh	2006-11-16 11:28:16.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -15915,9 +15915,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/comp
           (sprintf "extern_c struct VClass_%s Vt_%s;" cname cname) )
          (dhc-add-c-externs
           (dhc-class-to-struct-decl (dhu-type type)) ) )
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/compiler/make-standalone.lsh branches/upstream/cvs/lush/lsh/compiler/make-standalone.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/compiler/make-standalone.lsh cvs/lsh/compiler/make-standalone.lsh
 --- trunk/lsh/compiler/make-standalone.lsh	2007-01-06 22:15:53.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/compiler/make-standalone.lsh	2006-12-24 09:23:09.000000000 -0500
++++ cvs/lsh/compiler/make-standalone.lsh	2006-12-24 09:23:09.000000000 -0500
 @@ -139,11 +139,15 @@
  ;; This does not check if the C file actually exists, it merely
  ;; returns its supposed path. This simply turns a string of the form
@@ -15935,9 +15935,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/comp
  
  #? (lushc.o-to-c <oname>)
  ;; get the name of the compiler-generated .c file that corresponds to a 
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libc/files.lsh branches/upstream/cvs/lush/lsh/libc/files.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libc/files.lsh cvs/lsh/libc/files.lsh
 --- trunk/lsh/libc/files.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libc/files.lsh	2007-06-14 16:04:05.000000000 -0400
++++ cvs/lsh/libc/files.lsh	2007-06-14 16:04:05.000000000 -0400
 @@ -0,0 +1,205 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -16145,9 +16145,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libc
 + ;; fd-ioctl
 +)
 \ No newline at end of file
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libimage/image-io.lsh branches/upstream/cvs/lush/lsh/libimage/image-io.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libimage/image-io.lsh cvs/lsh/libimage/image-io.lsh
 --- trunk/lsh/libimage/image-io.lsh	2007-01-06 22:15:53.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libimage/image-io.lsh	2007-09-08 09:27:22.000000000 -0400
++++ cvs/lsh/libimage/image-io.lsh	2007-09-08 09:27:22.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -16191,9 +16191,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libi
      (when (not f) (error "couldn't open convert pipe file"))
      (prog1 (pnm-fread-ubim f) (pclose f))))
  
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libimage/img-util.lsh branches/upstream/cvs/lush/lsh/libimage/img-util.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libimage/img-util.lsh cvs/lsh/libimage/img-util.lsh
 --- trunk/lsh/libimage/img-util.lsh	2007-01-06 22:15:53.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libimage/img-util.lsh	2007-09-08 09:27:22.000000000 -0400
++++ cvs/lsh/libimage/img-util.lsh	2007-09-08 09:27:22.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -16215,9 +16215,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libi
      ubim ) )
    
  
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libstd/brace.lsh branches/upstream/cvs/lush/lsh/libstd/brace.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libstd/brace.lsh cvs/lsh/libstd/brace.lsh
 --- trunk/lsh/libstd/brace.lsh	2007-01-06 22:15:52.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libstd/brace.lsh	2007-09-08 09:27:24.000000000 -0400
++++ cvs/lsh/libstd/brace.lsh	2007-09-08 09:27:24.000000000 -0400
 @@ -22,7 +22,7 @@
  ;;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
  ;;;
@@ -16237,9 +16237,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libs
    *brace.ex-tmp* )
  
  ;; read preformatted text
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libstd/svgwindow.lsh branches/upstream/cvs/lush/lsh/libstd/svgwindow.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libstd/svgwindow.lsh cvs/lsh/libstd/svgwindow.lsh
 --- trunk/lsh/libstd/svgwindow.lsh	2007-01-06 22:15:52.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libstd/svgwindow.lsh	2007-09-08 09:27:25.000000000 -0400
++++ cvs/lsh/libstd/svgwindow.lsh	2007-09-08 09:27:25.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
@@ -16546,9 +16546,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libs
 +	 0 10 0.1 (alloccolor 1 0 0))
 +    (==> p redisplay)
 +    ()))
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/bibtex.lsh branches/upstream/cvs/lush/lsh/libtex/bibtex.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/bibtex.lsh cvs/lsh/libtex/bibtex.lsh
 --- trunk/lsh/libtex/bibtex.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libtex/bibtex.lsh	2007-09-08 09:27:27.000000000 -0400
++++ cvs/lsh/libtex/bibtex.lsh	2007-09-08 09:27:27.000000000 -0400
 @@ -0,0 +1,412 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -16962,15 +16962,15 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libt
 +  (printf "}\n") )
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/README branches/upstream/cvs/lush/lsh/libtex/README
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/README cvs/lsh/libtex/README
 --- trunk/lsh/libtex/README	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libtex/README	2007-01-19 18:55:16.000000000 -0500
++++ cvs/lsh/libtex/README	2007-01-19 18:55:16.000000000 -0500
 @@ -0,0 +1,2 @@
 +
 +Lush functions that help manipulating TeX/BibTex files.
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/texhtml.lsh branches/upstream/cvs/lush/lsh/libtex/texhtml.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/texhtml.lsh cvs/lsh/libtex/texhtml.lsh
 --- trunk/lsh/libtex/texhtml.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libtex/texhtml.lsh	2007-02-04 03:16:12.000000000 -0500
++++ cvs/lsh/libtex/texhtml.lsh	2007-02-04 03:16:12.000000000 -0500
 @@ -0,0 +1,73 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -17045,9 +17045,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libt
 +   ((stringp l) (tex-to-html l))
 +   ((consp l) (mapcar tex-to-html-list l))
 +   (t l) ) )
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/texutf8.lsh branches/upstream/cvs/lush/lsh/libtex/texutf8.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libtex/texutf8.lsh cvs/lsh/libtex/texutf8.lsh
 --- trunk/lsh/libtex/texutf8.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/libtex/texutf8.lsh	2006-12-13 16:15:30.000000000 -0500
++++ cvs/lsh/libtex/texutf8.lsh	2006-12-13 16:15:30.000000000 -0500
 @@ -0,0 +1,79 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -17128,9 +17128,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/libt
 +   ((consp l) (mapcar tex-to-utf8-list l))
 +   (t l) ) )
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/lush-manual.hlp branches/upstream/cvs/lush/lsh/lush-manual.hlp
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/lush-manual.hlp cvs/lsh/lush-manual.hlp
 --- trunk/lsh/lush-manual.hlp	2007-01-06 22:15:54.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/lush-manual.hlp	2007-09-17 20:01:14.000000000 -0400
++++ cvs/lsh/lush-manual.hlp	2007-09-17 20:01:14.000000000 -0400
 @@ -171,55 +171,106 @@
      Video4Linux Video-Grabbing API Interface}
  
@@ -17262,9 +17262,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/lush
  
  
  #? **** Applications
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/manual/objects.hlp branches/upstream/cvs/lush/lsh/manual/objects.hlp
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/manual/objects.hlp cvs/lsh/manual/objects.hlp
 --- trunk/lsh/manual/objects.hlp	2007-01-06 22:15:54.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/manual/objects.hlp	2007-09-08 09:27:27.000000000 -0400
++++ cvs/lsh/manual/objects.hlp	2007-09-08 09:27:27.000000000 -0400
 @@ -1,4 +1,4 @@
 -$Id: objects.hlp,v 1.8 2006/04/08 19:59:40 laseray Exp $
 +$Id: objects.hlp,v 1.11 2007/03/26 21:11:08 leonb Exp $
@@ -17314,9 +17314,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/manu
 +  An error message is produced when this method is not defined.
 +}
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/manual/strings.hlp branches/upstream/cvs/lush/lsh/manual/strings.hlp
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/manual/strings.hlp cvs/lsh/manual/strings.hlp
 --- trunk/lsh/manual/strings.hlp	2007-01-06 22:15:54.000000000 -0500
-+++ branches/upstream/cvs/lush/lsh/manual/strings.hlp	2007-09-08 09:27:28.000000000 -0400
++++ cvs/lsh/manual/strings.hlp	2007-09-08 09:27:28.000000000 -0400
 @@ -1,4 +1,4 @@
 -$Id: strings.hlp,v 1.9 2006/02/26 15:34:46 laseray Exp $
 +$Id: strings.hlp,v 1.11 2007/03/19 12:38:24 leonb Exp $
@@ -17374,9 +17374,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/lsh/manu
 +
 +Example
 +.EX (implode-bytes '(226 130 172 50 51))
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/Makefile.in branches/upstream/cvs/lush/Makefile.in
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/Makefile.in cvs/Makefile.in
 --- trunk/Makefile.in	2007-01-06 22:16:08.000000000 -0500
-+++ branches/upstream/cvs/lush/Makefile.in	2007-09-08 09:27:01.000000000 -0400
++++ cvs/Makefile.in	2007-09-08 09:27:01.000000000 -0400
 @@ -24,7 +24,7 @@
  #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -17394,17 +17394,17 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/Makefile
  datadir = @datadir@
  libdir = @libdir@
  mandir = @mandir@
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/audiofile/demos/kde_beep_honk.wav branches/upstream/cvs/lush/packages/audiofile/demos/kde_beep_honk.wav
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/audiofile/demos/kde_beep_honk.wav cvs/packages/audiofile/demos/kde_beep_honk.wav
 --- trunk/packages/audiofile/demos/kde_beep_honk.wav	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/audiofile/demos/kde_beep_honk.wav	2007-01-10 18:51:29.000000000 -0500
++++ cvs/packages/audiofile/demos/kde_beep_honk.wav	2007-01-10 18:51:29.000000000 -0500
 @@ -0,0 +1,3 @@
 +RIFFê
 +  WAVEfmt      w+  w+    dataÆ
 +  {xwvuyzurtv…‡ˆ‡‰ŒŠ„ƒƒ‚„ˆ†{xxzzvsojlw†Œ‰‚~‚Š‰~y{~€€~xrptwyzwnfm„˜“x€‘˜’„{}€‚„xroq{€tffw“§ ‡tw ‡u{†ƒ„ƒ{wsx…ƒ|~vc\m‹§¬–zmy›©•wq……€Œ‚spm}y|jU[vš¬Ÿ‚fe‰ª¢ƒo}…}lmnr‘Šs~|aS`€¡¨–xft–¦sk‡’{|xozu†š}mzv[Uk†¦§‰ke|¡„lt‹„uyokus†Šlhzr]\s’§€dg‡¤ ‡s{€qwmpxv‰~ak~r\^v“¦œfl‹£–~s€‰toslxz“zgy„o_kƒ¦“vfw˜¤’|wˆˆuz{u~—{o……i`t¦¦‹mg„¤£Œwy…uypr€~Œ„jv‰{bdz“¤™|gmˆ œ‡rxrxmu~„ziz‚lZd}™£rbp•¤“|qƒ‡sutk|„‰ˆli€ƒiat‹›—ff~š†ru‰~ksmk{„cn‚uagz“¢’vblŠŸ•}q€Štqyju‡ŒŒocx‚phx‹Ÿ ˆmkœ¤’{q}zhnpl‡‰gi„†pk{‘¡—|hp‹¤ ‹y|ˆvlxr{‘’“nx†yen‚™¢sjz’ –t‡sp{s€’‰qgz†vku‰š…ol}•¢“|sjr{xŠ‹„ig‡pfsˆ™”{glšŒxs…ycrvu‹Œ‡|gm……njz’{jpˆš‡uvƒxkxy{Œ‹‹fo‰…nl{“ŸuitŒ˜†w{…skzty‰‡vfuŠhi}“™‡nfv’~s|„pn}t‹Šsi€}iq‡™–hfy˜yo{yhu}v‰‡zad}kassem‚˜™‡vuvl}wwŒ†ƒyeq‰‚kg{’š‰pfrŠœ–…u{…ro~v‚’Šviz‹}kpƒ——ƒol|”Ÿ”u~nwyˆ‹‚li€Štjx›vflƒœŸŒyvƒym~}ŒŒˆ|iqŠ…kfx‘œ‹oesˆœ˜…tv‚rn~u|Š„tesˆkj}“—‚mhw˜…py‚psƒ{„‰‚nfy‹|hmƒ—“{ij|‘™}wƒ‚sy„‚’‹„oo…Œwdm‚‹vhl}’š|v„€lx{x‰€lr‡ŒvftŠ—wjo„›œŒ{wƒzn{|}““Œ~ks‹Šsl|“vkuŠ›˜‰xw„vo€~”’‰xit‡†nh|’—†pjw‹›•ƒuxnm}v…”‹„rfu‡kl}“mo–Ÿ“€u~€rwwƒŠ‡‚mey‰zgl…—’{eg~•š}u|lwzxŒ‡}hj‚Štcoˆ•wjqƒ–˜†ww„wkxv|‘Šyit‰‰rhz—†pkz‘Ÿ—‰z{„ur|z†–‚obp‡ln~’•ƒrmz‘v}€nry‡’‹…um~Š{nr…—–„nl{‘šx}kv{–‰}pr„Œ{kr‰™‘zmq‚—›‹yy…ul{{”“ˆwhr…„un{‘™„mivŠ›•€s|€lm}zƒ“Œ€nhy‰‚ol”‘{ko}‘›}s€}ir|wŠ•Š|jl‰yiq†–ukt€•|x„wkyz}Œ†tfm‚€kfwŒ’leoˆ™‘€su|ln~w‚“‹phy…po’’ml}‘š|sztdfquˆ‡|fg}†wlv†‘Œwjrƒ–š}y‚wiru~Œ‡|sy…†wq‘™Švms‹ š†y‡uit{›”Šues‡‚ml’|ii|“‘€u|{ko{|Š‘Š‚ni{‡zkoƒ—’yjp–‘q}{jpz~‘Š~mn‚‹zlt‡”uho…˜—Œ}w~shv|‚”’‡yik„sky–ˆrhq…–•‰{zƒtenv‚’„tfr†‚pkz‹‘‚nkz™tymhsz‰’Œ‡uk~‘†tu„”“}ljy•‰xpztfmu’‘‰|kn€…vnx‹˜xovˆ™™‰}€‡ymv{…’€pvŒŠwwŠœœ†pm~š”†}ƒnnw•š‘…oj~Œ~ry‹˜‘zlrƒ™Œ{z„seqx„”…tdj~€nl|‹nis†•€v|liqw‡Œ‚oerƒyjr‡˜•kk|‘œ’ƒ|€tcgpyŒ‘Œ~jh|…ulvŠ”‰sju…”•ˆz|„tekr€}lp€}nm~–…pjw‹™–…yqpuz˜’ˆxnuƒzntƒ’vdi~”š~‡~llp{“„qm|‚smy˜Œvjr‹¡~tgls‚‘—”‚jn}pr€’—‡rjwŠ™”„}…ˆvmqt„Šynx‡sy‡š˜pr‚–’†‚ˆmlqy‰„piv€sm{š‘{jpƒ”™‚ˆ|nmq|‹‘€no|xnt’—†oiwˆ—–‡}„nhpu‚†rgq{rox‡–yimz—‹~}„zjjoy‡Œ‹}jj{|os€‘˜ˆrhpƒ–˜‰~‡„pjouŠ„pemtnho‚’{mo}—€‚…{mnt}‰‘‘†vs|yv}ˆ™œŒxnx‹œš‹„‡xklwƒ‘‹|sxyvx€›•‚nlyŒ›—ˆ‰mip}‰‘†vrwyuz…”šŒznr„”—Œ„ˆŠ|mlr}‡‚rqtsu™–„oiw‰š•Š…‰ƒtgju€Œ‰yqtuqr|Œ–|jkz–xjdir}‡Œ‚uqqolo}–‰sekyŠ†…ˆ{lflw‚€tqrnnw„’ƒqmy…’‘ˆ†ˆ„wgcmv‚‰‚xrrojo{Œ•Œzjm|—“Š†…}qjox…‘”‰ywwuux†’”‹ypw„’–‰‹‰qjq~Š“~wvtru€Œ–“ojuˆ“ˆ†‰ƒxlkvˆ€tttppx…‘ˆuhn~’”ˆƒ‡€wlgmw‚‹ˆ{stpnu}‡“‘‚qmxˆ‘‰††‚tjkrŒ„wuvsu}ˆ“•Švko}Œ‰‡‰…ymjq{„ŒŠ|tspot~Š‘~olu…Š‰‰„zpkpz†‹„yuutsw†˜›{mozˆˆ…†„{mdhr‚‰{ztmp~‰‘€oksƒ‘‹ˆƒzrnt‚‹ƒwutor{‡“”‹ymq}‹Œ‹‰‚xpr{†ƒ~}xuvŒ•–Šypt~‹‘Œ‹‡€xsu}ˆ†}zwrpw„“ŒzllwƒŒŒ‰‡…‚{rrz…Šyvtps{……vpv€‰Œ‰ˆˆ‡€vrrz…Œ‡}xursz†‹|pqx‚‹‹‡†…}vsrwˆ‰{wssw…Š‚smq{…ˆ‡†ˆ†}qou~…‹ˆ€|xwz€‡ŠŠ{qpx„‚€~vrtx}…‚|zvvw}…ˆ‹‰‚yuw~…ˆ‰‰‰ƒ{vtw{ƒ‡†€{€
 \ No newline at end of file
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/audiofile/demos/read-wav.lsh branches/upstream/cvs/lush/packages/audiofile/demos/read-wav.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/audiofile/demos/read-wav.lsh cvs/packages/audiofile/demos/read-wav.lsh
 --- trunk/packages/audiofile/demos/read-wav.lsh	2007-01-06 22:16:06.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/audiofile/demos/read-wav.lsh	2007-09-08 09:27:31.000000000 -0400
++++ cvs/packages/audiofile/demos/read-wav.lsh	2007-09-08 09:27:31.000000000 -0400
 @@ -1,6 +1,14 @@
  ;; read and display a WAV file.
  ;; Yann LeCun, October 2002.
@@ -17436,9 +17436,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
        (cls)
        (plot-wave 10 250 (narrow wave 0 500 k) 128 1 3)))
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/devices/serial.lsh branches/upstream/cvs/lush/packages/devices/serial.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/devices/serial.lsh cvs/packages/devices/serial.lsh
 --- trunk/packages/devices/serial.lsh	2007-01-06 22:15:57.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/devices/serial.lsh	2007-09-08 09:27:34.000000000 -0400
++++ cvs/packages/devices/serial.lsh	2007-09-08 09:27:34.000000000 -0400
 @@ -58,15 +58,17 @@
        ("O" (setq par 2))
        (t (error "parity should be a one-character string containing N, E or O")))
@@ -17549,9 +17549,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
  
  
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/jidctflt.c branches/upstream/cvs/lush/packages/jpeg/jidctflt.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/jidctflt.c cvs/packages/jpeg/jidctflt.c
 --- trunk/packages/jpeg/jidctflt.c	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/jpeg/jidctflt.c	2007-05-19 22:56:15.000000000 -0400
++++ cvs/packages/jpeg/jidctflt.c	2007-05-19 22:56:15.000000000 -0400
 @@ -0,0 +1,286 @@
 +/*
 + * jidctflt.c
@@ -17839,9 +17839,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +  }
 +}
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/jpeg.lsh branches/upstream/cvs/lush/packages/jpeg/jpeg.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/jpeg.lsh cvs/packages/jpeg/jpeg.lsh
 --- trunk/packages/jpeg/jpeg.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/jpeg/jpeg.lsh	2007-05-19 22:56:15.000000000 -0400
++++ cvs/packages/jpeg/jpeg.lsh	2007-05-19 22:56:15.000000000 -0400
 @@ -0,0 +1,115 @@
 +;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;; uses Jean-Luc Saillard's tinyjpegdecoder to decode a JPEG
@@ -17958,9 +17958,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +    (when (not window) (new-window))
 +    (rgb-draw-matrix 0 0 m)))
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/loadjpeg.c branches/upstream/cvs/lush/packages/jpeg/loadjpeg.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/loadjpeg.c cvs/packages/jpeg/loadjpeg.c
 --- trunk/packages/jpeg/loadjpeg.c	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/jpeg/loadjpeg.c	2007-05-19 22:56:15.000000000 -0400
++++ cvs/packages/jpeg/loadjpeg.c	2007-05-19 22:56:15.000000000 -0400
 @@ -0,0 +1,341 @@
 +/*
 + * Small jpeg decoder library - testing application
@@ -18303,9 +18303,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg.c branches/upstream/cvs/lush/packages/jpeg/tinyjpeg.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg.c cvs/packages/jpeg/tinyjpeg.c
 --- trunk/packages/jpeg/tinyjpeg.c	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/jpeg/tinyjpeg.c	2007-05-19 22:56:15.000000000 -0400
++++ cvs/packages/jpeg/tinyjpeg.c	2007-05-19 22:56:15.000000000 -0400
 @@ -0,0 +1,2143 @@
 +/*
 + * Small jpeg decoder library
@@ -20450,9 +20450,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +  return oldflags;
 +}
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg.h branches/upstream/cvs/lush/packages/jpeg/tinyjpeg.h
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg.h cvs/packages/jpeg/tinyjpeg.h
 --- trunk/packages/jpeg/tinyjpeg.h	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/jpeg/tinyjpeg.h	2007-05-19 22:56:15.000000000 -0400
++++ cvs/packages/jpeg/tinyjpeg.h	2007-05-19 22:56:15.000000000 -0400
 @@ -0,0 +1,73 @@
 +/*
 + * Small jpeg decoder library (header file)
@@ -20527,9 +20527,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg-internal.h branches/upstream/cvs/lush/packages/jpeg/tinyjpeg-internal.h
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/jpeg/tinyjpeg-internal.h cvs/packages/jpeg/tinyjpeg-internal.h
 --- trunk/packages/jpeg/tinyjpeg-internal.h	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/jpeg/tinyjpeg-internal.h	2007-05-19 22:56:15.000000000 -0400
++++ cvs/packages/jpeg/tinyjpeg-internal.h	2007-05-19 22:56:15.000000000 -0400
 @@ -0,0 +1,115 @@
 +/*
 + * Small jpeg decoder library (Internal header)
@@ -20646,9 +20646,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +#endif
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/libnum/interpolator.lsh branches/upstream/cvs/lush/packages/libnum/interpolator.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/libnum/interpolator.lsh cvs/packages/libnum/interpolator.lsh
 --- trunk/packages/libnum/interpolator.lsh	2007-01-06 22:15:59.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/libnum/interpolator.lsh	2007-09-08 09:27:41.000000000 -0400
++++ cvs/packages/libnum/interpolator.lsh	2007-09-08 09:27:41.000000000 -0400
 @@ -68,27 +68,34 @@
      (setq yarray (double-matrix n))
      (idx-copy xa xarray)
@@ -20691,9 +20691,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
             break;
           default: run_time_error("illegal interpolation type (must be 0-5)"); 
          }
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/music/asound-config.lsh branches/upstream/cvs/lush/packages/music/asound-config.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/music/asound-config.lsh cvs/packages/music/asound-config.lsh
 --- trunk/packages/music/asound-config.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/music/asound-config.lsh	2007-09-10 16:35:24.000000000 -0400
++++ cvs/packages/music/asound-config.lsh	2007-09-10 16:35:24.000000000 -0400
 @@ -0,0 +1,52 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -20747,9 +20747,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +    (printf "(see %s for more details)\n" file-being-loaded)
 +    (error "cannot configure ALSA/libasound") ) )
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/music/midi-seq.lsh branches/upstream/cvs/lush/packages/music/midi-seq.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/music/midi-seq.lsh cvs/packages/music/midi-seq.lsh
 --- trunk/packages/music/midi-seq.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/music/midi-seq.lsh	2007-09-15 18:33:28.000000000 -0400
++++ cvs/packages/music/midi-seq.lsh	2007-09-15 18:33:28.000000000 -0400
 @@ -0,0 +1,484 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -21235,9 +21235,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +	       controller pgmchange pitchbend chanpress sysex write-event)
 +  )
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/music/music.hlp branches/upstream/cvs/lush/packages/music/music.hlp
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/music/music.hlp cvs/packages/music/music.hlp
 --- trunk/packages/music/music.hlp	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/music/music.hlp	2007-09-10 16:35:24.000000000 -0400
++++ cvs/packages/music/music.hlp	2007-09-10 16:35:24.000000000 -0400
 @@ -0,0 +1,9 @@
 +#? **** Music and MIDI: High-level interfaces to various 
 +;; MIDI, audio, and music-related libraries, such
@@ -21248,9 +21248,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +#? *** << music/midi-seq.lsh
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_const.lsh branches/upstream/cvs/lush/packages/opencv/aux_const.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_const.lsh cvs/packages/opencv/aux_const.lsh
 --- trunk/packages/opencv/aux_const.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/aux_const.lsh	2007-09-08 09:27:44.000000000 -0400
++++ cvs/packages/opencv/aux_const.lsh	2007-09-08 09:27:44.000000000 -0400
 @@ -493,6 +493,8 @@
  (defconstant "CV_SVD_U_T"                            2 )
  (defconstant "CV_SVD_V_T"                            4 )
@@ -21260,9 +21260,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
  
  ;;******************************************************************************
  ;;  constants defined in enum types
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_convert.lsh branches/upstream/cvs/lush/packages/opencv/aux_convert.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_convert.lsh cvs/packages/opencv/aux_convert.lsh
 --- trunk/packages/opencv/aux_convert.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/aux_convert.lsh	2007-09-08 09:27:44.000000000 -0400
++++ cvs/packages/opencv/aux_convert.lsh	2007-09-08 09:27:44.000000000 -0400
 @@ -478,51 +478,76 @@
  (de idx8u_ipl_share (mat img)
      ((-gptr- "IplImage *") img)
@@ -21406,9 +21406,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
       #{ {
       int width,height,channels,rowbytes;
       CvSize sz;
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_io.lsh branches/upstream/cvs/lush/packages/opencv/aux_io.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_io.lsh cvs/packages/opencv/aux_io.lsh
 --- trunk/packages/opencv/aux_io.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/aux_io.lsh	2007-09-08 09:27:44.000000000 -0400
++++ cvs/packages/opencv/aux_io.lsh	2007-09-08 09:27:44.000000000 -0400
 @@ -7,6 +7,9 @@
  
  (eval `(de |dummy_cvimage| () ,cv-cpheader-cmd ()))
@@ -21465,9 +21465,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
  (dhc-make () |dummy_cvimage| cvimage-read-rgb)
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_object.lsh branches/upstream/cvs/lush/packages/opencv/aux_object.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/aux_object.lsh cvs/packages/opencv/aux_object.lsh
 --- trunk/packages/opencv/aux_object.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/aux_object.lsh	2007-09-08 09:27:44.000000000 -0400
++++ cvs/packages/opencv/aux_object.lsh	2007-09-08 09:27:44.000000000 -0400
 @@ -257,12 +257,12 @@
  
  (defmethod cvmat get ( row col)
@@ -21492,9 +21492,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +   (cvmat cvmat -destructor)
     (cvsmobarray cvsmobarray ptr-nth)
  )
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cv-config.lsh branches/upstream/cvs/lush/packages/opencv/cv-config.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cv-config.lsh cvs/packages/opencv/cv-config.lsh
 --- trunk/packages/opencv/cv-config.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/cv-config.lsh	2007-09-08 09:27:45.000000000 -0400
++++ cvs/packages/opencv/cv-config.lsh	2007-09-08 09:27:45.000000000 -0400
 @@ -28,7 +28,8 @@
  ;;;  3/5/2005  modified for OpenCV version 0.9.7 by Ralf Juengling
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21516,9 +21516,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +;;    (libload cv-lib))
    (setq cv-libs-loaded t) 
  )
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cvmatrix.lsh branches/upstream/cvs/lush/packages/opencv/cvmatrix.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cvmatrix.lsh cvs/packages/opencv/cvmatrix.lsh
 --- trunk/packages/opencv/cvmatrix.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/cvmatrix.lsh	2007-03-31 12:18:00.000000000 -0400
++++ cvs/packages/opencv/cvmatrix.lsh	2007-03-31 12:18:00.000000000 -0400
 @@ -0,0 +1,849 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -22369,9 +22369,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +  cvmahalonobis
 +  cvperspectivetransform
 +)
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cv-statistics.lsh branches/upstream/cvs/lush/packages/opencv/cv-statistics.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/cv-statistics.lsh cvs/packages/opencv/cv-statistics.lsh
 --- trunk/packages/opencv/cv-statistics.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/cv-statistics.lsh	2007-09-02 21:32:58.000000000 -0400
++++ cvs/packages/opencv/cv-statistics.lsh	2007-09-02 21:32:58.000000000 -0400
 @@ -0,0 +1,201 @@
 +;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 +;;;
@@ -22574,18 +22574,18 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +  cvavgsdv
 +  cvminmaxloc
 +)
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d01_sample.lsh branches/upstream/cvs/lush/packages/opencv/demos/d01_sample.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d01_sample.lsh cvs/packages/opencv/demos/d01_sample.lsh
 --- trunk/packages/opencv/demos/d01_sample.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/demos/d01_sample.lsh	2007-09-08 09:27:46.000000000 -0400
++++ cvs/packages/opencv/demos/d01_sample.lsh	2007-09-08 09:27:46.000000000 -0400
 @@ -9,4 +9,4 @@
  (cvPyrDown :img:p  :simg:p  7)
  (cvPyrUp   :simg:p :img:p   7)
  
 -(cvimage-show  img)
 +(defparameter cvwin (cvimage-show  img))
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d02_cannyedge.lsh branches/upstream/cvs/lush/packages/opencv/demos/d02_cannyedge.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d02_cannyedge.lsh cvs/packages/opencv/demos/d02_cannyedge.lsh
 --- trunk/packages/opencv/demos/d02_cannyedge.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/demos/d02_cannyedge.lsh	2007-09-08 09:27:46.000000000 -0400
++++ cvs/packages/opencv/demos/d02_cannyedge.lsh	2007-09-08 09:27:46.000000000 -0400
 @@ -21,4 +21,5 @@
       (cvCanny     :grayimg:p    :edgeimg:p   0 50 5)
       (cvDilate    :edgeimg:p    :edgeimg:p   (gptr ()) 1)
@@ -22593,9 +22593,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 -     (cvimage-show  edgeimg)  )
 +     (defparameter cvwin (cvimage-show  edgeimg)  ))
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d03_pyrseg.lsh branches/upstream/cvs/lush/packages/opencv/demos/d03_pyrseg.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d03_pyrseg.lsh cvs/packages/opencv/demos/d03_pyrseg.lsh
 --- trunk/packages/opencv/demos/d03_pyrseg.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/demos/d03_pyrseg.lsh	2007-09-08 09:27:46.000000000 -0400
++++ cvs/packages/opencv/demos/d03_pyrseg.lsh	2007-09-08 09:27:46.000000000 -0400
 @@ -20,7 +20,7 @@
  		       :storage:p  :connectedcomp:pp  
  		       level  threshold1 threshold2) )
@@ -22605,9 +22605,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
  
  ;; the steps below are NOT really necessary, 
  ;; since the objects will be garbage collected automatically
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d04_video.lsh branches/upstream/cvs/lush/packages/opencv/demos/d04_video.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d04_video.lsh cvs/packages/opencv/demos/d04_video.lsh
 --- trunk/packages/opencv/demos/d04_video.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/demos/d04_video.lsh	2007-09-08 09:27:46.000000000 -0400
++++ cvs/packages/opencv/demos/d04_video.lsh	2007-09-08 09:27:46.000000000 -0400
 @@ -12,26 +12,26 @@
  (libload "opencv/opencv")
  
@@ -22656,9 +22656,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +    (cvimage-draw 0 0 grayimg)))
 +
  
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d05_video_edge.lsh branches/upstream/cvs/lush/packages/opencv/demos/d05_video_edge.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d05_video_edge.lsh cvs/packages/opencv/demos/d05_video_edge.lsh
 --- trunk/packages/opencv/demos/d05_video_edge.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/demos/d05_video_edge.lsh	2007-09-08 09:27:47.000000000 -0400
++++ cvs/packages/opencv/demos/d05_video_edge.lsh	2007-09-08 09:27:47.000000000 -0400
 @@ -6,34 +6,33 @@
  (libload "video4linux/v4l")
  (libload "opencv/opencv")
@@ -22723,9 +22723,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +      (cvimage-draw 0 0 edgeimg))))
  
 +(opencv-canny-demo)
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d06_corners.lsh branches/upstream/cvs/lush/packages/opencv/demos/d06_corners.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d06_corners.lsh cvs/packages/opencv/demos/d06_corners.lsh
 --- trunk/packages/opencv/demos/d06_corners.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/demos/d06_corners.lsh	2007-09-08 09:27:47.000000000 -0400
++++ cvs/packages/opencv/demos/d06_corners.lsh	2007-09-08 09:27:47.000000000 -0400
 @@ -18,7 +18,7 @@
  (setq corners (new cvsmobarray 
  		   (memsize_cvpoint2d32f) 300))
@@ -22764,9 +22764,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +		   (==> ccolor getp) 2 8 0) ) )
 +  (defparameter cvwin (cvimage-show img1)))
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d07_lk_track.lsh branches/upstream/cvs/lush/packages/opencv/demos/d07_lk_track.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/demos/d07_lk_track.lsh cvs/packages/opencv/demos/d07_lk_track.lsh
 --- trunk/packages/opencv/demos/d07_lk_track.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/demos/d07_lk_track.lsh	2007-09-08 09:27:47.000000000 -0400
++++ cvs/packages/opencv/demos/d07_lk_track.lsh	2007-09-08 09:27:47.000000000 -0400
 @@ -1,6 +1,7 @@
 -
 +;; Lukas-Kanade tracking demo.
@@ -22979,9 +22979,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
  
      
      
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/matrix.lsh branches/upstream/cvs/lush/packages/opencv/matrix.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/matrix.lsh cvs/packages/opencv/matrix.lsh
 --- trunk/packages/opencv/matrix.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/matrix.lsh	1969-12-31 19:00:00.000000000 -0500
++++ cvs/packages/opencv/matrix.lsh	1969-12-31 19:00:00.000000000 -0500
 @@ -1,850 +0,0 @@
 -;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -;;;
@@ -23833,9 +23833,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 -  cvmahalonobis
 -  cvperspectivetransform
 -)
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/opencv.hlp branches/upstream/cvs/lush/packages/opencv/opencv.hlp
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/opencv.hlp cvs/packages/opencv/opencv.hlp
 --- trunk/packages/opencv/opencv.hlp	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/opencv.hlp	2007-09-08 09:27:45.000000000 -0400
++++ cvs/packages/opencv/opencv.hlp	2007-09-08 09:27:45.000000000 -0400
 @@ -45,7 +45,7 @@
  #? ** << opencv/hough.lsh
  #? ** << opencv/kalman.lsh
@@ -23854,9 +23854,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
  #? ** << opencv/subdiv.lsh
  #? ** << opencv/thresholds.lsh
  #? ** << opencv/undistortion.lsh
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/opencv.lsh branches/upstream/cvs/lush/packages/opencv/opencv.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/opencv.lsh cvs/packages/opencv/opencv.lsh
 --- trunk/packages/opencv/opencv.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/opencv.lsh	2007-09-08 09:27:45.000000000 -0400
++++ cvs/packages/opencv/opencv.lsh	2007-09-08 09:27:45.000000000 -0400
 @@ -32,7 +32,7 @@
  (libload "opencv/hough.lsh")
  (libload "opencv/kalman.lsh")
@@ -23875,9 +23875,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
  (libload "opencv/subdiv.lsh")
  (libload "opencv/thresholds.lsh")
  (libload "opencv/undistortion.lsh")
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/statistics.lsh branches/upstream/cvs/lush/packages/opencv/statistics.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opencv/statistics.lsh cvs/packages/opencv/statistics.lsh
 --- trunk/packages/opencv/statistics.lsh	2007-01-06 22:16:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opencv/statistics.lsh	1969-12-31 19:00:00.000000000 -0500
++++ cvs/packages/opencv/statistics.lsh	1969-12-31 19:00:00.000000000 -0500
 @@ -1,201 +0,0 @@
 -;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -;;;
@@ -24080,9 +24080,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 -  cvavgsdv
 -  cvminmaxloc
 -)
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/00_miniglut.lsh branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/00_miniglut.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/00_miniglut.lsh cvs/packages/opengl/nehe_tutorial/00_miniglut.lsh
 --- trunk/packages/opengl/nehe_tutorial/00_miniglut.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/00_miniglut.lsh	2007-05-23 12:20:53.000000000 -0400
++++ cvs/packages/opengl/nehe_tutorial/00_miniglut.lsh	2007-05-23 12:20:53.000000000 -0400
 @@ -0,0 +1,21 @@
 +;; Fu Jie Huang, May 2007
 +;; a minimal glut window demo
@@ -24105,9 +24105,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/00_simpleglut.lsh branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/00_simpleglut.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/00_simpleglut.lsh cvs/packages/opengl/nehe_tutorial/00_simpleglut.lsh
 --- trunk/packages/opengl/nehe_tutorial/00_simpleglut.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/00_simpleglut.lsh	2007-05-23 12:20:54.000000000 -0400
++++ cvs/packages/opengl/nehe_tutorial/00_simpleglut.lsh	2007-05-23 12:20:54.000000000 -0400
 @@ -0,0 +1,30 @@
 +;; Fu Jie Huang, May 2007
 +;; glut window demo
@@ -24139,9 +24139,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/01_glut.lsh branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/01_glut.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/01_glut.lsh cvs/packages/opengl/nehe_tutorial/01_glut.lsh
 --- trunk/packages/opengl/nehe_tutorial/01_glut.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/01_glut.lsh	2007-05-23 12:20:54.000000000 -0400
++++ cvs/packages/opengl/nehe_tutorial/01_glut.lsh	2007-05-23 12:20:54.000000000 -0400
 @@ -0,0 +1,32 @@
 +;; Fu Jie Huang, May 2007
 +;; glut window demo
@@ -24175,9 +24175,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/06_texture.lsh branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/06_texture.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/06_texture.lsh cvs/packages/opengl/nehe_tutorial/06_texture.lsh
 --- trunk/packages/opengl/nehe_tutorial/06_texture.lsh	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/06_texture.lsh	2007-05-25 01:28:59.000000000 -0400
++++ cvs/packages/opengl/nehe_tutorial/06_texture.lsh	2007-05-25 01:28:59.000000000 -0400
 @@ -0,0 +1,123 @@
 +;; Fu Jie Huang, May 2007
 +
@@ -24302,9 +24302,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +
 +
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/nehe.png branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/nehe.png
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/nehe.png cvs/packages/opengl/nehe_tutorial/nehe.png
 --- trunk/packages/opengl/nehe_tutorial/nehe.png	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/nehe.png	2007-05-25 01:28:59.000000000 -0400
++++ cvs/packages/opengl/nehe_tutorial/nehe.png	2007-05-25 01:28:59.000000000 -0400
 @@ -0,0 +1,151 @@
 +‰PNG
 +
@@ -24458,9 +24458,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +d ÄŞ½­{3£
 +,‡¤œˆ³k§ÖZƒnÆ¡Rt”g“kŸ_ıŠPM®ÿæİéÎNöÚÛÎ¿ú“ó÷K½[5UMÎJ\Šo²Ïÿïÿ¾té£í­GÌ#Ï0°Ã¶ÙŒíA”´Z½A{a‰É€ªë2í÷¶‹|âì7Tìğ­Œÿ=¼yüÍI)‹ÒVw°œöR†Æšº˜ö¶'»uùÌ‡¿~ˆOQ°õğıOt9^L<ÛèÛ§¶9Ç/ :ôs|s˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ˜`9æ8Ñ sÕÿ9N2ş?,v™&ß<B„    IEND®B`‚
 \ No newline at end of file
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/README branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/README
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/opengl/nehe_tutorial/README cvs/packages/opengl/nehe_tutorial/README
 --- trunk/packages/opengl/nehe_tutorial/README	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/opengl/nehe_tutorial/README	2007-05-23 01:12:17.000000000 -0400
++++ cvs/packages/opengl/nehe_tutorial/README	2007-05-23 01:12:17.000000000 -0400
 @@ -0,0 +1,6 @@
 +
 +Fu Jie Huang, May 2007
@@ -24468,9 +24468,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +The set of popular "nehe" OpenGL tutorials (http://nehe.gamedev.net) 
 +translated into Lush.
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/demos/mnist-svqp.lsh branches/upstream/cvs/lush/packages/svm/demos/mnist-svqp.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/demos/mnist-svqp.lsh cvs/packages/svm/demos/mnist-svqp.lsh
 --- trunk/packages/svm/demos/mnist-svqp.lsh	2007-01-06 22:16:07.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/svm/demos/mnist-svqp.lsh	2007-09-08 09:27:56.000000000 -0400
++++ cvs/packages/svm/demos/mnist-svqp.lsh	2007-09-08 09:27:56.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -24520,9 +24520,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +	       (when (<> s y) (incr nerror)) ) ) ) )
 +    (printf "%d/%d errors (%l%%)\n" nerror nex (* 100 (/ nerror nex))) ) )
 +
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/lasvm/kcache.c branches/upstream/cvs/lush/packages/svm/lasvm/kcache.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/lasvm/kcache.c cvs/packages/svm/lasvm/kcache.c
 --- trunk/packages/svm/lasvm/kcache.c	2007-01-06 22:16:07.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/svm/lasvm/kcache.c	2007-09-08 09:27:56.000000000 -0400
++++ cvs/packages/svm/lasvm/kcache.c	2007-09-08 09:27:56.000000000 -0400
 @@ -24,13 +24,14 @@
   ***********************************************************************/
  
@@ -24897,9 +24897,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +  buddylast->nextbuddy = self;
 +  self->prevbuddy = buddylast;
 +}
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/lasvm/kcache.h branches/upstream/cvs/lush/packages/svm/lasvm/kcache.h
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/lasvm/kcache.h cvs/packages/svm/lasvm/kcache.h
 --- trunk/packages/svm/lasvm/kcache.h	2007-01-06 22:16:07.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/svm/lasvm/kcache.h	2007-09-08 09:27:56.000000000 -0400
++++ cvs/packages/svm/lasvm/kcache.h	2007-09-08 09:27:56.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -24937,9 +24937,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
  #ifdef __cplusplus__
  }
  #endif
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/lasvmcache.lsh branches/upstream/cvs/lush/packages/svm/lasvmcache.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/lasvmcache.lsh cvs/packages/svm/lasvmcache.lsh
 --- trunk/packages/svm/lasvmcache.lsh	2007-01-06 22:16:07.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/svm/lasvmcache.lsh	2007-09-08 09:27:55.000000000 -0400
++++ cvs/packages/svm/lasvmcache.lsh	2007-09-08 09:27:55.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -24983,9 +24983,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +			 row status discard shuffle set-buddy) ) )
  
  
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/svm.hlp branches/upstream/cvs/lush/packages/svm/svm.hlp
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages/svm/svm.hlp cvs/packages/svm/svm.hlp
 --- trunk/packages/svm/svm.hlp	1969-12-31 19:00:00.000000000 -0500
-+++ branches/upstream/cvs/lush/packages/svm/svm.hlp	2007-09-10 17:27:31.000000000 -0400
++++ cvs/packages/svm/svm.hlp	2007-09-10 17:27:31.000000000 -0400
 @@ -0,0 +1,28 @@
 +#? *** Support Vector Machine (SVM)
 +This package contains several implementations of the Support Vector
@@ -25016,9 +25016,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/packages
 +#? ** Optimizers
 +svqp and svqp2 optimizers waiting for a documentation
 \ No newline at end of file
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/dldbfd.c branches/upstream/cvs/lush/src/dldbfd.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/dldbfd.c cvs/src/dldbfd.c
 --- trunk/src/dldbfd.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/dldbfd.c	2007-09-08 09:27:59.000000000 -0400
++++ cvs/src/dldbfd.c	2007-09-08 09:27:59.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25050,9 +25050,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/dldb
                          }
  #endif
  		      if (stub)
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/fileio.c branches/upstream/cvs/lush/src/fileio.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/fileio.c cvs/src/fileio.c
 --- trunk/src/fileio.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/fileio.c	2007-09-08 09:27:59.000000000 -0400
++++ cvs/src/fileio.c	2007-09-08 09:27:59.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25078,9 +25078,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/file
    context->input_string = SADD(str->Object);
    if (sigsetjmp(context->error_jump, 1)) {
      context->input_tab = -1;
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/graphics.c branches/upstream/cvs/lush/src/graphics.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/graphics.c cvs/src/graphics.c
 --- trunk/src/graphics.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/graphics.c	2007-09-08 09:27:59.000000000 -0400
++++ cvs/src/graphics.c	2007-09-08 09:27:59.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25118,9 +25118,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/grap
      }
    LOCK(q);
    return q;
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/io.c branches/upstream/cvs/lush/src/io.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/io.c cvs/src/io.c
 --- trunk/src/io.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/io.c	2007-09-08 09:27:59.000000000 -0400
++++ cvs/src/io.c	2007-09-08 09:27:59.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25171,9 +25171,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/io.c
      }
      print_string(pname(list));
    }
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/main.c branches/upstream/cvs/lush/src/main.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/main.c cvs/src/main.c
 --- trunk/src/main.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/main.c	2007-09-08 09:28:00.000000000 -0400
++++ cvs/src/main.c	2007-09-08 09:28:00.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25224,9 +25224,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/main
    /* Start */
    FMODE_BINARY(stderr);
    init_lush(argv[0]);
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/oostruct.c branches/upstream/cvs/lush/src/oostruct.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/oostruct.c cvs/src/oostruct.c
 --- trunk/src/oostruct.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/oostruct.c	2007-09-08 09:28:00.000000000 -0400
++++ cvs/src/oostruct.c	2007-09-08 09:28:00.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25275,9 +25275,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/oost
    at_unknown = var_define("-unknown");
 +  at_call = var_define("-call");
  }
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/string.c branches/upstream/cvs/lush/src/string.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/string.c cvs/src/string.c
 --- trunk/src/string.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/string.c	2007-09-08 09:28:00.000000000 -0400
++++ cvs/src/string.c	2007-09-08 09:28:00.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25305,9 +25305,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/stri
        if (p->Car->Number != (real)wc)
          error(NIL,"Integer expected",p->Car);
        d = wcrtomb(buffer, wc, &ps);
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/toplevel.c branches/upstream/cvs/lush/src/toplevel.c
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/toplevel.c cvs/src/toplevel.c
 --- trunk/src/toplevel.c	2007-01-06 22:15:55.000000000 -0500
-+++ branches/upstream/cvs/lush/src/toplevel.c	2007-09-08 09:28:00.000000000 -0400
++++ cvs/src/toplevel.c	2007-09-08 09:28:00.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
@@ -25369,9 +25369,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/src/topl
    dx_define("lush-is-quiet", xquiet);
 +  dx_define("lush-is-case-sensitive", xcasesensitive);
  }
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/sys/stdenv.lsh branches/upstream/cvs/lush/sys/stdenv.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/sys/stdenv.lsh cvs/sys/stdenv.lsh
 --- trunk/sys/stdenv.lsh	2007-01-06 22:16:08.000000000 -0500
-+++ branches/upstream/cvs/lush/sys/stdenv.lsh	2007-09-08 09:28:00.000000000 -0400
++++ cvs/sys/stdenv.lsh	2007-09-08 09:28:00.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
@@ -25449,9 +25449,9 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/sys/stde
      (when (lush-is-quiet)
        (exit 0) ) ) )
  
-diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/sys/sysenv.lsh branches/upstream/cvs/lush/sys/sysenv.lsh
+diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk/sys/sysenv.lsh cvs/sys/sysenv.lsh
 --- trunk/sys/sysenv.lsh	2007-01-06 22:16:08.000000000 -0500
-+++ branches/upstream/cvs/lush/sys/sysenv.lsh	2006-11-08 10:45:15.000000000 -0500
++++ cvs/sys/sysenv.lsh	2006-11-08 10:45:15.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
