@@ -1,3 +1,12 @@
+lush (1.2.1-8+cvs20101229) experimental; urgency=low
+
+  * Fresh upstream CVS snapshot -- might be the last one in lush 1.x
+    series:
+    - supports Renesas SH(sh4) (Closes: #574258). Thanks Nobuhiro Iwamatsu
+      for the patch
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Wed, 29 Dec 2010 14:47:07 -0500
+
 lush (1.2.1-7+cvs20080204) unstable; urgency=medium
 
   * Fixed paths cvs20080204 so fresh versions of dpatch behave nicely
