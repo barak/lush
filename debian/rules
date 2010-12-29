@@ -10,7 +10,6 @@ export DH_OPTIONS
 # from the root of packaging project
 CVS_ROOT_PATH=lush-cvs
 CVS_TIMESTAMP=$(shell date +"20%y%m%d")
-include /usr/share/dpatch/dpatch.make
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
@@ -25,7 +24,7 @@ else
 	CFLAGS += -O2
 endif
 
-config.status: patch-stamp configure
+config.status: configure
 	dh_testdir
 
 	# Configuring package
@@ -44,9 +43,9 @@ cvs-snapshot:
 	#cd ../$(CVS_ROOT_PATH) && cvs update
 	cd .. && \
 	 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush $(CVS_ROOT_PATH) | \
-	 dpatch patch-template -p "cvs$(CVS_TIMESTAMP)" "Dated CVS snapshot" >| lush/debian/patches/cvs$(CVS_TIMESTAMP).dpatch && \
-	 { echo "cvs$(CVS_TIMESTAMP)"; grep -v '^cvs[0-9]*' lush/debian/patches/00list; } >| patches.new && \
-	 mv patches.new lush/debian/patches/00list
+	 dpatch patch-template -p "cvs$(CVS_TIMESTAMP)" "Dated CVS snapshot" >| lush/debian/patches/cvs$(CVS_TIMESTAMP) && \
+	 { echo "cvs$(CVS_TIMESTAMP)"; grep -v '^cvs[0-9]*' lush/debian/patches/series; } >| patches.new && \
+	 mv patches.new lush/debian/patches/series
 
 build: build-stamp
 build-stamp: config.status
@@ -57,7 +56,7 @@ build-stamp: config.status
 
 	touch build-stamp
 
-clean: unpatch
+clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
@@ -69,7 +68,7 @@ clean: unpatch
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
 
 	# Installing package

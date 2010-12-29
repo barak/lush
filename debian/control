@@ -2,7 +2,7 @@ Source: lush
 Section: devel
 Priority: extra
 Maintainer: Yaroslav Halchenko <debian@onerussian.com>
-Build-Depends: debhelper (>= 4), dpatch, autotools-dev, binutils-dev, libxt-dev, libxft-dev, gfortran, indent, pkg-config, libncurses-dev, libreadline-dev, libgsl0-dev, liblapack-dev, libgl1-mesa-dev | libgl-dev, libsdl-dev, libcv-dev, libasound2-dev, libaudiofile-dev
+Build-Depends: debhelper (>= 4), autotools-dev, binutils-dev, libxt-dev, libxft-dev, gfortran, indent, pkg-config, libncurses-dev, libreadline-dev, libgsl0-dev, liblapack-dev, libgl1-mesa-dev | libgl-dev, libsdl-dev, libcv-dev, libasound2-dev, libaudiofile-dev
 Standards-Version: 3.9.1
 Homepage: http://lush.sourceforge.net/
 Vcs-Browser: http://git.onerussian.com/?p=deb/lush.git
