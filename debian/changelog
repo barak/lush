@@ -4,6 +4,8 @@ lush (1.2.1-8+cvs20101229) experimental; urgency=low
     series:
     - supports Renesas SH(sh4) (Closes: #574258). Thanks Nobuhiro Iwamatsu
       for the patch
+  * debian/copyright: switched to DEP5 format
+  * debian/compat,control: dh compat version 7
 
  -- Yaroslav Halchenko <debian@onerussian.com>  Wed, 29 Dec 2010 14:47:07 -0500
 

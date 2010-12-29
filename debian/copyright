@@ -1,43 +1,38 @@
-This package was first debianized by Kevin M. Rosenberg <kmr@debian.org> on
-Fri, 28 Jun 2002 15:13:41 -0600.
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Name: lush
+Maintainer: Yann LeCun <yann@cs.nyu.edu>
+Source: http://sourceforge.net/projects/lush/files/
 
-It was downloaded from <http://lush.sourceforge.net/>.
+Files: *
+Copyright:
+  2002, Leon Bottou <leon@bottou.org>
+  2002, Yann Le Cun
+  2002, AT&T Corp
+  2002, NECI
+  1991-2001, AT&T Corp.
+  1987-1999, Leon Bottou
+  1987-1999, Neuristique
+License: GPL-2+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+  .
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  .
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+  .
+  On Debian systems, the complete text of the GNU General Public License
+  can be found in /usr/share/common-licenses/GPL file.
 
-Copyright Holder: Leon Bottou <leon@bottou.org>,
-		  Yann Le Cun, AT&T Corp., NECI, Leon Bottou, and Neuristique
-
-	Copyright (C) 2002 Leon Bottou <leon@bottou.org>
-	Copyright (C) 2002 Yann Le Cun
-	Copyright (C) 2002 AT&T Corp
-	Copyright (C) 2002 NECI
-	Copyright (C) 1991-2001 AT&T Corp.
-	Copyright (C) 1987-1999 Leon Bottou
-	Copyright (C) 1987-1999 Neuristique
-
-License:
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
-
-On Debian systems, the complete text of the GNU General Public License
-can be found in /usr/share/common-licenses/GPL file.
-
-The Debian packaging is (C) 2006, Yaroslav Halchenko <debian@onerussian.com>
-and is licensed under the GPL, see above.
-
-The Debian packaging is
-(C) 2002, Kevin M. Rosenberg <kmr@debian.org>
-(C) 2007, Yaroslav Halchenko <debian@onerussian.com>
-and is licensed under the GPL, see above.
+Files: debian/*
+Copyright:
+  2002, Kevin M. Rosenberg <kmr@debian.org>
+  2006-2010, Yaroslav Halchenko <debian@onerussian.com>
+License: GPL-2+
 
