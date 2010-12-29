@@ -1,4 +1,4 @@
-lush (1.2.1-7+cvs20080204) unstable; urgency=low
+lush (1.2.1-7+cvs20080204) unstable; urgency=medium
 
   * Fixed paths cvs20080204 so fresh versions of dpatch behave nicely
     (Closes: #608218). Thanks Jakub Wilk for reporting and Hideki Yamane for
