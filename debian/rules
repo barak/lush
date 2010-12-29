@@ -8,7 +8,7 @@ export DH_OPTIONS
 
 # To fetch upstream CVS snapshot -- relative path to it
 # from the root of packaging project
-CVS_ROOT_PATH=branches/upstream/cvs/lush
+CVS_ROOT_PATH=lush-cvs
 CVS_TIMESTAMP=$(shell date +"20%y%m%d")
 include /usr/share/dpatch/dpatch.make
 
@@ -43,10 +43,10 @@ endif
 cvs-snapshot:
 	#cd ../$(CVS_ROOT_PATH) && cvs update
 	cd .. && \
-	 diff -x config.sub -x config.guess -x .svn -x CVS -x debian -Naur trunk $(CVS_ROOT_PATH) | \
-	 dpatch patch-template -p "cvs$(CVS_TIMESTAMP)" "Dated CVS snapshot" >| trunk/debian/patches/cvs$(CVS_TIMESTAMP).dpatch && \
-	 { echo "cvs$(CVS_TIMESTAMP)"; grep -v '^cvs[0-9]*' trunk/debian/patches/00list; } >| patches.new && \
-	 mv patches.new trunk/debian/patches/00list
+	 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush $(CVS_ROOT_PATH) | \
+	 dpatch patch-template -p "cvs$(CVS_TIMESTAMP)" "Dated CVS snapshot" >| lush/debian/patches/cvs$(CVS_TIMESTAMP).dpatch && \
+	 { echo "cvs$(CVS_TIMESTAMP)"; grep -v '^cvs[0-9]*' lush/debian/patches/00list; } >| patches.new && \
+	 mv patches.new lush/debian/patches/00list
 
 build: build-stamp
 build-stamp: config.status
