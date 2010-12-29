@@ -24,7 +24,7 @@ Description: Lisp Universal Shell Executable
 
 Package: lush-library
 Architecture: all
-Depends: python
+Depends: python, ${misc:Depends}
 Recommends: lush (>= ${source:Version})
 Description: Lisp Universal Shell Library
  Lush is a programming language and environment that is based on the Lisp

@@ -5,6 +5,8 @@ lush (1.2.1-7+cvs20080204) unstable; urgency=medium
     for providing the fix
   * Added Vcs fields for easy debcheckout.  They point to freshly
     (re)initialized (using git-import-dscs --debsnapt) GIT repository
+  * Added ${misc:Depends} to lush-library Depends (per lintian
+    recommendations)
 
  -- Yaroslav Halchenko <debian@onerussian.com>  Wed, 29 Dec 2010 11:45:37 -0500
 
