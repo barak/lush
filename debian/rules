@@ -1,8 +1,5 @@
 #!/usr/bin/make -f
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
-
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
@@ -11,35 +8,25 @@ export DH_OPTIONS
 CVS_ROOT_PATH=lush-cvs
 CVS_TIMESTAMP=$(shell date +"20%y%m%d")
 
-# These are used for cross-compiling and for saving the configure script
-# from having to guess our platform (since we know it already)
-DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+## These are used for cross-compiling and for saving the configure script
+## from having to guess our platform (since we know it already)
+#DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+#DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-CFLAGS = -Wall -g
 
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
+# Mega rule
+%:
+	dh $@
 
-config.status: configure
+
+custom_config.status: configure
 	dh_testdir
 
 	# Configuring package
 	F77=gfortran ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=$$\{prefix}/share/man  CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs"
 
-# grr - those lines were added by dh_make originally -- I need to clarify
-autotools:
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
 
-cvs-snapshot:
+get-cvs-snapshot:
 	#cd ../$(CVS_ROOT_PATH) && cvs update
 	cd .. && \
 	 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush $(CVS_ROOT_PATH) | \
@@ -47,38 +34,33 @@ cvs-snapshot:
 	 { echo "cvs$(CVS_TIMESTAMP)"; grep -v '^cvs[0-9]*' lush/debian/patches/series; } >| patches.new && \
 	 mv patches.new lush/debian/patches/series
 
-build: build-stamp
-build-stamp: config.status
-	dh_testdir
 
-	# Building package
-	$(MAKE) all
-
-	touch build-stamp
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-
-	# Cleaning package
-	[ ! -f Makefile ] || $(MAKE) distclean
-	dh_clean
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
+override_dh_install:
+	dh_install
 
 	# Installing package
-	$(MAKE) install prefix=$(CURDIR)/debian/lush/usr
+	# $(MAKE) install prefix=$(CURDIR)/debian/lush/usr
+	# Additional doc file
 	install -D -m 0644 doc/README debian/lush/usr/share/doc/lush/README.doc
 
 	# Moving files
-	mv debian/lush/usr/share/lush             debian/lush-library/usr/share
-	mv debian/lush-library/usr/share/lush/etc debian/lush/usr/share/lush
+	#mv debian/lush/usr/share/lush             debian/lush-library/usr/share
+	#mv debian/lush-library/usr/share/lush/etc debian/lush/usr/share/lush
 
+	# Moving emacs script to proper location
+	mv debian/lush-library/usr/share/lush/lush.el     debian/lush-library/usr/share/emacs/site-lisp/lush/
+
+	# Removing double files
+	rm -f debian/lush-library/usr/share/lush/src/lush
+	rm -f `find debian/lush-library/usr/share/lush/src -name "*.o"`
+
+	# Installing lintian overrides
+	for LINTIAN in debian/lintian/*; \
+	do \
+		install -D -m 0644 $$LINTIAN debian/`basename $$LINTIAN`/usr/share/lintian/overrides/`basename $$LINTIAN` || exit 1; \
+	done
+
+override_dh_fixperms:
 	# Fixing permissions
 	chmod 0644 debian/lush/usr/share/lush/lush.el
 	chmod 0644 debian/lush/usr/share/lush/lush.1
@@ -92,49 +74,4 @@ install: build
 	chmod 0644 debian/lush-library/usr/share/lush/demos/README
 	chmod 0644 debian/lush-library/usr/share/lush/demos/*.lsh
 
-	# Moving emacs script to proper location
-	mv debian/lush/usr/share/lush/lush.el     debian/lush-library/usr/share/emacs/site-lisp/lush/
-
-	# Removing double files
-	rm -f debian/lush-library/usr/share/lush/src/lush
-	rm -f `find debian/lush-library/usr/share/lush/src -name "*.o"`
-
-	# Installing lintian overrides
-	for LINTIAN in debian/lintian/*; \
-	do \
-		install -D -m 0644 $$LINTIAN debian/`basename $$LINTIAN`/usr/share/lintian/overrides/`basename $$LINTIAN` || exit 1; \
-	done
-
-# Must not depend on anything. This is to be called by
-# binary-arch/binary-indep
-# in another 'make' thread.
-binary-common:
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-	dh_installexamples
-# keep debconf - might be necessary for emacsen
-#	dh_installdebconf
-	dh_installemacsen
-	dh_installman
-	dh_link
-	dh_strip
-	dh_compress
 	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-# Build architecture independant packages using the common target.
-binary-indep: build install
-	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
-
-# Build architecture dependant packages using the common target.
-binary-arch: build install
-	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary-common binary install

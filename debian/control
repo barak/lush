@@ -32,4 +32,5 @@ Description: Lisp Universal Shell Library
  and is optimized for numeric calculations. Lush includes a libraries for
  numerical analysis and building graphical user interfaces.
  .
- This package contains the libraries for the lush package.
+ This package contains architecture intependent libraries for the lush
+ package.

@@ -1,4 +1,4 @@
-lush (1.2.1-8+cvs20101229) experimental; urgency=low
+lush (1.2.1-8+cvs20101229~pre2) experimental; urgency=low
 
   * Fresh upstream CVS snapshot -- might be the last one in lush 1.x
     series:
@@ -10,6 +10,7 @@ lush (1.2.1-8+cvs20101229) experimental; urgency=low
     - Policy boost to 3.9.1 (no changes seems to be due)
   * debian/patches,source,control: switch to 3.0 (quilt) source format
     from dpatch
+  * debian/rules,...: simplifying to take advantage of dh7
 
  -- Yaroslav Halchenko <debian@onerussian.com>  Wed, 29 Dec 2010 14:47:07 -0500
 
