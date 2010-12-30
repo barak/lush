@@ -48,25 +48,26 @@ override_dh_install:
 	#mv debian/lush-library/usr/share/lush/etc debian/lush/usr/share/lush
 
 	# Moving emacs script to proper location
-	mv debian/lush-library/usr/share/lush/lush.el     debian/lush-library/usr/share/emacs/site-lisp/lush/
+	mv debian/lush-library/usr/share/lush/etc/lush.el     debian/lush-library/usr/share/emacs/site-lisp/lush/
 
-	# Removing double files
-	rm -f debian/lush-library/usr/share/lush/src/lush
-	rm -f `find debian/lush-library/usr/share/lush/src -name "*.o"`
+	# Removing double files or ones installed via other means
+	rm -f debian/lush-library/usr/share/lush/src/lush \
+		  debian/lush-library/usr/share/lush/etc/lush.1 \
+		  debian/lush-library/usr/share/lush/etc/README*
 
-	# Installing lintian overrides
-	for LINTIAN in debian/lintian/*; \
-	do \
-		install -D -m 0644 $$LINTIAN debian/`basename $$LINTIAN`/usr/share/lintian/overrides/`basename $$LINTIAN` || exit 1; \
-	done
+	# Cleaning up
+	-find debian/lush*/usr -name "*.o" -delete
+
+	# # Installing lintian overrides
+	# for LINTIAN in debian/lintian/*; \
+	# do \
+	# 	install -D -m 0644 $$LINTIAN debian/`basename $$LINTIAN`/usr/share/lintian/overrides/`basename $$LINTIAN` || exit 1; \
+	# done
 
 override_dh_fixperms:
 	# Fixing permissions
-	chmod 0644 debian/lush/usr/share/lush/lush.el
-	chmod 0644 debian/lush/usr/share/lush/lush.1
-	chmod 0644 debian/lush/usr/share/lush/README.ivtools
-
 	find debian/lush-library/usr/share/lush -type f -exec chmod 0644 {} \;
+	grep -l '^#!' debian/lush-library/usr/share/lush/etc/* | xargs chmod a+x
 	find debian/lush-library/usr/share/lush -name "*.py" -exec chmod 0755 {} \;
 	find debian/lush-library/usr/share/lush -name "demo*" -exec chmod 0755 {} \;
 	chmod 0755 debian/lush-library/usr/share/lush/packages/sn28/examples/tsp/tsp
