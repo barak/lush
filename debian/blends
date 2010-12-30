@@ -1,0 +1,9 @@
+Depends: lush
+Tasks: debian-science/machine-learning
+Published-Title: The Lush manual
+Published-Authors: Leon Bottou and Yann LeCun
+Published-URL: http://lush.sf.net
+Published-Year: 2002
+Why: LUSH is a generic Lisp environment for numeric computation, but
+ because ML is of primary interest of the authors, thus lush contains
+ quite a few ML libraries (ANN, SVM, etc).
