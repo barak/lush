@@ -27,21 +27,23 @@ override_dh_install:
 	# Additional doc file
 	install -D -m 0644 doc/README debian/lush/usr/share/doc/lush/README.doc
 
+	# For binary-arch only there would be no lush-library
 	# Moving emacs script to proper location
-	mv debian/lush-library/usr/share/lush/etc/lush.el \
-	   debian/lush-library/usr/share/emacs/site-lisp/lush/
+	[ -d debian/lush-library ] && \
+		mv debian/lush-library/usr/share/lush/etc/lush.el \
+		   debian/lush-library/usr/share/emacs/site-lisp/lush/
 
 	# Removing double files or ones installed via other means
 	rm -f debian/lush-library/usr/share/lush/src/lush \
 		  debian/lush-library/usr/share/lush/etc/lush.1 \
-		  debian/lush-library/usr/share/lush/etc/README*
+		  debian/lush-library/usr/share/lush/etc/README*; \
 
 	rm -rf debian/lush-library/usr/share/man
 
 	# Cleaning up
 	-find debian/lush*/usr -name "*.o" -delete
 
-override_dh_fixperms:
+dh_fixperms_indep:
 	# Fixing permissions
 	find debian/lush-library/usr/share -type f -exec chmod 0644 {} \;
 	grep -l '^#!' debian/lush-library/usr/share/lush/etc/* | xargs chmod a+x
@@ -52,4 +54,6 @@ override_dh_fixperms:
 	chmod 0644 debian/lush-library/usr/share/lush/demos/README
 	chmod 0644 debian/lush-library/usr/share/lush/demos/*.lsh
 
+override_dh_fixperms:
+	[ -d debian/lush-library ] && $(MAKE) -f debian/rules dh_fixperms_indep
 	dh_fixperms
