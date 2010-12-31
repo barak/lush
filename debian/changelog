@@ -1,4 +1,4 @@
-lush (1.2.1-8+cvs20101229~pre2) experimental; urgency=low
+lush (1.2.1-8+cvs20101229) experimental; urgency=low
 
   * Fresh upstream CVS snapshot -- might be the last one in lush 1.x
     series:
