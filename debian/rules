@@ -31,7 +31,7 @@ override_dh_install:
 	# Moving emacs script to proper location
 	[ -d debian/lush-library ] && \
 		mv debian/lush-library/usr/share/lush/etc/lush.el \
-		   debian/lush-library/usr/share/emacs/site-lisp/lush/
+		   debian/lush-library/usr/share/emacs/site-lisp/lush/ || :
 
 	# Removing double files or ones installed via other means
 	rm -f debian/lush-library/usr/share/lush/src/lush \
@@ -55,5 +55,5 @@ dh_fixperms_indep:
 	chmod 0644 debian/lush-library/usr/share/lush/demos/*.lsh
 
 override_dh_fixperms:
-	[ -d debian/lush-library ] && $(MAKE) -f debian/rules dh_fixperms_indep
+	[ -d debian/lush-library ] && $(MAKE) -f debian/rules dh_fixperms_indep || :
 	dh_fixperms
