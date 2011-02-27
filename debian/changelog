@@ -1,3 +1,10 @@
+lush (1.2.1-9+cvs20110227) unstable; urgency=low
+
+  * Upload to unstable
+  * Fresh upstream CVS snapshot -- few fixes
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Sun, 27 Feb 2011 09:15:19 -0500
+
 lush (1.2.1-8+cvs20101229) experimental; urgency=low
 
   * Fresh upstream CVS snapshot -- might be the last one in lush 1.x

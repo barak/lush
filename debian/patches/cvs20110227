@@ -1,5 +1,5 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## cvs20101229.dpatch by Yaroslav Halchenko <debian@onerussian.com>
+## cvs20110227.dpatch by Yaroslav Halchenko <debian@onerussian.com>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: Dated CVS snapshot
@@ -7,7 +7,7 @@
 @DPATCH@
 
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/aclocal.m4 lush-cvs/aclocal.m4
---- lush/aclocal.m4	2010-12-29 22:37:19.000000000 -0500
+--- lush/aclocal.m4	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/aclocal.m4	2006-12-17 09:08:04.000000000 -0500
 @@ -129,7 +129,8 @@
         AC_CHECK_CC_OPT([-O3],[OPTS="$OPTS -O3"],
@@ -20,7 +20,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/a
         opt="-march=${ac_cpu-${host_cpu}}"
         AC_CHECK_CC_OPT([$opt], [OPTS="$OPTS $opt"],
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/bin/lush lush-cvs/bin/lush
---- lush/bin/lush	2010-12-29 22:37:19.000000000 -0500
+--- lush/bin/lush	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/bin/lush	2007-11-25 18:42:58.000000000 -0500
 @@ -26,7 +26,7 @@
  #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -40,7 +40,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/b
  do
     if [ -d $n -a -x $n/lush ] 
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/configure lush-cvs/configure
---- lush/configure	2010-12-29 22:37:19.000000000 -0500
+--- lush/configure	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/configure	2008-09-16 11:59:27.000000000 -0400
 @@ -1,26 +1,55 @@
  #! /bin/sh
@@ -15953,7 +15953,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/c
  { (exit 0); exit 0; }
  _ACEOF
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/configure.ac lush-cvs/configure.ac
---- lush/configure.ac	2010-12-29 22:37:19.000000000 -0500
+--- lush/configure.ac	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/configure.ac	2008-09-16 11:59:27.000000000 -0400
 @@ -5,7 +5,7 @@
  
@@ -16040,7 +16040,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/c
      *-freebsd2*)
          CC_PIC_FLAG='-fPIC'
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/COPYRIGHT lush-cvs/COPYRIGHT
---- lush/COPYRIGHT	2010-12-28 14:34:02.000000000 -0500
+--- lush/COPYRIGHT	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/COPYRIGHT	2010-12-29 22:34:42.000000000 -0500
 @@ -6,6 +6,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16068,7 +16068,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/C
   **********************************************************************/
 \ No newline at end of file
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/etc/lush.el lush-cvs/etc/lush.el
---- lush/etc/lush.el	2010-12-29 22:37:19.000000000 -0500
+--- lush/etc/lush.el	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/etc/lush.el	2009-12-13 16:59:55.000000000 -0500
 @@ -24,18 +24,179 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16291,7 +16291,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/e
 +            (end (if end-string (search-forward end-string nil t) (point-max))))        
 +        (buffer-substring-no-properties beg end)))))
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/include/check_func.h lush-cvs/include/check_func.h
---- lush/include/check_func.h	2010-12-29 22:37:19.000000000 -0500
+--- lush/include/check_func.h	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/include/check_func.h	2009-10-16 12:07:04.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -16323,7 +16323,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/i
  
  #define Mis_sized(i1) \
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/include/define.h lush-cvs/include/define.h
---- lush/include/define.h	2010-12-29 22:37:19.000000000 -0500
+--- lush/include/define.h	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/include/define.h	2009-09-11 19:25:26.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -16351,7 +16351,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/i
  #ifdef HAVE_WCHAR_H
  # include <wchar.h>
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/include/dh.h lush-cvs/include/dh.h
---- lush/include/dh.h	2010-12-29 22:37:19.000000000 -0500
+--- lush/include/dh.h	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/include/dh.h	2009-10-16 12:07:04.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -16403,7 +16403,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/i
      int size;                   /* data size */
      int nmet;                   /* number of methods */
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/include/header.h lush-cvs/include/header.h
---- lush/include/header.h	2010-12-29 22:37:19.000000000 -0500
+--- lush/include/header.h	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/include/header.h	2009-10-16 12:07:04.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -16631,7 +16631,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/i
  #define EVENT_ASCII_MIN   (0L)
  #define EVENT_ASCII_MAX   (255L)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/include/idxops.h lush-cvs/include/idxops.h
---- lush/include/idxops.h	2010-12-29 22:37:19.000000000 -0500
+--- lush/include/idxops.h	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/include/idxops.h	2006-11-12 01:31:43.000000000 -0500
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -16652,7 +16652,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/i
  #define Midx_m1copy(i1,i2, Type1, Type2) \
  { Type1 *c1; \
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/include/lushconf.h.in lush-cvs/include/lushconf.h.in
---- lush/include/lushconf.h.in	2010-12-29 22:37:19.000000000 -0500
+--- lush/include/lushconf.h.in	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/include/lushconf.h.in	2008-01-23 17:45:06.000000000 -0500
 @@ -202,6 +202,9 @@
  /* Define to 1 if you have the `putenv' function. */
@@ -16700,7 +16700,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
 +You can find them at
 +http://yann.lecun.com/exdb/mnist/index.html
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/compiler/compiler.hlp lush-cvs/lsh/compiler/compiler.hlp
---- lush/lsh/compiler/compiler.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/compiler/compiler.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/compiler/compiler.hlp	2007-11-12 00:34:15.000000000 -0500
 @@ -659,10 +659,10 @@
  to in the Lisp code by preceding them with a dollar sign.
@@ -16880,7 +16880,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  #? *** More on the Lisp-C Interface
  [under construction]
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/compiler/dh-compile.lsh lush-cvs/lsh/compiler/dh-compile.lsh
---- lush/lsh/compiler/dh-compile.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/compiler/dh-compile.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/compiler/dh-compile.lsh	2009-10-01 08:49:42.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16900,7 +16900,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
                      (concat "L1_this->" 
                              (dhc-lisp-to-c-slot-name (nameof (car slot)))) )
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/compiler/dh-macro.lsh lush-cvs/lsh/compiler/dh-macro.lsh
---- lush/lsh/compiler/dh-macro.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/compiler/dh-macro.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/compiler/dh-macro.lsh	2008-07-07 11:16:33.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16966,7 +16966,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  (de dhc-c-cast (type)
      (if (==> type is-a-real) "(real)"
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/compiler/dh-util.lsh lush-cvs/lsh/compiler/dh-util.lsh
---- lush/lsh/compiler/dh-util.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/compiler/dh-util.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/compiler/dh-util.lsh	2006-11-16 11:28:16.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16987,7 +16987,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
          (dhc-add-c-externs
           (dhc-class-to-struct-decl (dhu-type type)) ) )
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/compiler/make-standalone.lsh lush-cvs/lsh/compiler/make-standalone.lsh
---- lush/lsh/compiler/make-standalone.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/compiler/make-standalone.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/compiler/make-standalone.lsh	2006-12-24 09:23:09.000000000 -0500
 @@ -139,11 +139,15 @@
  ;; This does not check if the C file actually exists, it merely
@@ -17458,7 +17458,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
 +)
 \ No newline at end of file
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libc/fortran.lsh lush-cvs/lsh/libc/fortran.lsh
---- lush/lsh/libc/fortran.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libc/fortran.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libc/fortran.lsh	2009-10-23 18:50:15.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17558,7 +17558,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
    (each ((lib (list "libF77" "libV77")))  ;; insert more
      (let ((fname ()))
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libc/make.lsh lush-cvs/lsh/libc/make.lsh
---- lush/lsh/libc/make.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libc/make.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libc/make.lsh	2009-10-16 11:50:10.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17613,7 +17613,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  
          
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libidx/idx-array.lsh lush-cvs/lsh/libidx/idx-array.lsh
---- lush/lsh/libidx/idx-array.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libidx/idx-array.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libidx/idx-array.lsh	2010-12-24 17:08:13.000000000 -0500
 @@ -24,10 +24,10 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17668,7 +17668,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  (dhc-make ()
            (idx1-array idx1-array set get)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libidx/idx-convol.lsh lush-cvs/lsh/libidx/idx-convol.lsh
---- lush/lsh/libidx/idx-convol.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libidx/idx-convol.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libidx/idx-convol.lsh	2007-10-05 03:10:14.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17770,7 +17770,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  #? (idx-d2oversample <input> <n> <output>)
  ;; oversampling of size <n>
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libimage/image-io.lsh lush-cvs/lsh/libimage/image-io.lsh
---- lush/lsh/libimage/image-io.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libimage/image-io.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libimage/image-io.lsh	2008-08-25 16:47:51.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17816,7 +17816,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
      (prog1 (pnm-fread-ubim f) (pclose f))))
  
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libimage/img-util.lsh lush-cvs/lsh/libimage/img-util.lsh
---- lush/lsh/libimage/img-util.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libimage/img-util.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libimage/img-util.lsh	2008-08-25 16:47:51.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17883,19 +17883,73 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
            rgbaim2rgbafim rgbafim2rgbaim pixel2rgbim
            (img-dim-C img-dim-C) 
            equal-dim align-dimensions)
+diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libogre/ogre.hlp lush-cvs/lsh/libogre/ogre.hlp
+--- lush/lsh/libogre/ogre.hlp	2010-12-28 14:34:13.000000000 -0500
++++ lush-cvs/lsh/libogre/ogre.hlp	2011-02-27 09:14:42.000000000 -0500
+@@ -448,6 +448,10 @@
+ events when the function <process-pending-events> is called. It is a
+ good practice to call this function a few times during long programs.
+ 
++#? (ogre-close-all)
++Closes all open ogre windows.
++
++
+ #? ** Error Handling in the Ogre Library
+ .SEE Errors in Lush.
+ .SEE (debug-hook)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libogre/ogre.lsh lush-cvs/lsh/libogre/ogre.lsh
---- lush/lsh/libogre/ogre.lsh	2010-12-29 22:37:19.000000000 -0500
-+++ lush-cvs/lsh/libogre/ogre.lsh	2008-05-26 13:01:13.000000000 -0400
+--- lush/lsh/libogre/ogre.lsh	2011-01-01 11:53:25.000000000 -0500
++++ lush-cvs/lsh/libogre/ogre.lsh	2011-02-27 09:14:42.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -;;; $Id: ogre.lsh,v 1.32 2006/03/01 19:39:57 leonb Exp $
-+;;; $Id: ogre.lsh,v 1.33 2008/05/26 17:01:13 leonb Exp $
++;;; $Id: ogre.lsh,v 1.34 2011/01/02 18:14:30 leonb Exp $
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-@@ -1434,13 +1434,18 @@
+@@ -1239,6 +1239,8 @@
+   (setq thisform this)
+   (setq thiswindowobject this)
+   (setq color-palette :color-palette)
++  (when :ogre-task
++    (:ogre-task:allwindows this t) )
+   (each ((i contenu))
+     (==> this insert i) )
+   (==> this realize (ogre-new-window x y w h title)) )
+@@ -1283,12 +1285,16 @@
+ 
+ (defclass OgreTasks object
+   timerid
++  allwindows
+   damagedwindows )
+ 
++(defmethod OgreTasks OgreTasks()
++  (setq allwindows (htable 7 t)) )
++
+ (defmethod OgreTasks damaged-window(w)
+   (when (not timerid)
+     (setq timerid (create-timer this 0)) )
+-`<  (when (not (member w damagedwindows))
++  (when (not (member w damagedwindows))
+     (setq damagedwindows (cons w damagedwindows)) ) )
+ 
+ (defmethod OgreTasks handle (event)
+@@ -1338,6 +1344,12 @@
+     (setq :ogre-task (new OgreTasks)) )
+   t)
+ 
++;; close all ogre windows
++(de ogre-close-all()
++  (when :ogre-task
++    (let ((wins :ogre-task:allwindows))
++      (when (is-of-class wins |HTABLE|)
++        (each ((x (htable-keys wins))) (delete x)) ) ) ) )
+ 
+ ;; function that processes events until its argument is nil
+ (de wait (s) (while s (waitevent) (process-pending-events)))
+@@ -1434,13 +1446,18 @@
    (when window
      (if (not contents)
  	(==> this resize 0 0)
@@ -17918,7 +17972,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  	  (hsize i (sup (cons 0 (hmat i ())))) )
  	(for (i 0 (1- columns))
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libstd/brace.lsh lush-cvs/lsh/libstd/brace.lsh
---- lush/lsh/libstd/brace.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libstd/brace.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libstd/brace.lsh	2007-03-19 08:40:10.000000000 -0400
 @@ -22,7 +22,7 @@
  ;;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
@@ -17940,7 +17994,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  
  ;; read preformatted text
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libstd/cluster.lsh lush-cvs/lsh/libstd/cluster.lsh
---- lush/lsh/libstd/cluster.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libstd/cluster.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libstd/cluster.lsh	2008-01-14 11:36:34.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17972,7 +18026,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  #? (cluster-kill <machine> <signal> <pid>)
  ;; Sends unix signal <signal> to process <pid> of computer <machine>.
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libstd/plotenv.lsh lush-cvs/lsh/libstd/plotenv.lsh
---- lush/lsh/libstd/plotenv.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libstd/plotenv.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libstd/plotenv.lsh	2010-01-28 18:26:17.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -18249,7 +18303,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
    (let* ((pc (new PlotCurve lx ly))
           (pp (graph-options pc . options)) )
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/libstd/svgwindow.lsh lush-cvs/lsh/libstd/svgwindow.lsh
---- lush/lsh/libstd/svgwindow.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/libstd/svgwindow.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/libstd/svgwindow.lsh	2008-01-07 19:06:44.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19140,7 +19194,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
 +   (t l) ) )
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/lush-manual.hlp lush-cvs/lsh/lush-manual.hlp
---- lush/lsh/lush-manual.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/lush-manual.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/lush-manual.hlp	2007-09-10 17:20:59.000000000 -0400
 @@ -171,55 +171,106 @@
      Video4Linux Video-Grabbing API Interface}
@@ -19274,7 +19328,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  
  #? **** Applications
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/manual/graphics.hlp lush-cvs/lsh/manual/graphics.hlp
---- lush/lsh/manual/graphics.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/manual/graphics.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/manual/graphics.hlp	2009-10-30 23:43:38.000000000 -0400
 @@ -1,4 +1,4 @@
 -$Id: graphics.hlp,v 1.19 2006/03/01 19:39:59 leonb Exp $
@@ -19321,7 +19375,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  to specify the curve color.
  Arguments <r>, <g>, and <b> are numbers in range 0 to 1
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/manual/idx.hlp lush-cvs/lsh/manual/idx.hlp
---- lush/lsh/manual/idx.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/manual/idx.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/manual/idx.hlp	2010-12-24 17:08:48.000000000 -0500
 @@ -1064,3 +1064,8 @@
  #? (m+c <a> <b> [<c>])
@@ -19333,7 +19387,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
 +
 +#? *** << ../libidx/idx-array.lsh
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/manual/lush-tutorial.hlp lush-cvs/lsh/manual/lush-tutorial.hlp
---- lush/lsh/manual/lush-tutorial.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/manual/lush-tutorial.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/manual/lush-tutorial.hlp	2007-11-29 17:09:48.000000000 -0500
 @@ -1243,15 +1243,18 @@
  {<code>
@@ -19363,15 +19417,24 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
  
  #? *** Object-Oriented Lush Programming
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/manual/objects.hlp lush-cvs/lsh/manual/objects.hlp
---- lush/lsh/manual/objects.hlp	2010-12-29 22:37:19.000000000 -0500
-+++ lush-cvs/lsh/manual/objects.hlp	2007-03-26 17:11:08.000000000 -0400
+--- lush/lsh/manual/objects.hlp	2011-01-01 11:53:25.000000000 -0500
++++ lush-cvs/lsh/manual/objects.hlp	2011-02-27 09:14:42.000000000 -0500
 @@ -1,4 +1,4 @@
 -$Id: objects.hlp,v 1.8 2006/04/08 19:59:40 laseray Exp $
-+$Id: objects.hlp,v 1.11 2007/03/26 21:11:08 leonb Exp $
++$Id: objects.hlp,v 1.13 2011/01/02 18:16:47 leonb Exp $
  
  #? *** Objects
  
-@@ -862,3 +862,42 @@
+@@ -344,6 +344,8 @@
+   </code>}
+ }
+ 
++
++
+ #? ** Accessing Slots
+ 
+ {<p>
+@@ -862,3 +864,42 @@
    symbols, classes, and so forth.
  }
  
@@ -19415,7 +19478,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
 +}
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/lsh/manual/strings.hlp lush-cvs/lsh/manual/strings.hlp
---- lush/lsh/manual/strings.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/lsh/manual/strings.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/lsh/manual/strings.hlp	2009-05-24 22:12:18.000000000 -0400
 @@ -1,4 +1,4 @@
 -$Id: strings.hlp,v 1.9 2006/02/26 15:34:46 laseray Exp $
@@ -19487,7 +19550,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/l
 +Example
 +.EX (implode-bytes '(226 130 172 50 51))
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/Makefile.in lush-cvs/Makefile.in
---- lush/Makefile.in	2010-12-29 22:37:19.000000000 -0500
+--- lush/Makefile.in	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/Makefile.in	2007-04-24 12:11:22.000000000 -0400
 @@ -24,7 +24,7 @@
  #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19507,7 +19570,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/M
  libdir = @libdir@
  mandir = @mandir@
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/audio/simple-audio.lsh lush-cvs/packages/audio/simple-audio.lsh
---- lush/packages/audio/simple-audio.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/audio/simple-audio.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/audio/simple-audio.lsh	2009-07-04 16:12:22.000000000 -0400
 @@ -40,9 +40,9 @@
  
@@ -19540,7 +19603,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +  {xwvuyzurtv…‡ˆ‡‰ŒŠ„ƒƒ‚„ˆ†{xxzzvsojlw†Œ‰‚~‚Š‰~y{~€€~xrptwyzwnfm„˜“x€‘˜’„{}€‚„xroq{€tffw“§ ‡tw ‡u{†ƒ„ƒ{wsx…ƒ|~vc\m‹§¬–zmy›©•wq……€Œ‚spm}y|jU[vš¬Ÿ‚fe‰ª¢ƒo}…}lmnr‘Šs~|aS`€¡¨–xft–¦sk‡’{|xozu†š}mzv[Uk†¦§‰ke|¡„lt‹„uyokus†Šlhzr]\s’§€dg‡¤ ‡s{€qwmpxv‰~ak~r\^v“¦œfl‹£–~s€‰toslxz“zgy„o_kƒ¦“vfw˜¤’|wˆˆuz{u~—{o……i`t¦¦‹mg„¤£Œwy…uypr€~Œ„jv‰{bdz“¤™|gmˆ œ‡rxrxmu~„ziz‚lZd}™£rbp•¤“|qƒ‡sutk|„‰ˆli€ƒiat‹›—ff~š†ru‰~ksmk{„cn‚uagz“¢’vblŠŸ•}q€Štqyju‡ŒŒocx‚phx‹Ÿ ˆmkœ¤’{q}zhnpl‡‰gi„†pk{‘¡—|hp‹¤ ‹y|ˆvlxr{‘’“nx†yen‚™¢sjz’ –t‡sp{s€’‰qgz†vku‰š…ol}•¢“|sjr{xŠ‹„ig‡pfsˆ™”{glšŒxs…ycrvu‹Œ‡|gm……njz’{jpˆš‡uvƒxkxy{Œ‹‹fo‰…nl{“ŸuitŒ˜†w{…skzty‰‡vfuŠhi}“™‡nfv’~s|„pn}t‹Šsi€}iq‡™–hfy˜yo{yhu}v‰‡zad}kassem‚˜™‡vuvl}wwŒ†ƒyeq‰‚kg{’š‰pfrŠœ–…u{…ro~v‚’Šviz‹}kpƒ——ƒol|”Ÿ”u~nwyˆ‹‚li€Štjx›vflƒœŸŒyvƒym~}ŒŒˆ|iqŠ…kfx‘œ‹oesˆœ˜…tv‚rn~u|Š„tesˆkj}“—‚mhw˜…py‚psƒ{„‰‚nfy‹|hmƒ—“{ij|‘™}wƒ‚sy„‚’‹„oo…Œwdm‚‹vhl}’š|v„€lx{x‰€lr‡ŒvftŠ—wjo„›œŒ{wƒzn{|}““Œ~ks‹Šsl|“vkuŠ›˜‰xw„vo€~”’‰xit‡†nh|’—†pjw‹›•ƒuxnm}v…”‹„rfu‡kl}“mo–Ÿ“€u~€rwwƒŠ‡‚mey‰zgl…—’{eg~•š}u|lwzxŒ‡}hj‚Štcoˆ•wjqƒ–˜†ww„wkxv|‘Šyit‰‰rhz—†pkz‘Ÿ—‰z{„ur|z†–‚obp‡ln~’•ƒrmz‘v}€nry‡’‹…um~Š{nr…—–„nl{‘šx}kv{–‰}pr„Œ{kr‰™‘zmq‚—›‹yy…ul{{”“ˆwhr…„un{‘™„mivŠ›•€s|€lm}zƒ“Œ€nhy‰‚ol”‘{ko}‘›}s€}ir|wŠ•Š|jl‰yiq†–ukt€•|x„wkyz}Œ†tfm‚€kfwŒ’leoˆ™‘€su|ln~w‚“‹phy…po’’ml}‘š|sztdfquˆ‡|fg}†wlv†‘Œwjrƒ–š}y‚wiru~Œ‡|sy…†wq‘™Švms‹ š†y‡uit{›”Šues‡‚ml’|ii|“‘€u|{ko{|Š‘Š‚ni{‡zkoƒ—’yjp–‘q}{jpz~‘Š~mn‚‹zlt‡”uho…˜—Œ}w~shv|‚”’‡yik„sky–ˆrhq…–•‰{zƒtenv‚’„tfr†‚pkz‹‘‚nkz™tymhsz‰’Œ‡uk~‘†tu„”“}ljy•‰xpztfmu’‘‰|kn€…vnx‹˜xovˆ™™‰}€‡ymv{…’€pvŒŠwwŠœœ†pm~š”†}ƒnnw•š‘…oj~Œ~ry‹˜‘zlrƒ™Œ{z„seqx„”…tdj~€nl|‹nis†•€v|liqw‡Œ‚oerƒyjr‡˜•kk|‘œ’ƒ|€tcgpyŒ‘Œ~jh|…ulvŠ”‰sju…”•ˆz|„tekr€}lp€}nm~–…pjw‹™–…yqpuz˜’ˆxnuƒzntƒ’vdi~”š~‡~llp{“„qm|‚smy˜Œvjr‹¡~tgls‚‘—”‚jn}pr€’—‡rjwŠ™”„}…ˆvmqt„Šynx‡sy‡š˜pr‚–’†‚ˆmlqy‰„piv€sm{š‘{jpƒ”™‚ˆ|nmq|‹‘€no|xnt’—†oiwˆ—–‡}„nhpu‚†rgq{rox‡–yimz—‹~}„zjjoy‡Œ‹}jj{|os€‘˜ˆrhpƒ–˜‰~‡„pjouŠ„pemtnho‚’{mo}—€‚…{mnt}‰‘‘†vs|yv}ˆ™œŒxnx‹œš‹„‡xklwƒ‘‹|sxyvx€›•‚nlyŒ›—ˆ‰mip}‰‘†vrwyuz…”šŒznr„”—Œ„ˆŠ|mlr}‡‚rqtsu™–„oiw‰š•Š…‰ƒtgju€Œ‰yqtuqr|Œ–|jkz–xjdir}‡Œ‚uqqolo}–‰sekyŠ†…ˆ{lflw‚€tqrnnw„’ƒqmy…’‘ˆ†ˆ„wgcmv‚‰‚xrrojo{Œ•Œzjm|—“Š†…}qjox…‘”‰ywwuux†’”‹ypw„’–‰‹‰qjq~Š“~wvtru€Œ–“ojuˆ“ˆ†‰ƒxlkvˆ€tttppx…‘ˆuhn~’”ˆƒ‡€wlgmw‚‹ˆ{stpnu}‡“‘‚qmxˆ‘‰††‚tjkrŒ„wuvsu}ˆ“•Švko}Œ‰‡‰…ymjq{„ŒŠ|tspot~Š‘~olu…Š‰‰„zpkpz†‹„yuutsw†˜›{mozˆˆ…†„{mdhr‚‰{ztmp~‰‘€oksƒ‘‹ˆƒzrnt‚‹ƒwutor{‡“”‹ymq}‹Œ‹‰‚xpr{†ƒ~}xuvŒ•–Šypt~‹‘Œ‹‡€xsu}ˆ†}zwrpw„“ŒzllwƒŒŒ‰‡…‚{rrz…Šyvtps{……vpv€‰Œ‰ˆˆ‡€vrrz…Œ‡}xursz†‹|pqx‚‹‹‡†…}vsrwˆ‰{wssw…Š‚smq{…ˆ‡†ˆ†}qou~…‹ˆ€|xwz€‡ŠŠ{qpx„‚€~vrtx}…‚|zvvw}…ˆ‹‰‚yuw~…ˆ‰‰‰ƒ{vtw{ƒ‡†€{€
 \ No newline at end of file
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/audiofile/demos/read-wav.lsh lush-cvs/packages/audiofile/demos/read-wav.lsh
---- lush/packages/audiofile/demos/read-wav.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/audiofile/demos/read-wav.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/audiofile/demos/read-wav.lsh	2007-01-10 18:51:30.000000000 -0500
 @@ -1,6 +1,14 @@
  ;; read and display a WAV file.
@@ -19574,7 +19637,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
        (plot-wave 10 250 (narrow wave 0 500 k) 128 1 3)))
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/devices/serial.lsh lush-cvs/packages/devices/serial.lsh
---- lush/packages/devices/serial.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/devices/serial.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/devices/serial.lsh	2007-08-06 10:25:06.000000000 -0400
 @@ -58,15 +58,17 @@
        ("O" (setq par 2))
@@ -19687,7 +19750,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/fftw/fftw.lsh lush-cvs/packages/fftw/fftw.lsh
---- lush/packages/fftw/fftw.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/fftw/fftw.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/fftw/fftw.lsh	2009-12-13 17:02:58.000000000 -0500
 @@ -148,6 +148,56 @@
  ;; These functions perform 1D and 2D FFTs
@@ -22889,7 +22952,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +#endif
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/lapack/lapack-d.lsh lush-cvs/packages/lapack/lapack-d.lsh
---- lush/packages/lapack/lapack-d.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/lapack/lapack-d.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/lapack/lapack-d.lsh	2008-05-13 01:16:27.000000000 -0400
 @@ -35697,7 +35697,7 @@
      "dlarfx" "dlargv" "dlarnv" "dlarrb" "dlarre" "dlarrf" "dlarrv"
@@ -22901,7 +22964,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
      "dlassq" "dlasv2" "dlaswp" "dlasy2" "dlasyf" "dlatbs" "dlatdf"
      "dlatps" "dlatrd" "dlatrs" "dlatrz" "dlatzm" "dlauu2" "dlauum"
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/lapack/lapack-s.lsh lush-cvs/packages/lapack/lapack-s.lsh
---- lush/packages/lapack/lapack-s.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/lapack/lapack-s.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/lapack/lapack-s.lsh	2008-05-13 01:16:27.000000000 -0400
 @@ -35699,7 +35699,7 @@
      "slarfb" "slarf" "slarfg" "slarft" "slarfx" "slargv" "slarnv" "slarrb"
@@ -22913,7 +22976,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
      "slasq6" "slasr" "slasrt" "slassq" "slasv2" "slaswp" "slasy2" "slasyf"
      "slatbs" "slatdf" "slatps" "slatrd" "slatrs" "slatrz" "slatzm"
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/libnum/interpolator.lsh lush-cvs/packages/libnum/interpolator.lsh
---- lush/packages/libnum/interpolator.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/libnum/interpolator.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/libnum/interpolator.lsh	2007-04-24 12:11:24.000000000 -0400
 @@ -68,27 +68,34 @@
      (setq yarray (double-matrix n))
@@ -22958,7 +23021,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
           default: run_time_error("illegal interpolation type (must be 0-5)"); 
          }
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/libnum/stats.lsh lush-cvs/packages/libnum/stats.lsh
---- lush/packages/libnum/stats.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/libnum/stats.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/libnum/stats.lsh	2008-10-04 12:07:24.000000000 -0400
 @@ -6,7 +6,11 @@
  ;;;   Copyright (C) 1987-1999 Leon Bottou and Neuristique.
@@ -23695,7 +23758,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +#? *** << music/midi-seq.lsh
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/aux_const.lsh lush-cvs/packages/opencv/aux_const.lsh
---- lush/packages/opencv/aux_const.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/aux_const.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/aux_const.lsh	2007-09-02 21:32:58.000000000 -0400
 @@ -493,6 +493,8 @@
  (defconstant "CV_SVD_U_T"                            2 )
@@ -23707,7 +23770,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  ;;******************************************************************************
  ;;  constants defined in enum types
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/aux_convert.lsh lush-cvs/packages/opencv/aux_convert.lsh
---- lush/packages/opencv/aux_convert.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/aux_convert.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/aux_convert.lsh	2007-09-02 21:32:58.000000000 -0400
 @@ -478,51 +478,76 @@
  (de idx8u_ipl_share (mat img)
@@ -23853,7 +23916,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
       int width,height,channels,rowbytes;
       CvSize sz;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/aux_io.lsh lush-cvs/packages/opencv/aux_io.lsh
---- lush/packages/opencv/aux_io.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/aux_io.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/aux_io.lsh	2007-03-31 16:37:44.000000000 -0400
 @@ -7,6 +7,9 @@
  
@@ -23912,7 +23975,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  
  (dhc-make () |dummy_cvimage| cvimage-read-rgb)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/aux_object.lsh lush-cvs/packages/opencv/aux_object.lsh
---- lush/packages/opencv/aux_object.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/aux_object.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/aux_object.lsh	2007-03-31 12:18:00.000000000 -0400
 @@ -257,12 +257,12 @@
  
@@ -23939,7 +24002,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
     (cvsmobarray cvsmobarray ptr-nth)
  )
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/cv-config.lsh lush-cvs/packages/opencv/cv-config.lsh
---- lush/packages/opencv/cv-config.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/cv-config.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/cv-config.lsh	2007-09-02 21:32:58.000000000 -0400
 @@ -28,7 +28,8 @@
  ;;;  3/5/2005  modified for OpenCV version 0.9.7 by Ralf Juengling
@@ -25021,7 +25084,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +  cvminmaxloc
 +)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/demos/d01_sample.lsh lush-cvs/packages/opencv/demos/d01_sample.lsh
---- lush/packages/opencv/demos/d01_sample.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/demos/d01_sample.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/demos/d01_sample.lsh	2007-03-31 16:37:16.000000000 -0400
 @@ -9,4 +9,4 @@
  (cvPyrDown :img:p  :simg:p  7)
@@ -25030,7 +25093,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 -(cvimage-show  img)
 +(defparameter cvwin (cvimage-show  img))
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/demos/d02_cannyedge.lsh lush-cvs/packages/opencv/demos/d02_cannyedge.lsh
---- lush/packages/opencv/demos/d02_cannyedge.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/demos/d02_cannyedge.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/demos/d02_cannyedge.lsh	2007-03-31 16:37:16.000000000 -0400
 @@ -21,4 +21,5 @@
       (cvCanny     :grayimg:p    :edgeimg:p   0 50 5)
@@ -25040,7 +25103,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +     (defparameter cvwin (cvimage-show  edgeimg)  ))
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/demos/d03_pyrseg.lsh lush-cvs/packages/opencv/demos/d03_pyrseg.lsh
---- lush/packages/opencv/demos/d03_pyrseg.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/demos/d03_pyrseg.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/demos/d03_pyrseg.lsh	2007-03-31 16:37:16.000000000 -0400
 @@ -20,7 +20,7 @@
  		       :storage:p  :connectedcomp:pp  
@@ -25052,7 +25115,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  ;; the steps below are NOT really necessary, 
  ;; since the objects will be garbage collected automatically
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/demos/d04_video.lsh lush-cvs/packages/opencv/demos/d04_video.lsh
---- lush/packages/opencv/demos/d04_video.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/demos/d04_video.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/demos/d04_video.lsh	2007-03-31 16:37:16.000000000 -0400
 @@ -12,26 +12,26 @@
  (libload "opencv/opencv")
@@ -25103,7 +25166,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +
  
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/demos/d05_video_edge.lsh lush-cvs/packages/opencv/demos/d05_video_edge.lsh
---- lush/packages/opencv/demos/d05_video_edge.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/demos/d05_video_edge.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/demos/d05_video_edge.lsh	2007-03-31 16:37:16.000000000 -0400
 @@ -6,34 +6,33 @@
  (libload "video4linux/v4l")
@@ -25170,7 +25233,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  
 +(opencv-canny-demo)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/demos/d06_corners.lsh lush-cvs/packages/opencv/demos/d06_corners.lsh
---- lush/packages/opencv/demos/d06_corners.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/demos/d06_corners.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/demos/d06_corners.lsh	2007-03-31 16:37:16.000000000 -0400
 @@ -18,7 +18,7 @@
  (setq corners (new cvsmobarray 
@@ -25211,7 +25274,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +  (defparameter cvwin (cvimage-show img1)))
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/demos/d07_lk_track.lsh lush-cvs/packages/opencv/demos/d07_lk_track.lsh
---- lush/packages/opencv/demos/d07_lk_track.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/demos/d07_lk_track.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/demos/d07_lk_track.lsh	2007-03-31 16:37:16.000000000 -0400
 @@ -1,6 +1,7 @@
 -
@@ -25426,7 +25489,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
      
      
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/matrix.lsh lush-cvs/packages/opencv/matrix.lsh
---- lush/packages/opencv/matrix.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/matrix.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/matrix.lsh	1969-12-31 19:00:00.000000000 -0500
 @@ -1,850 +0,0 @@
 -;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26280,7 +26343,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 -  cvperspectivetransform
 -)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/opencv.hlp lush-cvs/packages/opencv/opencv.hlp
---- lush/packages/opencv/opencv.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/opencv.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/opencv.hlp	2007-09-02 21:32:58.000000000 -0400
 @@ -45,7 +45,7 @@
  #? ** << opencv/hough.lsh
@@ -26301,7 +26364,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  #? ** << opencv/thresholds.lsh
  #? ** << opencv/undistortion.lsh
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/opencv.lsh lush-cvs/packages/opencv/opencv.lsh
---- lush/packages/opencv/opencv.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/opencv.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/opencv.lsh	2007-09-02 21:32:58.000000000 -0400
 @@ -32,7 +32,7 @@
  (libload "opencv/hough.lsh")
@@ -26322,7 +26385,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  (libload "opencv/thresholds.lsh")
  (libload "opencv/undistortion.lsh")
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opencv/statistics.lsh lush-cvs/packages/opencv/statistics.lsh
---- lush/packages/opencv/statistics.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opencv/statistics.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opencv/statistics.lsh	1969-12-31 19:00:00.000000000 -0500
 @@ -1,201 +0,0 @@
 -;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26915,7 +26978,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +translated into Lush.
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opengl/opengl.lsh lush-cvs/packages/opengl/opengl.lsh
---- lush/packages/opengl/opengl.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opengl/opengl.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opengl/opengl.lsh	2008-05-13 00:18:46.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26946,7 +27009,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  
  (de glLineWidth( width )
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/opengl/openglu.lsh lush-cvs/packages/opengl/openglu.lsh
---- lush/packages/opengl/openglu.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/opengl/openglu.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/opengl/openglu.lsh	2008-05-13 00:18:46.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26966,7 +27029,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
      #{ gluBeginCurve ($nurb); #} ())
  (de gluBeginPolygon (tess)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/svm/demos/mnist-kernel.lsh lush-cvs/packages/svm/demos/mnist-kernel.lsh
---- lush/packages/svm/demos/mnist-kernel.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/svm/demos/mnist-kernel.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/svm/demos/mnist-kernel.lsh	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26994,7 +27057,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
                    asm("pxor %%mm6,%%mm6\n\t"
                        "pxor %%mm7,%%mm7"
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/svm/demos/mnist-svqp.lsh lush-cvs/packages/svm/demos/mnist-svqp.lsh
---- lush/packages/svm/demos/mnist-svqp.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/svm/demos/mnist-svqp.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/svm/demos/mnist-svqp.lsh	2007-01-19 18:55:18.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27046,7 +27109,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +    (printf "%d/%d errors (%l%%)\n" nerror nex (* 100 (/ nerror nex))) ) )
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/svm/lasvm/kcache.c lush-cvs/packages/svm/lasvm/kcache.c
---- lush/packages/svm/lasvm/kcache.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/svm/lasvm/kcache.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/svm/lasvm/kcache.c	2007-01-25 17:42:09.000000000 -0500
 @@ -24,13 +24,14 @@
   ***********************************************************************/
@@ -27423,7 +27486,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +  self->prevbuddy = buddylast;
 +}
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/svm/lasvm/kcache.h lush-cvs/packages/svm/lasvm/kcache.h
---- lush/packages/svm/lasvm/kcache.h	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/svm/lasvm/kcache.h	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/svm/lasvm/kcache.h	2007-01-25 17:42:09.000000000 -0500
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -27463,7 +27526,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  }
  #endif
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/svm/lasvmcache.lsh lush-cvs/packages/svm/lasvmcache.lsh
---- lush/packages/svm/lasvmcache.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/svm/lasvmcache.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/svm/lasvmcache.lsh	2007-01-25 17:42:05.000000000 -0500
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27542,7 +27605,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +svqp and svqp2 optimizers waiting for a documentation
 \ No newline at end of file
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/svm/svqp2/svqp2.cpp lush-cvs/packages/svm/svqp2/svqp2.cpp
---- lush/packages/svm/svqp2/svqp2.cpp	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/svm/svqp2/svqp2.cpp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/svm/svqp2/svqp2.cpp	2009-06-05 14:40:07.000000000 -0400
 @@ -26,7 +26,7 @@
   ***********************************************************************/
@@ -27744,7 +27807,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +(demo dev width height eff fps nb)
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/video4linux/demos/v4l-demo.lsh lush-cvs/packages/video4linux/demos/v4l-demo.lsh
---- lush/packages/video4linux/demos/v4l-demo.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/video4linux/demos/v4l-demo.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/video4linux/demos/v4l-demo.lsh	2007-10-11 16:29:53.000000000 -0400
 @@ -19,7 +19,7 @@
  (de v4l-demo-rgb (in swidth sheight)
@@ -28393,7 +28456,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
 +	     get-frame-yuv422 get-frame-grey get-frame-yuv get-frame-rgb)
 + )
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/video4linux/v4l.hlp lush-cvs/packages/video4linux/v4l.hlp
---- lush/packages/video4linux/v4l.hlp	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/video4linux/v4l.hlp	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/video4linux/v4l.hlp	2007-09-30 22:53:56.000000000 -0400
 @@ -2,22 +2,33 @@
  {<author> Yann LeCun}
@@ -28445,7 +28508,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  the class <v4ldevice>. Creating a new <v4ldevice> will open
  and initialize one of the Linux video devices.
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/packages/video4linux/v4l.lsh lush-cvs/packages/video4linux/v4l.lsh
---- lush/packages/video4linux/v4l.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/packages/video4linux/v4l.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/packages/video4linux/v4l.lsh	2007-09-30 22:53:56.000000000 -0400
 @@ -22,7 +22,7 @@
  ;;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA
@@ -28565,7 +28628,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/p
  	   grab-into-rgb
  	   grab-into-rgbx 
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/README lush-cvs/README
---- lush/README	2010-12-29 22:37:19.000000000 -0500
+--- lush/README	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/README	2008-10-13 00:01:58.000000000 -0400
 @@ -1,3 +1,4 @@
 +
@@ -28777,7 +28840,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/R
 -libMesaGLU1-devel-4.0.3-6mdk.i586.rpm
 -libMesaglut3-devel-4.0.3-6mdk.i586.rpm
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/README.mac lush-cvs/README.mac
---- lush/README.mac	2010-12-29 22:37:19.000000000 -0500
+--- lush/README.mac	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/README.mac	2007-12-18 10:26:49.000000000 -0500
 @@ -10,7 +10,7 @@
  --------------
@@ -28789,7 +28852,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/R
  We recomment the following packages:
  	readline
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/allocate.c lush-cvs/src/allocate.c
---- lush/src/allocate.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/allocate.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/allocate.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -28854,7 +28917,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
  #if HAVE_CFREE
      cfree(x);
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/arith.c lush-cvs/src/arith.c
---- lush/src/arith.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/arith.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/arith.c	2008-06-25 11:47:52.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -28919,7 +28982,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
  
  DX(xpower)
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/check_func.c lush-cvs/src/check_func.c
---- lush/src/check_func.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/check_func.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/check_func.c	2009-10-16 12:07:05.000000000 -0400
 @@ -25,7 +25,7 @@
   ***********************************************************************/
@@ -28966,7 +29029,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
 +int dummy() { return 0; }
 +
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/dh.c lush-cvs/src/dh.c
---- lush/src/dh.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/dh.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/dh.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -28989,7 +29052,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    if (s != 0)
      while (*s && (*s==' ' || *s=='\t' || *s=='\n' || *s=='\r'))
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/dldbfd.c lush-cvs/src/dldbfd.c
---- lush/src/dldbfd.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/dldbfd.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/dldbfd.c	2008-09-16 11:59:27.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29032,7 +29095,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
  #if defined(__GNUC__) && (__GNUC__ < 3)
  void 
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/dump.c lush-cvs/src/dump.c
---- lush/src/dump.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/dump.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/dump.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29062,7 +29125,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    at *p;
    at *sym;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/event.c lush-cvs/src/event.c
---- lush/src/event.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/event.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/event.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29083,7 +29146,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    int mods = -1;
    at *ev = event_to_list(event, xd, yd, xu, yu, &mods);
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/fileio.c lush-cvs/src/fileio.c
---- lush/src/fileio.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/fileio.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/fileio.c	2010-09-26 14:29:02.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29481,7 +29544,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    /** SETUP PATH */
    at_path = var_define("*PATH");
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/graphics.c lush-cvs/src/graphics.c
---- lush/src/graphics.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/graphics.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/graphics.c	2007-02-06 14:36:46.000000000 -0500
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29521,7 +29584,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    LOCK(q);
    return q;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/htable.c lush-cvs/src/htable.c
---- lush/src/htable.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/htable.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/htable.c	2010-10-28 22:37:16.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29555,7 +29618,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
  }
  
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/index.c lush-cvs/src/index.c
---- lush/src/index.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/index.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/index.c	2010-10-28 22:37:16.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29616,7 +29679,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
      ans = D_matrix(ndim, dim);
      break;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/io.c lush-cvs/src/io.c
---- lush/src/io.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/io.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/io.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29825,7 +29888,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    strcpy(s, " ... ");
    return 0L;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/lisp_c.c lush-cvs/src/lisp_c.c
---- lush/src/lisp_c.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/lisp_c.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/lisp_c.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29878,7 +29941,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    error(NIL,"Cannot make a compiled version of this lisp object",p);
  }
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/lisp_driver.c lush-cvs/src/lisp_driver.c
---- lush/src/lisp_driver.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/lisp_driver.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/lisp_driver.c	2008-01-07 19:05:48.000000000 -0500
 @@ -290,7 +290,7 @@
  	error(NIL,"Method alloccolor returned something illegal", p);
@@ -29890,7 +29953,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
  
  static int
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/main.c lush-cvs/src/main.c
---- lush/src/main.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/main.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/main.c	2007-04-02 12:02:57.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -29943,7 +30006,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    FMODE_BINARY(stderr);
    init_lush(argv[0]);
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/Makefile.in lush-cvs/src/Makefile.in
---- lush/src/Makefile.in	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/Makefile.in	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/Makefile.in	2008-09-16 11:59:27.000000000 -0400
 @@ -24,7 +24,7 @@
  #;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -29984,7 +30047,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
  
  
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/module.c lush-cvs/src/module.c
---- lush/src/module.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/module.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/module.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -30129,7 +30192,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    at *symb, *priminame, *func;
    dhrecord *drec;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/nan.c lush-cvs/src/nan.c
---- lush/src/nan.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/nan.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/nan.c	2010-03-20 11:12:37.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -30216,14 +30279,14 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    /* Define functions */
    dx_define("nan"    , xnan    );
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/oostruct.c lush-cvs/src/oostruct.c
---- lush/src/oostruct.c	2010-12-29 22:37:19.000000000 -0500
-+++ lush-cvs/src/oostruct.c	2007-03-26 16:56:53.000000000 -0400
+--- lush/src/oostruct.c	2011-01-01 11:53:25.000000000 -0500
++++ lush-cvs/src/oostruct.c	2011-02-27 09:14:43.000000000 -0500
 @@ -24,7 +24,7 @@
   ***********************************************************************/
  
  /***********************************************************************
 - * $Id: oostruct.c,v 1.22 2005/08/19 14:38:53 leonb Exp $
-+ * $Id: oostruct.c,v 1.23 2007/03/26 20:56:53 leonb Exp $
++ * $Id: oostruct.c,v 1.25 2011/01/02 18:17:25 leonb Exp $
   **********************************************************************/
  
  /***********************************************************************
@@ -30260,14 +30323,22 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    generic_serialize,
    oostruct_compare,
    oostruct_hash,
-@@ -1462,4 +1472,5 @@
+@@ -1424,6 +1434,7 @@
+ 
+ 
+ 
++
+ /* --------- INITIALISATION CODE --------- */
+ 
+ void 
+@@ -1462,4 +1473,5 @@
    at_destroy = var_define("-destructor");
    at_mexpand = var_define("macro-expand");
    at_unknown = var_define("-unknown");
 +  at_call = var_define("-call");
  }
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/string.c lush-cvs/src/string.c
---- lush/src/string.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/string.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/string.c	2008-12-02 20:03:38.000000000 -0500
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -30638,7 +30709,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
              } 
            else 
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/symbol.c lush-cvs/src/symbol.c
---- lush/src/symbol.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/symbol.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/symbol.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -30707,7 +30778,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    at *p;
    struct symbol *symb;
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/toplevel.c lush-cvs/src/toplevel.c
---- lush/src/toplevel.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/toplevel.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/toplevel.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -30848,7 +30919,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
 +  dx_define("lush-is-case-sensitive", xcasesensitive);
  }
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/unix.c lush-cvs/src/unix.c
---- lush/src/unix.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/unix.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/unix.c	2009-10-16 12:07:05.000000000 -0400
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -31000,7 +31071,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    } 
  #endif
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/src/x11_driver.c lush-cvs/src/x11_driver.c
---- lush/src/x11_driver.c	2010-12-29 22:37:19.000000000 -0500
+--- lush/src/x11_driver.c	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/src/x11_driver.c	2008-11-20 16:58:07.000000000 -0500
 @@ -24,7 +24,7 @@
   ***********************************************************************/
@@ -31097,7 +31168,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
    
    /* Defaults */
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/sys/stdenv.lsh lush-cvs/sys/stdenv.lsh
---- lush/sys/stdenv.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/sys/stdenv.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/sys/stdenv.lsh	2007-04-02 12:02:57.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -31177,7 +31248,7 @@ diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/s
        (exit 0) ) ) )
  
 diff -x config.sub -x config.guess -x .svn -x CVS -x .git -x debian -Naur lush/sys/sysenv.lsh lush-cvs/sys/sysenv.lsh
---- lush/sys/sysenv.lsh	2010-12-29 22:37:19.000000000 -0500
+--- lush/sys/sysenv.lsh	2011-01-01 11:53:25.000000000 -0500
 +++ lush-cvs/sys/sysenv.lsh	2010-03-24 12:03:38.000000000 -0400
 @@ -24,7 +24,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
