@@ -2,6 +2,8 @@ lush (1.2.1-9+cvs20110227) unstable; urgency=low
 
   * Upload to unstable
   * Fresh upstream CVS snapshot -- few fixes
+  * Added  04-ld-no-add-needed patch to add -lfontconfig.
+    Report and patch from Matthias Klose (Thanks!) (Closes: #608692)
 
  -- Yaroslav Halchenko <debian@onerussian.com>  Sun, 27 Feb 2011 09:15:19 -0500
 

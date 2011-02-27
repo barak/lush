@@ -1,0 +1,17 @@
+From: Yaroslav Halchenko <debian@onerussian.com>
+Author: Matthias Klose <doko@ubuntu.com> 
+Subject: Added missing -lfontconfig for linking X libraries
+Vendor: Ubuntu
+
+
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -61,7 +61,7 @@ LN_S = @LN_S@
+ TOUCH = @TOUCH@
+ RANLIB = @RANLIB@
+ INSTALL = @INSTALL@
+-X_LIBS = @X_LIBS@
++X_LIBS = @X_LIBS@  -lfontconfig
+ X_CFLAGS = @X_CFLAGS@
+ CC_PIC_FLAG = @CC_PIC_FLAG@
+ CC_EXP_FLAG = @CC_EXP_FLAG@
