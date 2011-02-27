@@ -8,6 +8,12 @@ export DH_OPTIONS
 CVS_ROOT_PATH=lush-cvs
 CVS_TIMESTAMP=$(shell date +"20%y%m%d")
 
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_GNU_CPU ?= $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+ifeq ($(DEB_HOST_ARCH),i386)
+  CONFIG_ARGS += --with-cpu=$(DEB_HOST_GNU_CPU)
+endif
+
 # Mega rule
 %:
 	dh $@ --with autotools_dev
@@ -20,6 +26,8 @@ get-cvs-snapshot:
 	 { echo "cvs$(CVS_TIMESTAMP)"; grep -v '^cvs[0-9]*' lush/debian/patches/series; } >| patches.new && \
 	 mv patches.new lush/debian/patches/series
 
+override_dh_auto_configure:
+	dh_auto_configure -- $(CONFIG_ARGS)
 
 override_dh_install:
 	dh_install
