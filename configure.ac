@@ -3,17 +3,15 @@
 # Initialization
 # ----------------------------------------
 
-AC_PREREQ(2.50)
-AC_INIT(Lush2, 2.0)
+AC_PREREQ([2.68])
+AC_INIT([Lush2],[2.0.1])
 AC_CONFIG_AUX_DIR(config)
-AC_CONFIG_SRCDIR(README)
+AC_CONFIG_SRCDIR([src/lisp_driver.c])
 AC_CONFIG_HEADER(include/lushconf.h)
-AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 
 AC_ARG_WITH(extra-includes,
-            AC_HELP_STRING([--with-extra-includes=DIR],
-                       [Define an additional directory for include files]),
+            AS_HELP_STRING([--with-extra-includes=DIR],[Define an additional directory for include files]),
         [ if test -d "$withval" ; then
             CPPFLAGS="$CPPFLAGS -I$withval" 
           else
@@ -21,8 +19,7 @@ AC_ARG_WITH(extra-includes,
           fi ] )
 
 AC_ARG_WITH(extra-libraries,
-            AC_HELP_STRING([--with-extra-libraries=DIR],
-                       [Define an additional directory for library files]),
+            AS_HELP_STRING([--with-extra-libraries=DIR],[Define an additional directory for library files]),
         [ if test -d "$withval" ; then
            LDFLAGS="$LDFLAGS -L$withval"
           else
@@ -58,19 +55,17 @@ esac
 
 require_readline=yes
 AC_ARG_WITH(readline,
-    AC_HELP_STRING([--without-readline],
-        [Build Lush without command line editing support.]),
+    AS_HELP_STRING([--without-readline],[Build Lush without command line editing support.]),
     [require_readline=$withval])
 
 require_bfd=yes
 AC_ARG_WITH(bfd,
-    AC_HELP_STRING([--without-bfd],
-        [Build Lush without the BFD library.]),
+    AS_HELP_STRING([--without-bfd],[Build Lush without the BFD library.]),
     [require_bfd=$withval])
 
 require_snapshot_gc=no
 AC_ARG_WITH(snapshot-gc,
-    AC_HELP_STRING([--with-snapshot-gc], [Use child processes for garbage collection.]),
+    AS_HELP_STRING([--with-snapshot-gc],[Use child processes for garbage collection.]),
     [ if test $withval != no ; then
         require_snapshot_gc=yes
     fi ])
@@ -80,8 +75,7 @@ fi
     
 ac_have_mpi=no
 AC_ARG_WITH(mpi,
-            AC_HELP_STRING([--with-mpi],
-                       [Build Lush with MPI support.]),
+            AS_HELP_STRING([--with-mpi],[Build Lush with MPI support.]),
         [ if test $withval != no ; then
             ac_have_mpi=yes
           fi ] )
@@ -168,34 +162,25 @@ if test x$has_bfd = xyes ; then
     si_LIBS=`echo $i_LIBS | sed -e 's/-lbfd\( -liberty\)*/-Wl,-Bstatic & -Wl,-Bdynamic/'`
     LIBS=$sn_LIBS
     AC_MSG_CHECKING([whether bfd works with -Bstatic])
-    AC_TRY_LINK([#include "bfd.h"],
-                [bfd_openr("junk1","default"); ],
-		[okay_bfd=yes],[okay_bfd=no]);
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "bfd.h"]], [[bfd_openr("junk1","default"); ]])],[okay_bfd=yes],[okay_bfd=no]);
     AC_MSG_RESULT($okay_bfd)
     if test x$okay_bfd = xno ; then
 	if test x$has_intl = xyes ; then
 	    LIBS=$si_LIBS
 	    AC_MSG_CHECKING([whether bfd works with -Bstatic and -lintl])
-	    AC_TRY_LINK([#include "bfd.h"],
-		    [bfd_openr("junk1","default"); ],
-		    [okay_bfd=yes],[okay_bfd=no]);
+	    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "bfd.h"]], [[bfd_openr("junk1","default"); ]])],[okay_bfd=yes],[okay_bfd=no]);
 	    AC_MSG_RESULT($okay_bfd)
 	fi
 	if test x$okay_bfd = xno ; then
 	    LIBS=$n_LIBS
 	    AC_MSG_CHECKING([whether bfd works alone])
-	    AC_TRY_LINK([#include "bfd.h"],
-		    [bfd_openr("junk1","default"); ],
-		    [okay_bfd=yes],[okay_bfd=no]);
+	    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "bfd.h"]], [[bfd_openr("junk1","default"); ]])],[okay_bfd=yes],[okay_bfd=no]);
 	    AC_MSG_RESULT($okay_bfd)
 	    if test x$okay_bfd = xno ; then
 		if test x$has_intl = xyes ; then
 		    LIBS=$i_LIBS
 		    AC_MSG_CHECKING([whether bfd works with -lintl])
-		    AC_TRY_LINK([#include "bfd.h"],
-			    [bfd_openr("junk1","default"); ],
-			    [okay_bfd=yes],
-			    [okay_bfd=no]);
+		    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "bfd.h"]], [[bfd_openr("junk1","default"); ]])],[okay_bfd=yes],[okay_bfd=no]);
 		    AC_MSG_RESULT($okay_bfd)
 		fi
 		if test x$okay_bfd = xno ; then
@@ -206,10 +191,7 @@ if test x$has_bfd = xyes ; then
     fi
     if test x$okay_bfd = xyes ; then
 	AC_MSG_CHECKING([whether bfd_hash_table_init wants two arguments])
-        AC_TRY_COMPILE([#include "bfd.h"],
-                       [struct bfd_hash_table t; bfd_hash_table_init(&t,(void*)0);],
-                       [bfd_hash_init_2_args=yes],
-                       [bfd_hash_init_2_args=no])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include "bfd.h"]], [[struct bfd_hash_table t; bfd_hash_table_init(&t,(void*)0);]])],[bfd_hash_init_2_args=yes],[bfd_hash_init_2_args=no])
         AC_MSG_RESULT($bfd_hash_init_2_args)
         if test x$bfd_hash_init_2_args = xyes ; then
             AC_DEFINE(HAVE_BFD_HASH_TABLE_INIT_WANTS_2_ARGS,1,
@@ -321,9 +303,7 @@ AC_CHECK_FUNCS(setlocale nl_langinfo)
 # iconv function might be defined as libiconv in iconv.h
 AC_MSG_CHECKING([for iconv])
 ac_has_iconv=no
-AC_TRY_LINK([#include "iconv.h"],
-            [iconv((iconv_t)0, (char**)0, (size_t*)0, (char**)0, (size_t*)0);],
-            [ac_has_iconv=yes])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "iconv.h"]], [[iconv((iconv_t)0, (char**)0, (size_t*)0, (char**)0, (size_t*)0);]])],[ac_has_iconv=yes],[])
 AC_MSG_RESULT($ac_has_iconv)
 if test x$ac_has_iconv = xyes ; then
     AC_DEFINE(HAVE_ICONV,1,
