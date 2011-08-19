@@ -293,7 +293,6 @@ AC_TYPE_MODE_T
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_TYPE_PID_T
-AC_TYPE_SIGNAL
 AC_CHECK_TYPES(long long int)
 AC_CHECK_TYPES(wchar_t,,,[#include "stddef.h"])
 AC_CHECK_TYPES(wint_t,,,[#include "wchar.h"])

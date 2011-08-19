@@ -40,7 +40,7 @@
 #endif
 #include <signal.h>
 
-typedef RETSIGTYPE (*SIGHANDLERTYPE)();
+typedef void (*SIGHANDLERTYPE)();
 
 #ifdef linux
 # ifdef __hppa__          /* Checked (debian) 2003-07-14 */
@@ -401,7 +401,7 @@ static void fpe_irq(int sig, int num)
    }
 }
 #else
-static RETSIGTYPE fpe_irq(void)
+static void fpe_irq(void)
 {
    if (ieee_present)
       setup_fpu(fpe_inv, fpe_ofl);
@@ -415,7 +415,7 @@ static RETSIGTYPE fpe_irq(void)
 static int fpe_flag;
 static int fpe_isnan;
 
-static RETSIGTYPE probe_fpe_irq(void)
+static void probe_fpe_irq(void)
 {
 #ifdef WIN32
    _clearfp();

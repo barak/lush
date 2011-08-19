@@ -130,7 +130,7 @@
 # undef RL_READLINE_VERSION    /* not a readline we can work with (MacOS ?) */
 #endif
 
-typedef RETSIGTYPE (*SIGHANDLERTYPE)();
+typedef void (*SIGHANDLERTYPE)();
 
 
 /* ---------------------------------------- */
@@ -218,7 +218,7 @@ void goodsignal(int signo, SIGHANDLERTYPE vec)
 
 /* quit_irq -- signal handler for QUIT signal */
 
-static RETSIGTYPE quit_irq(void)
+static void quit_irq(void)
 {
 #ifdef SYSVSIGNAL
    goodsignal(SIGQUIT, quit_irq);
@@ -229,7 +229,7 @@ static RETSIGTYPE quit_irq(void)
 
 /* break_irq -- signal handler for Control-C */
 
-static RETSIGTYPE break_irq(void)
+static void break_irq(void)
 {
    break_attempt = 1;
    eval_ptr = eval_brk;
@@ -241,7 +241,7 @@ static RETSIGTYPE break_irq(void)
 
 /* usr1_irq -- toggle MM debug mode and return */
 
-static RETSIGTYPE usr1_irq(void)
+static void usr1_irq(void)
 {
    static bool debug_on = false;
    debug_on = !debug_on;
@@ -294,7 +294,7 @@ static void fpe_irq(int signo, siginfo_t *siginf, void *c)
    error(NIL, errmsg, NIL);
 }
 #else
-static RETSIGTYPE fpe_irq(void)
+static void fpe_irq(void)
 {
    error(NIL, "FPU exception", NIL);
 }
@@ -347,7 +347,7 @@ void lastchance(const char *s)
 
 /* gasp_irq -- signal handler for hopeless situations */
 
-static RETSIGTYPE gasp_irq(int sig)
+static void gasp_irq(int sig)
 {
    char buffer[80];
    sprintf(buffer, "Signal %d has occurred", sig);
@@ -482,7 +482,7 @@ static void (*trigger_handler)(void);
 
 
 /* trigger_irq -- signal handler for trigger */
-static RETSIGTYPE trigger_irq(void)
+static void trigger_irq(void)
 {
    errno = 0;
    if (trigger_handler)
