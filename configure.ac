@@ -247,6 +247,9 @@ AC_SUBST(X_LIBS)
 AC_SUBST(X_CFLAGS)
 AC_SUBST(X_YES)
 
+# font library, used in getfont
+AC_CHECK_LIB(fontconfig,FcNameParse)
+
 # threads
 AC_PATH_PTHREAD
 
