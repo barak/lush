@@ -1,5 +1,12 @@
+*.o
+/autom4te.cache
+/bin/x86_64-unknown-linux-gnu/
 /config.log
 /config.status
+/doc/latex/
 /include/lushconf.h
 /include/lushmake.h
+/lsh/libstd/C/
+/src/lush2
+/sys/stdenv.dump
 Makefile
