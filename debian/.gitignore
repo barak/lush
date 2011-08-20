@@ -1,0 +1,9 @@
+/*.debhelper
+/*.debhelper.log
+/*.substvars
+/autoreconf.after
+/autoreconf.before
+/files
+/lush-library/
+/lush/
+/tmp/
