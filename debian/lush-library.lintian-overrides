@@ -1,0 +1,3 @@
+# Those are an integral part of the system
+lush-library binary: extra-license-file usr/share/lush2/lsh/manual/copying.hlp
+lush-library binary: extra-license-file usr/share/lush2/packages/sdl/SDL_copying.lsh

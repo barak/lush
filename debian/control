@@ -1,0 +1,52 @@
+Source: lush
+Section: devel
+Priority: extra
+Maintainer: Yaroslav Halchenko <debian@onerussian.com>
+Uploaders: Barak A. Pearlmutter <bap@debian.org>
+Build-Depends: debhelper (>= 8),
+	dh-autoreconf,
+	binutils-dev,
+	libxt-dev, libxft-dev,
+	gfortran,
+	indent,
+	pkg-config,
+	libncurses-dev,
+	libreadline-dev,
+	libfontconfig1-dev,
+	libgsl0-dev,
+	liblapack-dev,
+	libgl1-mesa-dev | libgl-dev,
+	libsdl-dev,
+	libcv-dev,
+	libasound2-dev, libaudiofile-dev
+Standards-Version: 3.9.2
+Homepage: http://lush.sourceforge.net/
+Vcs-Browser: http://git.onerussian.com/?p=deb/lush.git
+Vcs-git: git://git.onerussian.com/deb/lush.git
+
+Package: lush
+Architecture: any
+Depends: lush-library (>= ${source:Version}), ${shlibs:Depends}, ${misc:Depends}
+Recommends: indent, libxt-dev, libxft-dev, libgsl0-dev, liblapack-dev, freeglut3-dev, libsdl-dev, libsdl-image1.2-dev
+Suggests: gfortran, libgl1-mesa-dev, libcv-dev, libasound2-dev, libaudiofile-dev
+Description: Lisp Universal Shell Executable
+ Lush is a programming language and environment that is based on the Lisp
+ programming language. The lush language is small compared to ANSI Common Lisp
+ and is optimized for numeric calculations. Lush includes a libraries for
+ numerical analysis and building graphical user interfaces.
+ .
+ This package contains the binary executable.
+
+Package: lush-library
+Architecture: all
+Depends: python, ${misc:Depends}
+Conflicts: lush (<< 1.2.1-8+cvs20101229~)
+Recommends: lush (>= ${source:Version})
+Description: Lisp Universal Shell Library
+ Lush is a programming language and environment that is based on the Lisp
+ programming language. The lush language is small compared to ANSI Common Lisp
+ and is optimized for numeric calculations. Lush includes a libraries for
+ numerical analysis and building graphical user interfaces.
+ .
+ This package contains architecture intependent libraries for the lush
+ package.

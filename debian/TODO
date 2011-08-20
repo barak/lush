@@ -1,0 +1,28 @@
+* clarify on what python version it really depends since
+   packages/python/python-config.lsh lists 2.2
+
+* clarify if copying of autotools files during clean is a good thing,
+   but it was added by dh_make
+
+* rename lush-library into lush-common
+
+* take care about proper handling of material under etc/ - I better might
+   prebuild all modules and install them systemwide.
+
+Taken care of
+-------------
+* emacs mode installation
+
+* proper depends and -dev depends for lush itself since it will
+   compile 'on-fly' later on
+
+* Fix rules since it seems to be quite messy in binary-* rules...
+
+* verify that 243501 is non existant - try to build on debian provided
+   ia64 box -- it builds fine on itanix within up-to-date sid
+   chroot.
+ Did build nicely...
+
+* figure out that why it wasn't even attempted to built for ia64 -- so
+   where I have to remove that ban
+ Emailed

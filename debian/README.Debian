@@ -1,0 +1,12 @@
+
+Package was adopted by me on 2007/06/07. It required to provide proper
+depends. Since available libraries and respective -dev packages are
+detected at package build time but also used at runtime for
+'compile-on-demand', all -dev packages are mentioned also in
+Recommends or Suggests fields for lush, depending on how common their
+use from lush. Also Recommends includes packages necessary for
+successful run of demos (to close #336570)
+
+For demos, please cd /usr/share/lush/demos and invoke ./RUNME.
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Sat,  6 Jan 2007 23:16:35 -0500

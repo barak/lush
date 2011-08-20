@@ -1,0 +1,59 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+dh_targets=binary binary-arch binary-indep build build-arch build-indep clean install
+
+# Mega rule
+$(dh_targets) %:
+	dh $@ --with autoreconf --parallel
+
+.PHONY: $(dh_targets)
+
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_GNU_CPU ?= $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+ifeq ($(DEB_HOST_ARCH),i386)
+  CONFIG_CPU = --with-cpu=$(DEB_HOST_GNU_CPU)
+endif
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(CONFIG_CPU)
+
+override_dh_install:
+	dh_install
+
+	# Additional doc file
+	install -D -m 0644 doc/README debian/lush/usr/share/doc/lush/README-doc
+
+	# For binary-arch only there would be no lush-library
+	# Moving emacs script to proper location
+	[ -d debian/lush-library ] && \
+		mv debian/lush-library/usr/share/lush/etc/lush.el \
+		   debian/lush-library/usr/share/emacs/site-lisp/lush/ || :
+
+	# Removing double files or ones installed via other means
+	rm -f --verbose \
+		debian/lush-library/usr/share/lush/src/lush \
+		debian/lush-library/usr/share/lush/etc/lush.1 \
+		debian/lush-library/usr/share/lush/etc/README*; \
+
+	rm -rf --verbose debian/lush-library/usr/share/man
+
+	# Cleaning up
+	-find debian/lush*/usr -name "*.o" -delete
+
+dh_fixperms_indep:
+	# Fixing permissions
+	find debian/lush-library/usr/share -type f -exec chmod 0644 {} \;
+	grep -l '^#!' debian/lush-library/usr/share/lush/etc/* | xargs chmod a+x
+	find debian/lush-library/usr/share/lush -name "*.py" -exec chmod 0755 {} \;
+	find debian/lush-library/usr/share/lush -name "demo*" -exec chmod 0755 {} \;
+	chmod 0755 debian/lush-library/usr/share/lush/packages/sn28/examples/tsp/tsp
+	chmod 0755 debian/lush-library/usr/share/lush/demos/*
+	chmod 0644 debian/lush-library/usr/share/lush/demos/README
+	chmod 0644 debian/lush-library/usr/share/lush/demos/*.lsh
+
+override_dh_fixperms:
+	[ -d debian/lush-library ] && $(MAKE) -f debian/rules dh_fixperms_indep || :
+	dh_fixperms

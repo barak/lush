@@ -1,0 +1,461 @@
+lush (1.2.1-9+cvs20110227) unstable; urgency=low
+
+  * Upload to unstable
+  * Fresh upstream CVS snapshot -- few fixes
+  * Added  04-ld-no-add-needed patch to add -lfontconfig.
+    Report and patch from Matthias Klose (Thanks!) (Closes: #608692)
+  * Provide --with-cpu on i386 to overwrite mmx and sse assumptions
+    (once again - thanks Matthias Klose!)
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Sun, 27 Feb 2011 09:15:19 -0500
+
+lush (1.2.1-8+cvs20101229) experimental; urgency=low
+
+  * Fresh upstream CVS snapshot -- might be the last one in lush 1.x
+    series:
+    - supports Renesas SH(sh4) (Closes: #574258). Thanks Nobuhiro Iwamatsu
+      for the patch
+  * debian/copyright: switched to DEP5 format
+  * debian/compat,control: dh compat version 7
+  * debian/control:
+    - Policy boost to 3.9.1 (no changes seems to be due)
+  * debian/patches,source,control: switch to 3.0 (quilt) source format
+    from dpatch
+  * debian/rules,...: simplifying to take advantage of dh7
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Wed, 29 Dec 2010 14:47:07 -0500
+
+lush (1.2.1-7+cvs20080204) unstable; urgency=medium
+
+  * Fixed paths cvs20080204 so fresh versions of dpatch behave nicely
+    (Closes: #608218). Thanks Jakub Wilk for reporting and Hideki Yamane
+    for providing the fix
+  * Added Vcs fields for easy debcheckout.  They point to freshly
+    (re)initialized (using git-import-dscs --debsnapt) GIT repository
+  * Added ${misc:Depends} to lush-library Depends (per lintian
+    recommendations)
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Wed, 29 Dec 2010 11:45:37 -0500
+
+lush (1.2.1-6+cvs20080204) unstable; urgency=low
+
+  * Fresh CVS snapshot.
+  * g77 -> gfortran, lapack3-dev -> liblapack-dev transition (Closes: #463966).
+    Thanks Kumar Appaiah.
+  * Homepage migrated into header field.
+  * Changing versioing scheme to include CVS snapshot date into debian
+    revision after + (instead of . which is used for NMUs)
+  * Boosted standards to 3.7.3:
+   - ${source:Version} instead of ${Source-Version}
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Mon, 04 Feb 2008 23:27:34 -0500
+
+lush (1.2.1-5.cvs20070918) unstable; urgency=low
+
+  * Semi-automated introduction of CVS snapshots to benefit having up-to-date
+    LUSH before next release.
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Tue, 18 Sep 2007 01:28:20 -0400
+
+lush (1.2.1-4) unstable; urgency=low
+
+  * New maintainer. (Closes: #402989: ITA: lush -- Lisp Universal Shell
+    Executable - Debian Bug report logs)
+  * Moved copying of config.{sub,guess} under rule autotools, which has to be
+    manually invoked to provide deterministic update of those files and to
+    don't freak out svn-buildpackage. TODO: Need to clarify since that
+    statement was added by dh_make
+  * Tiny adjustment of debian/copyright file
+  * Added homepage to the description in debian/control
+  * Multiple changes within debian/rules
+  * Added proper Build-Depends, which includes libxt-dev and others necessary
+    to build lush so it could run demos (Closes: #336570)
+  * Added development packages for on-fly-compilation done by lush into
+    Recommends and Suggests, depending on how common they are. libcv-dev was
+    added to Suggests (Closes: #312081)
+  * Ship and properly enable lush.el along with lush-library package to
+    enable lush command within emacs
+  * Mentioned demos in README.Debian
+  * Adjusted paths in the manpage patch
+  * More things to do in future. But enough for current upload I hope
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Sun,  7 Jan 2007 14:03:44 -0500
+
+lush (1.2.1-3) unstable; urgency=medium
+
+  * QA upload.
+  * src/dldbfd.c: Fix another `invalid lvalue in assignment'.
+    Closes: #393084.
+
+ -- Matej Vela <vela@debian.org>  Thu, 14 Dec 2006 12:45:12 +0100
+
+lush (1.2.1-2) unstable; urgency=low
+
+  * Orphaned package.
+
+ -- Daniel Baumann <daniel@debian.org>  Thu, 14 Dec 2006 00:41:00 +0100
+
+lush (1.2.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Dropping 04-ftbfs.dpatch, went upstream.
+
+ -- Daniel Baumann <daniel@debian.org>  Tue, 21 Nov 2006 15:12:00 +0100
+
+lush (1.2-2) unstable; urgency=low
+
+  * Corrected accidently mistake in rules wrt/ the -a/-i in
+    build-arch/build-indep targets.
+  * Downgrading lush-library depends on lush to recommends (Closes: #387672).
+
+ -- Daniel Baumann <daniel@debian.org>  Tue, 19 Sep 2006 03:05:00 +0200
+
+lush (1.2-1) unstable; urgency=low
+
+  * New email address.
+  * New upstrem release (Closes: #386420).
+  * Removing 03-gcc4-amd64.dpatch, went upstream.
+  * Added lintian overrides.
+
+ -- Daniel Baumann <daniel@debian.org>  Sun, 10 Sep 2006 10:29:00 +0200
+
+lush (1.1-5) unstable; urgency=low
+
+  * Added patch to fix FTBFS, thanks Matej (Closes: #367872).
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Mon,  5 Jun 2006 10:52:00 +0200
+
+lush (1.1-4) unstable; urgency=low
+
+  * Removed patch for kfreebsd-i386, its obsolete since kfreebsd has SIGPOLL.
+  * Set Architecture back to any, will ask the ia64 buildd admin to add it to
+    p-a-s.
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Thu, 26 Jan 2006 20:32:00 +0100
+
+lush (1.1-3) unstable; urgency=low
+
+  * Added patch to fix FTBS on kfreebsd-i386 (Closes: #345266).
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Fri, 30 Dec 2005 14:29:00 +0100
+
+lush (1.1-2) unstable; urgency=low
+
+  * Added patch to fix FTBFS on mips and mipsel (Closes: #336086).
+  * Rewritten debian/rules.
+  * Using dpatch for maintaining patches.
+  * Reformated debian/lush.1.
+  * Minor formal changes.
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Wed, 14 Dec 2005 13:43:00 +0100
+
+lush (1.1-1) unstable; urgency=low
+
+  * New upstream release:
+    - no longer need to ship unstripped binaries (Closes: #315973).
+  * added ppc64 to the list of architectures (Closes: #304516).
+  * bumped policy to 3.6.2.
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Fri,  8 Jul 2005 16:40:00 +0200
+
+lush (1.0+final-1) unstable; urgency=low
+
+  * New maintainer (Closes: #250414).
+  * New upstream release.
+  * debian/* redone.
+  * fixed lintian errors.
+  * src/{date.c,index.c}: fixed FTBS on amd64/gcc-4.0 (Closes: #287626).
+
+ -- Daniel Baumann <daniel.baumann@panthera-systems.net>  Wed,  2 Feb 2005 11:38:00 +0100
+
+lush (1.0+cvs.2004.05.16) unstable; urgency=low
+
+  * QA Upload.
+  * Add amd64 to the list of supported architectures.  (Closes: #265426)
+
+ -- Thomas Bushnell, BSG <tb@debian.org>  Fri, 13 Aug 2004 01:15:07 -0700
+
+lush (1.0+cvs.2004.05.15) unstable; urgency=low
+
+  * QA Upload.
+  * Provide explicit list of architectures supported, excluded ia64.
+  See bug 243501.
+
+ -- Thomas Bushnell, BSG <tb@debian.org>  Wed, 11 Aug 2004 13:28:06 -0700
+
+lush (1.0+cvs.2004.05.14) unstable; urgency=low
+
+  * New upstream
+  * Orphan as in bug #250414
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 12 Jul 2004 19:02:17 -0600
+
+lush (1.0+cvs.2004.05.13) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu, 13 May 2004 23:23:09 -0600
+
+lush (1.0+cvs.2004.04.02) unstable; urgency=low
+
+  * New upstream, hopefully fix mips floating point exception
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri,  2 Apr 2004 09:29:53 -0700
+
+lush (1.0+cvs.2004.03.06) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat,  6 Mar 2004 21:12:48 -0700
+
+lush (1.0+cvs.2004.02.02) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  2 Feb 2004 18:38:08 -0700
+
+lush (1.0+cvs.2004.01.26) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 26 Jan 2004 21:03:21 -0700
+
+lush (1.0+cvs.2003.09.08) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  8 Sep 2003 20:38:16 -0600
+
+lush (1.0+cvs.2003.07.15) unstable; urgency=low
+
+  * New upstream with patch for mips
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 15 Jul 2003 15:15:50 -0600
+
+lush (1.0+cvs.2003.07.14) unstable; urgency=low
+
+  * New upstream with hppa/alpha arch workarounds (closes:193054)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 14 Jul 2003 14:30:32 -0600
+
+lush (1.0+cvs.2003.07.12.1) unstable; urgency=low
+
+  * Compile with gcc-2.95 on hppa and alpha (closes:193054)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 12 Jul 2003 18:14:12 -0600
+
+lush (1.0+cvs.2003.07.12) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 12 Jul 2003 10:02:37 -0600
+
+lush (1.0+cvs.2003.07.09) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed,  9 Jul 2003 11:56:16 -0600
+
+lush (1.0+cvs.2003.06.23) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 24 Jun 2003 08:57:26 -0600
+
+lush (1.0+cvs.2003.05.28) unstable; urgency=low
+
+  * new upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed, 28 May 2003 17:10:17 -0600
+
+lush (1.0+cvs.2003.05.27) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 20 May 2003 15:31:36 -0600
+
+lush (1.0+cvs.2003.05.16) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 16 May 2003 23:25:55 -0600
+
+lush (1.0+cvs.2003.05.09.1) unstable; urgency=low
+
+  * Avoid use of dh_strip for lush (closes:192591)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri,  9 May 2003 04:42:40 -0600
+
+lush (1.0+cvs.2003.05.09) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri,  9 May 2003 01:52:15 -0600
+
+lush (1.0+cvs.2003.04.28) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 28 Apr 2003 15:36:08 -0600
+
+lush (1.0+cvs.2003.03.11) unstable; urgency=low
+
+  * New upstream
+  * Update standards version (no changes required)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 11 Mar 2003 23:34:09 -0700
+
+lush (1.0+cvs.2003.02.14) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 14 Feb 2003 09:26:42 -0700
+
+lush (1.0+cvs.2003.02.02.6) unstable; urgency=low
+
+  * New upstream
+  * New compilation sequence
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu,  6 Feb 2003 13:35:50 -0700
+
+lush (1.0+cvs.2003.02.02.1) unstable; urgency=low
+
+  * Build with static libbfd, remove binutils dependency (Thanks James Troup)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun,  2 Feb 2003 20:07:02 -0700
+
+lush (1.0+cvs.2003.02.02) unstable; urgency=low
+
+  * Change binutils dependency (closes: 179534)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun,  2 Feb 2003 17:42:02 -0700
+
+lush (1.0+cvs.2003.01.31) unstable; urgency=low
+
+  * New upstream
+  * Add versioned library depends (closes: 178715)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 28 Jan 2003 09:21:17 -0700
+
+lush (1.0+cvs.2003.01.19) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 19 Jan 2003 04:18:15 -0700
+
+lush (1.0+cvs.2003.01.14) unstable; urgency=low
+
+  * New upstream, version 1.0!
+  * Build with gcc-3.2
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 11 Jan 2003 15:08:57 -0700
+
+lush (0.95+cvs.2002.12.17) unstable; urgency=low
+
+  * New upstream version
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 17 Dec 2002 22:32:02 -0700
+
+lush (0.1.1.2.cvs.2002.11.06) unstable; urgency=low
+
+  * New CVS snapshot
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed,  6 Nov 2002 21:09:33 -0700
+
+lush (0.1.1.2.cvs.2002.10.28) unstable; urgency=low
+
+  * New CVS snapshot
+  * Split rules file into arch & indep binaries
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 28 Oct 2002 13:00:58 -0700
+
+lush (0.1.1.2.cvs.2002.10.12) unstable; urgency=low
+
+  * Update config.guess (closes: 164529)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 12 Oct 2002 21:39:43 -0600
+
+lush (0.1.1.2.cvs.2002.10.11) unstable; urgency=low
+
+  * New upstream version
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 11 Oct 2002 20:49:54 -0600
+
+lush (0.1.1.2.cvs.2002.09.25) unstable; urgency=low
+
+  * New upstream version.
+  * Remove executable flag from non-executable files
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed, 25 Sep 2002 10:17:10 -0600
+
+lush (0.1.1.2.cvs.2002.09.18) unstable; urgency=low
+
+  * New upstream version (adds more online help)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed, 18 Sep 2002 21:51:17 -0600
+
+lush (0.1.1.2.cvs.2002.09.07) unstable; urgency=low
+
+  * Move lush library files into lush-library binary package
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri,  6 Sep 2002 21:35:43 -0600
+
+lush (0.1.1.2.cvs.2002.09.06) unstable; urgency=low
+
+  * New upstream version
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu,  5 Sep 2002 17:31:15 -0600
+
+lush (0.1.1.2.cvs.2002.08.31) unstable; urgency=low
+
+  * New upstream version.
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 31 Aug 2002 15:41:44 -0600
+
+lush (0.1.1.2.cvs.2002.08.27) unstable; urgency=low
+
+   * New upstream version, adds more library functions.
+   * Add packages directory from upstream
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 24 Aug 2002 12:25:44 -0600
+
+lush (0.1.1.2.cvs.2002.08.23) unstable; urgency=low
+
+  * New upstream version, adds helptool
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 20 Aug 2002 20:13:00 -0600
+
+lush (0.1.1.2.cvs.2002.08.19-2) unstable; urgency=low
+
+  * New upstream version, adds online documentation and user libraries
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 20 Aug 2002 20:10:46 -0600
+
+lush (0.1.1.2.cvs.2002.08.15-1) unstable; urgency=low
+
+  * Move to new version of lush (Sourceforge lush CVS module vs. earlier 
+  attlush-frpzem
+  CVS module)
+  * This package is does yet include the full library. Thus, this release is 
+  ___ONLY FOR TESTING___ the new compiler. 
+  * Update e-mail address.
+  * Update Standards Version
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 19 Aug 2002 10:58:52 -0600
+
+lush (0.1.1.1-2) unstable; urgency=low
+
+  * Improve build rules for cross-platform building
+  
+  * Update upstream's config.guess and config.sub, remove extra blank line
+  from debian/control (closes: 152352)
+  
+  * Expand package description (closes: 152415)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  8 Jul 2002 07:57:05 -0600
+
+lush (0.1.1.1-1) unstable; urgency=low
+
+  * Initial package (closes: 151326)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 28 Jun 2002 15:13:41 -0600
