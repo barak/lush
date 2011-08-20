@@ -136,7 +136,9 @@ install-sub: FORCE
 
 # The dump must be regenerated on the basis of the installed 
 # lush files in order to get the time stamps right.
-install-dump: FORCE
+# It cannot proceed in parallel with install-sub, because it invokes
+# the installed executable; hence the dependency on install-sub
+install-dump: install-sub FORCE
 	${DESTDIR}${bindir}/lush2 @sysenv stdenv -- ${DESTDIR}${datadir}/lush2/sys/stdenv.dump
 	chmod 644  ${DESTDIR}${datadir}/lush2/sys/stdenv.dump
 
