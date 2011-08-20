@@ -1209,7 +1209,7 @@ the first byte following the data read.
 #? (export-array <a> <f>)
 Store data of array <a> in a binary file <f>.
 
-Argument <f> may be a filename or a writeable file descriptor
+Argument <f> may be a filename or a writable file descriptor
 createdwith <open-write> or <open-append>. No header is written.
 
 

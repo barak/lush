@@ -90,7 +90,7 @@ Each element of the file starting at byte <offs> is made accessible
 through the corresponding element of the storage <srg>. Storages of 
 storage class <AtomStorage> or <MptrStorage> cannot be memory mapped.
 Mapped storages are readonly by default (pass <()> as fourth 
-argument to create a writeable mmapped storage).
+argument to create a writable mmapped storage).
 
 
 #? (new-storage/foreign <et> <n> <p> [<readonly>])

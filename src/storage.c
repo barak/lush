@@ -599,7 +599,7 @@ DX(xnew_storage_mmap)
 
    at *atf = APOINTER(2);
    if (RFILEP(atf) && !readonly) {
-      RAISEF("file not writeable", atf);
+      RAISEF("file not writable", atf);
 
    } else if (STRINGP(atf)) {
       atf = readonly ? OPEN_READ(String(atf), NULL) : OPEN_WRITE(String(atf), NULL);

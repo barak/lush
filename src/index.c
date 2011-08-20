@@ -2716,7 +2716,7 @@ index_t *index_expandD(index_t *ind, int d, size_t ne)
    /* create output */
    IND_MOD(ind, d) = 0;
    IND_DIM(ind, d) = ne;
-   // todo: flag resulting index as non-writeable?
+   // todo: flag resulting index as non-writable?
    return ind;
 }
 
