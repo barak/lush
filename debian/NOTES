@@ -1,0 +1,4 @@
+git config svn-remote.svn.url https://lush.svn.sourceforge.net/svnroot/lush
+git config svn-remote.svn.fetch lush2:refs/remotes/svn/trunk
+git config svn-remote.svn.branches 'lush2-branches/*:refs/remotes/svn/*'
+git config svn-remote.svn.tags 'lush2-tags/*:refs/remotes/svn/*'
